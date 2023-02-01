@@ -87,7 +87,7 @@ class MainActivity : ComponentActivity() {
 fun login(){
     Box(modifier = Modifier
         .fillMaxWidth()
-        //.fillMaxHeight()
+        .fillMaxHeight()
         .paint(painterResource(id = R.drawable.login_bg))){
         Column(modifier = Modifier
             .fillMaxWidth()
