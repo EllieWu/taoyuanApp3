@@ -19,6 +19,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -66,7 +67,7 @@ fun MA3_1(
         Column(modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()
-            .background(Color(232,232,232))) {
+            .background(Color(232, 232, 232))) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -186,14 +187,40 @@ fun MA3_1(
                     color = Color(105,105,105),
                     fontWeight = FontWeight.Bold)
 
-                Row(verticalAlignment = Alignment.CenterVertically,modifier = Modifier.fillMaxWidth().size(width = 0.dp,height = 100.dp).background(Color(255,255,255)).border(1.dp, Color.Black)){
-                   Text("待執行")
-                    Column() {
-                        Text(text = "1090301001")
-                        Text(text = "早班 08:00~12:00")
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(width = 0.dp, height = 100.dp)
+                        .background(Color(255, 255, 255))
+                ){
+                    Card() {
+                        Box(contentAlignment = Alignment.Center,modifier = Modifier
+                            .size(width = 100.dp, height = 100.dp)
+                            .background(Color(65,89,151))){
+                            Text(modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                                text = "待執行",
+                                textAlign = TextAlign.Center,
+                                color = White,
+                            )
+                        }
+                    }
+                    Column(verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth()
+                            .padding(start = 20.dp)
+                    ) {
+                        Text(modifier = Modifier.padding(bottom = 10.dp),
+                            text = "1090301001",
+                            color = Color(105,105,105)
+                        )
+                        Text(
+                            text = "早班 08:00~12:00",
+                            color = Color(200,71,52),
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
-
             }
         }
 }
