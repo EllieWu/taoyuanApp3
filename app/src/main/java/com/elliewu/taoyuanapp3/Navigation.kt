@@ -28,12 +28,14 @@ import androidx.navigation.navArgument
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController,startDestination = Screen.login.route) {
+    NavHost(navController = navController, startDestination = Screen.login.route) {
         composable(route = Screen.login.route) {
-            login(navController = navController)
+            //login(navController = navController)
+            login{navController.navigate(Screen.MA3_1.route)}
         }
-        composable(route = Screen.MA3_1.route) {
-                entry -> MA3_1(navController = navController) }
+        composable(route = Screen.MA3_1.route) { entry ->
+            MA3_1(onClick = {navController.navigate(Screen.login.route)})
+        }
     }
 }
 

@@ -11,12 +11,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun login(navController: NavController){
+fun login(onClick: () -> Unit = {}){
     Box(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()
@@ -63,8 +64,9 @@ fun login(navController: NavController){
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent), onValueChange = {if (it.length <= maxLength) password = it})
 
-            Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(red = 255, green = 166, blue = 0)),modifier = Modifier.fillMaxWidth().size(width = 50.dp, height = 60.dp), onClick = {
-                navController.navigate(Screen.MA3_1.route)
+            Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(red = 255, green = 166, blue = 0)),
+                modifier = Modifier.fillMaxWidth().size(width = 50.dp, height = 60.dp), onClick = {
+                onClick();
             },) {
                 //按鈕的文字
                 Text(text = "登入", fontSize = 24.sp, fontWeight = FontWeight.Bold,
@@ -73,4 +75,10 @@ fun login(navController: NavController){
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewLogin() {
+    login();
 }
