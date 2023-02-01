@@ -197,10 +197,10 @@ fun MA3_1(
                         Box(contentAlignment = Alignment.Center,modifier = Modifier
                             .size(width = 100.dp, height = 100.dp)
                             .background(Color(65,89,151))){
-                            Text(modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                                text = "待執行",
+                            Text("待執行",
+                                Modifier.padding(16.dp),
                                 textAlign = TextAlign.Center,
-                                color = White,
+                                color = White
                             )
                         }
                     }
