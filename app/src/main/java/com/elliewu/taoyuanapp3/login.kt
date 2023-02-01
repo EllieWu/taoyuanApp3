@@ -13,9 +13,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
-fun login2(){
+fun login(navController: NavController){
     Box(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()
@@ -63,13 +64,12 @@ fun login2(){
                     unfocusedIndicatorColor = Color.Transparent), onValueChange = {if (it.length <= maxLength) password = it})
 
             Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(red = 255, green = 166, blue = 0)),modifier = Modifier.fillMaxWidth().size(width = 50.dp, height = 60.dp), onClick = {
-                //按 onclick 的事件
+                navController.navigate(Screen.MA3_1.route)
             },) {
                 //按鈕的文字
                 Text(text = "登入", fontSize = 24.sp, fontWeight = FontWeight.Bold,
                     color = Color(255,255,255)
                 )
-
             }
         }
     }
