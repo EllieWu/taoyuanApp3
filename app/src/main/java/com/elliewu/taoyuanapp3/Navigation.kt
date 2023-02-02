@@ -1,20 +1,6 @@
 package com.elliewu.taoyuanapp3
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -34,7 +20,7 @@ fun Navigation() {
             login{navController.navigate(Screen.MA3_1.route)}
         }
         composable(route = Screen.MA3_1.route) { entry ->
-            MA3_1(onClick = {navController.navigate(Screen.login.route)})
+            MA3_1 { navController.navigate(Screen.login.route) }
         }
     }
 }
