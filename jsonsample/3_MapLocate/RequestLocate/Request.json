@@ -1,5 +1,6 @@
 {
-    "Function": "RequestLocate",
-    "WorkCode":"10903012",
-    "WorkTime":"早班 08:00~12:00"
+    "Function": "RequestLocateInfo",
+    "WorkCode":"111032201",
+    "WorkTime":"早班 08:00~12:00",
+    "LocateNumber":"1"
 }
