@@ -18,26 +18,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+
 @Preview(device= Devices.PIXEL_C)
+@Preview(device= Devices.PIXEL_3A)
 @Composable
 fun login(onClick: () -> Unit = {}){
     Box(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()
         ){
-
-
-
         Image(painter = painterResource(id = R.drawable.login_bg),
             contentDescription = "",
-            contentScale = ContentScale.FillWidth,
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxHeight()
                                .fillMaxWidth())
         Row(horizontalArrangement = Arrangement.Center,modifier = Modifier.fillMaxWidth().fillMaxHeight()){
-//        Box(modifier = Modifier
-//            .size(width = 500.dp, height = 300.dp)
-//            .fillMaxWidth()
-//            .fillMaxHeight()){
             Column(
                 modifier = Modifier
                 .size(width = 500.dp,1000.dp)
@@ -96,15 +91,12 @@ fun login(onClick: () -> Unit = {}){
                         .size(width = 50.dp, height = 60.dp), onClick = {
                         onClick();
                     },) {
-                    //按鈕的文字
                     Text(text = "登入", fontSize = 24.sp, fontWeight = FontWeight.Bold,
                         color = Color(255,255,255)
                     )
                 }
             }
         }
-        //}
-
     }
 }
 

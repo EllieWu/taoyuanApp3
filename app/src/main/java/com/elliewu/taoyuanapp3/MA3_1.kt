@@ -16,12 +16,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,6 +61,8 @@ object FakeData {
 //}
 
 //3-1巡檢工單
+@Preview(device= Devices.PIXEL_C)
+@Preview(device= Devices.PIXEL_3A)
 @Preview(showBackground = true)
 @Composable
 fun MA3_1(
@@ -67,36 +71,45 @@ fun MA3_1(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxHeight()
             .fillMaxWidth()
-            .background(Color(232, 232, 232))
+            .fillMaxHeight()
+            .background(Color(232, 232, 232)),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+
             modifier = Modifier
                 .fillMaxWidth()
-                .size(width = 150.dp, height = 50.dp)
-                .background(Color(62, 83, 140))
+                .size(width = 250.dp, 50.dp)
+                .background(Color(62, 83, 140)),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                modifier = Modifier.size(width = 250.dp, height = 30.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(start = 60.dp),
+                //size(width = 250.dp, height = 30.dp),
                 text = "外巡巡檢工單",
-                fontSize = 24.sp,
-                textAlign = TextAlign.End,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
                 color = Color(255, 255, 255),
             )
+                ClickableText(
+                    text = AnnotatedString("登出"),
+                    style = TextStyle(
+                        color = White,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.End,
+
+                    ),
+                    onClick = {
+                        //navController.navigate(Screen.login.route)
+                        onClick()
+                    },
+                modifier = Modifier.padding(end = 20.dp))
             //var enabled by remember { mutableStateOf(true)}
-            ClickableText(
-                text = AnnotatedString("登出"),
-                style = TextStyle(
-                    color = White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.End
-                ),
-                onClick = {
-                    //navController.navigate(Screen.login.route)
-                    onClick()
-                })
+
         }
         Column(modifier = Modifier.padding(top = 20.dp, start = 40.dp, end = 40.dp)) {
             Row(
@@ -202,60 +215,119 @@ fun MA3_1(
                 color = Color(105, 105, 105),
                 fontWeight = FontWeight.Bold
             )
-            workList(msggg);
         }
+        Row(horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(Color(238, 239, 241))){
+            Text(modifier = Modifier.padding(top = 180.dp),text = "暫無巡檢工單")
+        }
+        //workList(msggg);
+
     }
+    BottomBtn();
 }
 
+@Composable
+fun BottomBtn(){
+    Box(modifier = Modifier.fillMaxSize(), Alignment.BottomCenter){
+    Row(verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround,
+        modifier = Modifier
+            .fillMaxWidth()
+            .size(width = 1000.dp, height = 80.dp)
+            .fillMaxHeight()
+            .background(Color(253, 253, 253))){
+        Button(
+            border = BorderStroke(0.dp, Color.Transparent),
+            colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.Transparent
+        ),
+            onClick = { /*TODO*/ }
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center) {
+                Image(
+                    painterResource(id = R.drawable.list) ,
+                    contentDescription = "",
+                    modifier = Modifier.size(30.dp),
+                    colorFilter = ColorFilter.tint(Color(157,157,157))
+                )
+                Text(text = "巡檢工單",
+                     color = Color(157,157,157),
+                     fontWeight = FontWeight.Bold
+                    )
+            }
+            
+        }
+        Button(
+
+            onClick = { /*TODO*/ }
+        ) {
+
+        }
+        Button(
+
+            onClick = { /*TODO*/ }
+        ) {
+
+        }
+    }
+    }
+}
 
 
 @Composable
 fun listCard(list: Lists){
-    Card(modifier = Modifier.padding(bottom = 20.dp)) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(width = 0.dp, height = 100.dp)
-                .background(Color(255, 255, 255))
-        ) {
-            Box(
-                contentAlignment = Alignment.Center, modifier = Modifier
-                    .size(width = 100.dp, height = 100.dp)
-                    .background(Color(65, 89, 151))
-            ) {
-                Text(
-                    text = list.state,
-                    Modifier.padding(16.dp),
-                    textAlign = TextAlign.Center,
-                    color = White
-                )
-            }
-            Column(
-                verticalArrangement = Arrangement.Center,
+    //Column(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
+        Card(modifier = Modifier.padding(bottom = 20.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .fillMaxHeight()
                     .fillMaxWidth()
-                    .padding(start = 20.dp)
+                    .size(width = 0.dp, height = 100.dp)
+                    .background(Color(255, 255, 255))
             ) {
-                Text(
-                    modifier = Modifier.padding(bottom = 10.dp),
-                    text = list.workID,
-                    color = Color(105, 105, 105)
-                )
-                Text(
-                    text = list.time,
-                    color = Color(200, 71, 52),
-                    fontWeight = FontWeight.Bold
-                )
+                Box(
+                    contentAlignment = Alignment.Center, modifier = Modifier
+                        .size(width = 100.dp, height = 100.dp)
+                        .background(Color(65, 89, 151))
+                ) {
+                    Text(
+                        text = list.state,
+                        Modifier.padding(16.dp),
+                        textAlign = TextAlign.Center,
+                        color = White
+                    )
+                }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .padding(start = 20.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        text = list.workID,
+                        color = Color(105, 105, 105)
+                    )
+                    Text(
+                        text = list.time,
+                        color = Color(200, 71, 52),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }
-}
+    //}
+
 
 @Composable
 fun workList(messages: List<Lists>){
-    LazyColumn(){
+    LazyColumn(modifier = Modifier.padding(start = 40.dp, end = 40.dp)){
         items(messages){message ->
             listCard(message)
         }
