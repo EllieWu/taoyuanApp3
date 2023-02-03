@@ -216,12 +216,22 @@ fun MA3_1(
                 fontWeight = FontWeight.Bold
             )
         }
-        Row(horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(Color(238, 239, 241))){
-            Text(modifier = Modifier.padding(top = 180.dp),text = "暫無巡檢工單")
+        if(msggg.size == 0)
+        {
+            Row(horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(Color(238, 239, 241))){
+                Text(modifier = Modifier.padding(top = 180.dp),text = "暫無巡檢工單")
+            }
+        }
+        else
+        {
+//            Button(onClick = { msggg = msggg - msggg[msggg.size -1] }) {
+//
+//            }
+            workList(msggg);
         }
         //workList(msggg);
 
