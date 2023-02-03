@@ -89,6 +89,7 @@ fun login(onClick: () -> Unit = {}){
                     modifier = Modifier
                         .fillMaxWidth()
                         .size(width = 50.dp, height = 60.dp), onClick = {
+                        rawJSON();
                         onClick();
                     },) {
                     Text(text = "登入", fontSize = 24.sp, fontWeight = FontWeight.Bold,
