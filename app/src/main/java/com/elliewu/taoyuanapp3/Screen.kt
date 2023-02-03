@@ -1,9 +1,10 @@
 package com.elliewu.taoyuanapp3
 
 sealed class Screen(val route: String){
-    object MA3_1 : Screen("main_screen")
-    object DetailScreen : Screen("detail_screen")
-    object login :Screen("login")
+    object login : Screen("login")
+    object MA3_1 : Screen("MA3_1")
+    object MA3_2 : Screen("MA3_2")
+
 
 //    fun withArgs(vararg args: String): String{
 //        return buildString{
