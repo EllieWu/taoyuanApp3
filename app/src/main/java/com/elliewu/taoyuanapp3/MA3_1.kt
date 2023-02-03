@@ -5,6 +5,10 @@ import android.widget.DatePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.Interaction
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import java.util.*
 
 var msggg by mutableStateOf(FakeData.workListData)
@@ -91,6 +96,7 @@ fun MA3_1(
                     .weight(1f)
                     .padding(start = 60.dp),
                 //size(width = 250.dp, height = 30.dp),
+
                 text = "外巡巡檢工單",
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
@@ -239,7 +245,7 @@ fun MA3_1(
 }
 
 @Composable
-fun BottomBtn() {
+fun BottomBtn(onClick: () -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize(), Alignment.BottomCenter) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -250,13 +256,21 @@ fun BottomBtn() {
                 .fillMaxHeight()
                 .background(Color(253, 253, 253))
         ) {
+//            var selected by remember { mutableStateOf(false) }
+//            val clickColor =
+//                if(selected){
+//                    (Color(254, 166, 0))
+//                }else {
+//                    (Color(157, 157, 157))
+//                }
             Button(
                 border = BorderStroke(0.dp, Color.Transparent),
                 elevation = null,
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Transparent
+                    backgroundColor = Color(247,240,213)
                 ),
-                onClick = { /*TODO*/ }
+                modifier = Modifier.size(width = 100.dp,80.dp),
+                onClick = { onClick() }
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -266,11 +280,11 @@ fun BottomBtn() {
                         painterResource(id = R.drawable.list),
                         contentDescription = "",
                         modifier = Modifier.size(30.dp),
-                        colorFilter = ColorFilter.tint(Color(157, 157, 157))
+                        colorFilter = ColorFilter.tint((Color(239, 166, 58)))
                     )
                     Text(
                         text = "巡檢工單",
-                        color = Color(157, 157, 157),
+                        color = (Color(239, 166, 58)),
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                     )
@@ -283,7 +297,8 @@ fun BottomBtn() {
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent
                 ),
-                onClick = { /*TODO*/ }
+                modifier = Modifier.size(width = 100.dp,80.dp),
+                onClick = { }
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -293,11 +308,11 @@ fun BottomBtn() {
                         painterResource(id = R.drawable.p2),
                         contentDescription = "",
                         modifier = Modifier.size(30.dp),
-                        colorFilter = ColorFilter.tint(Color(157, 157, 157))
+                        colorFilter = ColorFilter.tint((Color(157, 157, 157)))
                     )
                     Text(
                         text = "維修工單",
-                        color = Color(157, 157, 157),
+                        color = (Color(157, 157, 157)),
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                     )
@@ -309,21 +324,22 @@ fun BottomBtn() {
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent
                 ),
-                onClick = { /*TODO*/ }
+                modifier = Modifier.size(width = 100.dp,80.dp),
+                onClick = {  }
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Image(
                         painterResource(id = R.drawable.p3),
                         contentDescription = "",
                         modifier = Modifier.size(30.dp),
-                        colorFilter = ColorFilter.tint(Color(157, 157, 157))
+                        colorFilter = ColorFilter.tint((Color(157, 157, 157)))
                     )
                     Text(
                         text = "報修",
-                        color = Color(157, 157, 157),
+                        color = (Color(157, 157, 157)),
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                     )
@@ -335,7 +351,8 @@ fun BottomBtn() {
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent
                 ),
-                onClick = { /*TODO*/ }
+                modifier = Modifier.size(width = 100.dp,90.dp),
+                onClick = {  }
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -345,11 +362,11 @@ fun BottomBtn() {
                         painterResource(id = R.drawable.p4),
                         contentDescription = "",
                         modifier = Modifier.size(30.dp),
-                        colorFilter = ColorFilter.tint(Color(157, 157, 157))
+                        colorFilter = ColorFilter.tint((Color(157, 157, 157)))
                     )
                     Text(
                         text = "密碼變更",
-                        color = Color(157, 157, 157),
+                        color = (Color(157, 157, 157)),
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                     )
