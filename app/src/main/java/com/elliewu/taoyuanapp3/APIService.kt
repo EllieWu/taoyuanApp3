@@ -2,6 +2,7 @@ package com.elliewu.taoyuanapp3
 
 import android.util.Log
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +22,7 @@ interface APIService {
     @POST("/api/app/")
     suspend fun createEmployee(@Body requestBody: RequestBody): retrofit2.Response<ResponseBody>
 }
-fun rawJSON() {
+fun rawJSON(PostjsonBody : JSONObject): JSONObject? {
 
     // Create Retrofit
     val retrofit = Retrofit.Builder()
@@ -32,10 +33,9 @@ fun rawJSON() {
     val service = retrofit.create(APIService::class.java)
 
     // Create JSON using JSONObject
-    val jsonObject = JSONObject()
-    jsonObject.put("Function", "Login")
-    jsonObject.put("UserID", "F123332212")
-    jsonObject.put("UserPW", "Abc1234")
+
+    var jsonObject = JSONObject()
+        jsonObject = PostjsonBody;
 
     // Convert JSONObject to String
     val jsonObjectString = jsonObject.toString()
@@ -43,6 +43,7 @@ fun rawJSON() {
     // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
     val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
 
+    var returnJsonObject = JSONObject();
     CoroutineScope(Dispatchers.IO).launch {
         // Do the POST request and get response
         val response = service.createEmployee(requestBody)
@@ -58,14 +59,14 @@ fun rawJSON() {
                             ?.string() // About this thread blocking annotation : https://github.com/square/retrofit/issues/3255
                     )
                 )
-
+                returnJsonObject = JSONObject(prettyJson);
                 Log.d("Pretty Printed JSON :", prettyJson)
-
             } else {
 
                 Log.e("RETROFIT_ERROR", response.code().toString())
-
+                returnJsonObject = JSONObject()
             }
         }
     }
+    return returnJsonObject
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import org.json.JSONObject
 
 @Preview(device= Devices.PIXEL_C)
 @Preview(device= Devices.PIXEL_3A)
@@ -89,7 +90,11 @@ fun login(onClick: () -> Unit = {}){
                     modifier = Modifier
                         .fillMaxWidth()
                         .size(width = 50.dp, height = 60.dp), onClick = {
-                        rawJSON();
+                        var loginJsonObject = JSONObject();
+                        loginJsonObject.put("Function", "Login")
+                        loginJsonObject.put("UserID", "F123332212")
+                        loginJsonObject.put("UserPW", "Abc1234")
+                        rawJSON(loginJsonObject);
                         onClick();
                     },) {
                     Text(text = "登入", fontSize = 24.sp, fontWeight = FontWeight.Bold,
