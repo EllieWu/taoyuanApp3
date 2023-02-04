@@ -20,13 +20,7 @@ interface APIService {
     suspend fun createEmployee(@Body requestBody: RequestBody): retrofit2.Response<ResponseBody>
 }
 suspend fun HttpRequestTest(jsonObject: JSONObject):String {
-    var loginJsonObject = jsonObject;
-    loginJsonObject.put("Function", "Login")
-    loginJsonObject.put("UserID", "F123332212")
-    loginJsonObject.put("UserPW", "Abc1234")
     // Create JSON using JSONObject
-
-    var jsonObject = loginJsonObject
 
     // Convert JSONObject to String
     val jsonObjectString = jsonObject.toString()
@@ -39,7 +33,13 @@ suspend fun HttpRequestTest(jsonObject: JSONObject):String {
         .method("POST",requestBody)
         .url("http://api.taoyuan.isayso.de/api/app")
         .build()
-    var response = client.newCall(request).await();
+    try {
+        var response = client.newCall(request).await();
+        return  response.body?.string().toString();
+    }catch (e:java.lang.Exception){
+        return "Error"
+    }
 
-    return  response.body?.string().toString();
+
+
 }

@@ -1,13 +1,15 @@
 package com.elliewu.taoyuanapp3
 
+import com.google.gson.annotations.SerializedName
+
 
 class Login_Request(
-    var Function : String?,
-    var UserID : String?,
-    var UserPW : String?
+    @SerializedName("Function")var Function : String?,
+    @SerializedName("UserID")var UserID : String?,
+    @SerializedName("UserPW")var UserPW : String?
 )
 class Login_Response(
-    var Feedback : String?
+    @SerializedName("Feedback")var Feedback : String?
 )
 class SelectWorkList_Request(
     var Function : String?,
