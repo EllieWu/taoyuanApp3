@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -110,11 +111,13 @@ fun login(onClick: () -> Unit = {}){
                             loginJsonObject.put("UserPW", "Abc1234")
                             val responseString = HttpRequestTest(loginJsonObject)
                             Log.d("Login Response",responseString)
-                            val jResponse = JSONObject(responseString);
-                            val succeed:String = jResponse.getString("Feedback");
-                            if(succeed == "TRUE")
-                            {
-                                onClick();
+                            if(responseString != "Error"){
+                                val jResponse = JSONObject(responseString);
+                                val succeed:String? = jResponse.getString("Feedback");
+                                if(succeed == "TRUE")
+                                {
+                                    onClick();
+                                }
                             }
                         }
                         //onClick();

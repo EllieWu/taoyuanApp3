@@ -33,7 +33,13 @@ suspend fun HttpRequestTest(jsonObject: JSONObject):String {
         .method("POST",requestBody)
         .url("http://api.taoyuan.isayso.de/api/app")
         .build()
-    var response = client.newCall(request).await();
+    try {
+        var response = client.newCall(request).await();
+        return  response.body?.string().toString();
+    }catch (e:java.lang.Exception){
+        return "Error"
+    }
 
-    return  response.body?.string().toString();
+
+
 }
