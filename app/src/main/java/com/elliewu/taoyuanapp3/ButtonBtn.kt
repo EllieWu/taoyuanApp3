@@ -96,7 +96,7 @@ fun BottomBtnCard(btnList: buttonBtn) {
         ),
         modifier = Modifier.size(width = 100.dp, 80.dp),
         onClick = {
-
+                Log.d("ButtonEvent",btnList.screen.route.toString())
 
 //                val screen = btnList.screen
 //                navController.navigate(screen.route)
