@@ -4,25 +4,22 @@ import android.util.Log
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
-import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.POST
+import ru.gildor.coroutines.okhttp.await
+import java.io.IOException
 
 interface APIService {
     @POST("/api/app/")
     suspend fun createEmployee(@Body requestBody: RequestBody): retrofit2.Response<ResponseBody>
 }
-fun rawJSON(PostjsonBody : JSONObject): JSONObject? {
+fun rawJSON(PostjsonBody : JSONObject): String? {
 
     // Create Retrofit
     val retrofit = Retrofit.Builder()
@@ -43,8 +40,8 @@ fun rawJSON(PostjsonBody : JSONObject): JSONObject? {
     // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
     val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
 
-    var returnJsonObject = JSONObject();
-    CoroutineScope(Dispatchers.IO).launch {
+    var returnJsonString:String = "";
+    var abccc = CoroutineScope(Dispatchers.IO).launch {
         // Do the POST request and get response
         val response = service.createEmployee(requestBody)
 
@@ -59,14 +56,40 @@ fun rawJSON(PostjsonBody : JSONObject): JSONObject? {
                             ?.string() // About this thread blocking annotation : https://github.com/square/retrofit/issues/3255
                     )
                 )
-                returnJsonObject = JSONObject(prettyJson);
-                Log.d("Pretty Printed JSON :", prettyJson)
+                returnJsonString = prettyJson;
+                return@withContext
             } else {
-
+                returnJsonString = ""
                 Log.e("RETROFIT_ERROR", response.code().toString())
-                returnJsonObject = JSONObject()
+                return@withContext
             }
         }
+
     }
-    return returnJsonObject
+    Log.d("Pretty Printed :", abccc.toString())
+    return returnJsonString
+}
+suspend fun HttpRequestTest():String {
+    var loginJsonObject = JSONObject();
+    loginJsonObject.put("Function", "Login")
+    loginJsonObject.put("UserID", "F123332212")
+    loginJsonObject.put("UserPW", "Abc1234")
+    // Create JSON using JSONObject
+
+    var jsonObject = loginJsonObject
+
+    // Convert JSONObject to String
+    val jsonObjectString = jsonObject.toString()
+    var resList = ArrayList<String>()
+    var responseString = "";
+    // Create RequestBody ( We're not using any converter, like GsonConverter, MoshiConverter e.t.c, that's why we use RequestBody )
+    val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
+    val client = OkHttpClient()
+    val request = Request.Builder()
+        .method("POST",requestBody)
+        .url("http://api.taoyuan.isayso.de/api/app")
+        .build()
+    var response = client.newCall(request).await();
+
+    return  response.body?.string().toString();
 }

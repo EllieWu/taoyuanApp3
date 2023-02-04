@@ -1,13 +1,12 @@
 package com.elliewu.taoyuanapp3
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -17,13 +16,15 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import com.google.gson.JsonObject
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @Preview(device= Devices.PIXEL_C)
 @Preview(device= Devices.PIXEL_3A)
 @Composable
 fun login(onClick: () -> Unit = {}){
+    val coroutineScope = rememberCoroutineScope()
     Box(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()
@@ -31,13 +32,16 @@ fun login(onClick: () -> Unit = {}){
         Image(painter = painterResource(id = R.drawable.login_bg),
             contentDescription = "",
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxHeight()
-                               .fillMaxWidth())
-        Row(horizontalArrangement = Arrangement.Center,modifier = Modifier.fillMaxWidth().fillMaxHeight()){
+            modifier = Modifier
+                .fillMaxHeight()
+                .fillMaxWidth())
+        Row(horizontalArrangement = Arrangement.Center,modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()){
             Column(
                 modifier = Modifier
-                .size(width = 500.dp,1000.dp)
-                .padding(start = 50.dp, end = 50.dp),
+                    .size(width = 500.dp, 1000.dp)
+                    .padding(start = 50.dp, end = 50.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
                ) {
@@ -86,17 +90,31 @@ fun login(onClick: () -> Unit = {}){
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent), onValueChange = {if (it.length <= maxLength) password = it})
 
-                Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(red = 255, green = 166, blue = 0)),
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(
+                            red = 255,
+                            green = 166,
+                            blue = 0
+                        )
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .size(width = 50.dp, height = 60.dp), onClick = {
-                        var loginJsonObject = JSONObject();
-                        loginJsonObject.put("Function", "Login")
-                        loginJsonObject.put("UserID", "F123332212")
-                        loginJsonObject.put("UserPW", "Abc1234")
-                        rawJSON(loginJsonObject);
-                        onClick();
-                    },) {
+                        .size(width = 50.dp, height = 60.dp),
+                    onClick = {
+                        coroutineScope.launch {
+                            val responsestring = HttpRequestTest()
+                            Log.d("Login Response",responsestring)
+                            val jresponse = JSONObject(responsestring);
+                            val Succeed:String = jresponse.getString("Feedback");
+                            if(Succeed == "TRUE")
+                            {
+                                onClick();
+                            }
+                        }
+                        //onClick();
+                    },
+                ) {
                     Text(text = "登入", fontSize = 24.sp, fontWeight = FontWeight.Bold,
                         color = Color(255,255,255)
                     )
@@ -105,7 +123,6 @@ fun login(onClick: () -> Unit = {}){
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewLogin() {
