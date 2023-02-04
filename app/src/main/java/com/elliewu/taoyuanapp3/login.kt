@@ -16,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.google.gson.JsonObject
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -23,7 +25,7 @@ import org.json.JSONObject
 @Preview(device= Devices.PIXEL_C)
 @Preview(device= Devices.PIXEL_3A)
 @Composable
-fun login(onClick: () -> Unit = {}){
+fun login(navController: NavHostController = rememberNavController(), onClick: () -> Unit = {}){
     val coroutineScope = rememberCoroutineScope()
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -110,7 +112,8 @@ fun login(onClick: () -> Unit = {}){
                             val succeed:String = jResponse.getString("Feedback");
                             if(succeed == "TRUE")
                             {
-                                onClick();
+                                navController.navigate(Screen.MA3_1.route)
+                                //onClick();
                             }
                         }
                         //onClick();

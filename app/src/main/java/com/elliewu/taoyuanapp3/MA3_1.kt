@@ -5,10 +5,6 @@ import android.widget.DatePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.Interaction
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import java.util.*
 
 var msggg by mutableStateOf(FakeData.workListData)
@@ -73,8 +71,7 @@ object FakeData {
 @Preview(showBackground = true)
 @Composable
 fun MA3_1(
-    //navController: NavController
-    onClick: () -> Unit = {}
+    navController: NavHostController = rememberNavController()
 ) {
     Column(
         modifier = Modifier
@@ -113,8 +110,7 @@ fun MA3_1(
                     textDecoration = TextDecoration.Underline,
                     ),
                 onClick = {
-                    //navController.navigate(Screen.login.route)
-                    onClick()
+                    navController.navigate(Screen.login.route)
                 },
                 modifier = Modifier.padding(end = 20.dp)
             )
@@ -146,7 +142,7 @@ fun MA3_1(
                     shape = RoundedCornerShape(50),
                     modifier = Modifier.size(width = 70.dp, height = 40.dp),
                     onClick = {
-                        onClick();
+                        navController.navigate(Screen.login.route)
                     },
                 )
                 {
@@ -243,7 +239,7 @@ fun MA3_1(
             workList(msggg);
         }
     }
-    BottomSpace();
+    BottomSpace(navController)
 }
 
 @Composable

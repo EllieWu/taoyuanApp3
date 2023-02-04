@@ -27,6 +27,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import java.util.*
 
 @Preview(device = Devices.PIXEL_C)
@@ -34,8 +36,7 @@ import java.util.*
 @Preview(showBackground = true)
 @Composable
 fun MA3_3(
-    //navController: NavController
-    onClick: () -> Unit = {}
+    navController: NavHostController = rememberNavController()
 ) {
     Column(
         modifier = Modifier
@@ -74,7 +75,6 @@ fun MA3_3(
                     ),
                 onClick = {
                     //navController.navigate(Screen.login.route)
-                    onClick()
                 },
                 modifier = Modifier.padding(end = 20.dp)
             )
@@ -106,7 +106,7 @@ fun MA3_3(
                     shape = RoundedCornerShape(50),
                     modifier = Modifier.size(width = 70.dp, height = 40.dp),
                     onClick = {
-                        onClick();
+
                     },
                 )
                 {
@@ -203,5 +203,5 @@ fun MA3_3(
             workList(msggg);
         }
     }
-    BottomSpace();
+    BottomSpace(navController);
 }

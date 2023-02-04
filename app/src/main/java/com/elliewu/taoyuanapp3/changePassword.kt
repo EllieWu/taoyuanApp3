@@ -24,6 +24,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import java.util.*
 
 @Preview(device = Devices.PIXEL_C)
@@ -31,8 +33,7 @@ import java.util.*
 @Preview(showBackground = true)
 @Composable
 fun changePassword(
-    //navController: NavController
-    onClick: () -> Unit = {}
+    navController: NavHostController = rememberNavController()
 ) {
     Column(
         modifier = Modifier
@@ -98,8 +99,9 @@ fun changePassword(
             Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(red = 87, green = 104, blue = 182)),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .size(width = 50.dp, height = 60.dp), onClick = {
-                    onClick();
+                    .size(width = 50.dp, height = 60.dp),
+                onClick = {
+
                 },) {
                 Text(text = "下一步", fontSize = 24.sp, fontWeight = FontWeight.Bold,
                     color = Color(255,255,255),
@@ -109,5 +111,5 @@ fun changePassword(
         }
 
     }
-    BottomSpace();
+    BottomSpace(navController);
 }

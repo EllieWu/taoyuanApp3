@@ -32,6 +32,9 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import java.util.*
 
 //var msggg by mutableStateOf(FakeData.workListData)
@@ -71,8 +74,7 @@ import java.util.*
 @Preview(showBackground = true)
 @Composable
 fun MA3_2(
-    //navController: NavController
-    onClick: () -> Unit = {}
+    navController: NavHostController = rememberNavController()
 ) {
     Column(
         modifier = Modifier
@@ -127,7 +129,7 @@ fun MA3_2(
                     shape = RoundedCornerShape(50),
                     modifier = Modifier.size(width = 70.dp, height = 40.dp),
                     onClick = {
-                        onClick();
+                        navController.navigate(Screen.MA3_3.route)
                     },
                 )
                 {
@@ -224,7 +226,7 @@ fun MA3_2(
             //workList(msggg);
         }
     }
-    BottomSpace();
+    BottomSpace(navController)
 }
 
 

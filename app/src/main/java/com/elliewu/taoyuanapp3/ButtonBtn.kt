@@ -22,24 +22,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
-data class buttonBtn(val icon: Int, val text: String,val screen: Screen)
+data class buttonBtn(val icon: Int, val text: String, val screen: Screen)
 
 var buttonBtnData = listOf(
     buttonBtn(
-        R.drawable.list, "巡檢工單",Screen.MA3_1
+        R.drawable.list, "巡檢工單", Screen.MA3_1
     ),
     buttonBtn(
-        R.drawable.p2, "維修工單",Screen.MA3_2
+        R.drawable.p2, "維修工單", Screen.MA3_2
     ),
     buttonBtn(
-        R.drawable.p3, "報修",Screen.MA3_3
+        R.drawable.p3, "報修", Screen.MA3_3
     ),
     buttonBtn(
-        R.drawable.p4, "密碼變更",Screen.MA3_2
+        R.drawable.p4, "密碼變更", Screen.changePassword
     ),
 )
 
@@ -47,7 +50,7 @@ var buttonBtnData = listOf(
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
 @Composable
-fun BottomSpace() {
+fun BottomSpace(navController :NavHostController = rememberNavController()) {
     Box(modifier = Modifier.fillMaxSize(), Alignment.BottomCenter) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -80,14 +83,13 @@ fun BottomSpace() {
 //            }else{
 //                Color(157,157,157)
 //            }
-            BottomBtn(buttonBtnData);
+            BottomBtn(buttonBtnData,navController);
         }
     }
 }
 
 @Composable
-fun BottomBtnCard(btnList: buttonBtn) {
-
+fun BottomBtnCard(btnList: buttonBtn,navController :NavHostController = rememberNavController()) {
     Button(
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
@@ -96,20 +98,11 @@ fun BottomBtnCard(btnList: buttonBtn) {
         ),
         modifier = Modifier.size(width = 100.dp, 80.dp),
         onClick = {
-                Log.d("ButtonEvent",btnList.screen.route.toString())
+            Log.d("ButtonEvent", btnList.screen.route.toString())
 
 //                val screen = btnList.screen
-//                navController.navigate(screen.route)
-//            val value = if (btnList.text == "巡檢工單") {
-//                Log.d("TAG", "message")
-//            } else if (btnList.text == "維修工單") {
-//                2
-//            } else if (btnList.text == "報修") {
-//                3
-//            } else {
-//                4
-//            }
-//            println(value);
+            navController.navigate(btnList.screen.route)
+
 //
 //                if (value == 1) {
 //                    Color(235, 166, 59)
@@ -124,7 +117,6 @@ fun BottomBtnCard(btnList: buttonBtn) {
 //                } else {
 //                    Color(157, 157, 157)
 //                }
-
         }
     ) {
         Column(
@@ -149,11 +141,21 @@ fun BottomBtnCard(btnList: buttonBtn) {
     }
 }
 
+
 @Composable
-fun BottomBtn(messages: List<buttonBtn>) {
-    LazyRow(modifier = Modifier.fillMaxSize(),horizontalArrangement = Arrangement.SpaceAround) {
+fun BottomBtn(messages: List<buttonBtn>,navController :NavHostController = rememberNavController()) {
+    LazyRow(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.SpaceAround) {
         items(messages) { message ->
-            BottomBtnCard(message)
+            BottomBtnCard(message,navController)
         }
     }
+}
+
+@Preview
+@Composable
+fun p(){
+    Column() {
+        BottomBtnCard(buttonBtnData[0])
+    }
+
 }
