@@ -5,6 +5,7 @@ sealed class Screen(val route: String){
     object MA3_1 : Screen("MA3_1")
     object MA3_2 : Screen("MA3_2")
     object MA3_3 : Screen("MA3_3")
+    object changePassword : Screen("changePassword")
 
 
 //    fun withArgs(vararg args: String): String{
