@@ -5,23 +5,17 @@ import android.widget.DatePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.Interaction
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -33,46 +27,13 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import java.util.*
 
-var msggg by mutableStateOf(FakeData.workListData)
-const val title = "外巡巡檢工單"
-data class Lists(val state: String, val workID: String, val time: String)
-object FakeData {
-    var workListData = listOf(
-        Lists(
-            "待執行", "1090301001", "早班 08:00~12:00 "
-        ),
-        Lists(
-            "待執行", "1090301002", "中班 13:00~17:00 "
-        ),
-        Lists(
-            "待執行", "1090301003", "晚班 19:00~23:00 "
-        ),
-        Lists(
-            "待執行", "1090301003", "晚班 19:00~23:00 "
-        ),
-        Lists(
-            "待執行", "1090301003", "晚班 19:00~23:00 "
-        ),
-        Lists(
-            "待執行", "1090301003", "晚班 19:00~23:00 "
-        ),
-    )
-}
-//var list = FakeData;
-//@Composable
-//fun listCard(list: List){
-//    Text(text = list.state),
-//}
-
-//3-1巡檢工單
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
 @Composable
-fun MA3_1(
+fun MA3_3(
     //navController: NavController
     onClick: () -> Unit = {}
 ) {
@@ -91,23 +52,22 @@ fun MA3_1(
                 .background(Color(62, 83, 140)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .padding(start = 60.dp),
-                //size(width = 250.dp, height = 30.dp),
 
-                text = "外巡巡檢工單",
+                    .weight(1f)
+                    .padding(start = 100.dp),
+                //size(width = 250.dp, height = 30.dp),
+                text = "報修",
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 color = Color(255, 255, 255),
             )
             ClickableText(
-                text = AnnotatedString("登出"),
+                text = AnnotatedString("新增報修"),
                 style = TextStyle(
-                    color = White,
+                    color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
                     textDecoration = TextDecoration.Underline,
@@ -244,68 +204,4 @@ fun MA3_1(
         }
     }
     BottomSpace();
-}
-
-@Composable
-fun listCard(list: Lists) {
-    //Column(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
-    Card(modifier = Modifier.padding(bottom = 20.dp)) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(width = 0.dp, height = 100.dp)
-                .background(Color(255, 255, 255))
-        ) {
-            Box(
-                contentAlignment = Alignment.Center, modifier = Modifier
-                    .size(width = 100.dp, height = 100.dp)
-                    .background(Color(65, 89, 151))
-            ) {
-                Text(
-                    text = list.state,
-                    Modifier.padding(16.dp),
-                    textAlign = TextAlign.Center,
-                    color = White
-                )
-            }
-            Column(
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth()
-                    .padding(start = 20.dp)
-            ) {
-                Text(
-                    modifier = Modifier.padding(bottom = 10.dp),
-                    text = list.workID,
-                    color = Color(105, 105, 105)
-                )
-                Text(
-                    text = list.time,
-                    color = Color(200, 71, 52),
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-    }
-}
-//}
-
-
-@Composable
-fun workList(messages: List<Lists>) {
-    LazyColumn(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
-        items(messages) { message ->
-            listCard(message)
-        }
-    }
-}
-
-//@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    MA3_1();
-    //workList(msggg);
-
 }

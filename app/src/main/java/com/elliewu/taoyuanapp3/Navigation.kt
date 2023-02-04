@@ -21,7 +21,7 @@ fun Navigation() {
         }
         composable(route = Screen.MA3_1.route) { entry ->
             MA3_1 { navController.navigate(Screen.login.route) }
-            BottomBtn{ (navController.navigate(Screen.MA3_2.route)) }
+            //BottomBtnCard (navController = navController, btnList = buttonBtn())
         }
         composable(route = Screen.MA3_2.route) { entry ->
             MA3_2 { navController.navigate(Screen.login.route) }
