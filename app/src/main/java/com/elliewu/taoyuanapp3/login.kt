@@ -103,7 +103,8 @@ fun login(onClick: () -> Unit = {}){
                         .size(width = 50.dp, height = 60.dp),
                     onClick = {
                         coroutineScope.launch {
-                            val responseString = HttpRequestTest()
+                            var jsonObject = JSONObject()
+                            val responseString = HttpRequestTest(jsonObject)
                             Log.d("Login Response",responseString)
                             val jResponse = JSONObject(responseString);
                             val succeed:String = jResponse.getString("Feedback");
