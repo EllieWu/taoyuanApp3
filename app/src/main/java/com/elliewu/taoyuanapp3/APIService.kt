@@ -20,13 +20,7 @@ interface APIService {
     suspend fun createEmployee(@Body requestBody: RequestBody): retrofit2.Response<ResponseBody>
 }
 suspend fun HttpRequestTest(jsonObject: JSONObject):String {
-    var loginJsonObject = jsonObject;
-    loginJsonObject.put("Function", "Login")
-    loginJsonObject.put("UserID", "F123332212")
-    loginJsonObject.put("UserPW", "Abc1234")
     // Create JSON using JSONObject
-
-    var jsonObject = loginJsonObject
 
     // Convert JSONObject to String
     val jsonObjectString = jsonObject.toString()

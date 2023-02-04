@@ -104,7 +104,11 @@ fun login(onClick: () -> Unit = {}){
                     onClick = {
                         coroutineScope.launch {
                             var jsonObject = JSONObject()
-                            val responseString = HttpRequestTest(jsonObject)
+                            var loginJsonObject = jsonObject;
+                            loginJsonObject.put("Function", "Login")
+                            loginJsonObject.put("UserID", "F123332212")
+                            loginJsonObject.put("UserPW", "Abc1234")
+                            val responseString = HttpRequestTest(loginJsonObject)
                             Log.d("Login Response",responseString)
                             val jResponse = JSONObject(responseString);
                             val succeed:String = jResponse.getString("Feedback");
