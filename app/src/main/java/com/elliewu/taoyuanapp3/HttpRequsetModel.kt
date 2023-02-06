@@ -17,7 +17,7 @@ class SelectWorkList_Request(
     @SerializedName("UserID")var UserID : String?
 )
 class SelectWorkList_Response(
-    @SerializedName("WorkList")var WorkList : List<WorkList>
+    @SerializedName("WorkList")var WorkList : List<WorkList>?
 )
 class WorkList(
     @SerializedName("State")var State : String?,

@@ -34,6 +34,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.util.*
 
 var msggg by mutableStateOf(FakeData.workListData)
@@ -74,6 +79,8 @@ object FakeData {
 fun MA3_1(
     navController: NavHostController = rememberNavController()
 ) {
+    //TODO:Jeremy增加根據request塞入變數 下方的Date跟UserID會根據外部變化
+    MA3_1_MakeListCom("2023-02-02","F123332212");
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -242,7 +249,39 @@ fun MA3_1(
     }
     BottomSpace(navController)
 }
-
+//TODO:Jeremy增加
+@Composable
+fun MA3_1_MakeListCom(Date:String,UserID:String){
+    val coroutineScope = rememberCoroutineScope()
+    MA3_1_MakeList(coroutineScope,Date,UserID)
+}
+fun MA3_1_MakeList(coroutineScope:CoroutineScope,Date:String,UserID:String){
+    coroutineScope.launch {
+        var MA3_RequestJsonObject = JSONObject();
+        MA3_RequestJsonObject.put("Function", "SelectWorkList")
+        MA3_RequestJsonObject.put("Date", Date)
+        MA3_RequestJsonObject.put("UserID", UserID)
+        val responseString = HttpRequestTest(MA3_RequestJsonObject)
+        Log.d("MA3_1",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var TestWorkList:SelectWorkList_Response = gson.fromJson(responseString,SelectWorkList_Response::class.java)
+            var workListDatas = listOf(
+                Lists(
+                    "", "", ""
+                )
+            )
+            workListDatas = workListDatas - workListDatas[workListDatas.size -1]
+            if(TestWorkList.WorkList != null){
+                TestWorkList.WorkList!!.forEach {
+                    var worklistd = Lists(it.State.toString(),it.WorkCode.toString(),it.WorkTime.toString())
+                    workListDatas += worklistd
+                }
+            }
+            msggg = workListDatas
+        }
+    }
+}
 @Composable
 fun listCard(list: Lists,navController :NavHostController = rememberNavController()) {
     //Column(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
