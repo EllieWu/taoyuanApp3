@@ -1,8 +1,10 @@
 package com.elliewu.taoyuanapp3
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -13,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,32 +27,81 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun infoLayout(){
-    Row(modifier = Modifier
-        .size(width = 1000.dp, height = 30.dp)
-        .fillMaxWidth()
-        .background(Color(255, 255, 255))){
+    Row(
+        modifier = Modifier
+            .size(width = 1000.dp, height = 80.dp)
+            .fillMaxWidth()
+            .background(Color.Transparent)
+        ,horizontalArrangement = Arrangement.SpaceBetween
+        )
+    {
         Button(
+            contentPadding = PaddingValues(4.dp),
+            border = BorderStroke(0.dp, Color.Transparent),
+            shape = RoundedCornerShape(0.dp),
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(147,146,146)
             ),
-            modifier = Modifier.size(width = 100.dp, height = 50.dp),
+            modifier = Modifier.size(width = 130.dp, height = 50.dp),
             onClick = {}
         ){
-            Row(horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.size(width = 150.dp, height = 200.dp).fillMaxWidth().fillMaxHeight()) {
+            Row(
+                modifier = Modifier
+                    .size(width = 180.dp, height = 200.dp)
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,)
+            {
                 Image(
                     painterResource(id = R.drawable.list),
                     contentDescription = "",
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(25.dp),
                     colorFilter = ColorFilter.tint(Color(255,255,255))
                 )
                 Text(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(vertical = 7.dp),
                     text = "巡檢資訊",
+                    textAlign = TextAlign.Center,
                     color = Color(255,255,255),
-                    fontSize = 10.sp,
+                    fontSize = 20.sp,
                     )
+            }
+        }
+        Row(modifier = Modifier.fillMaxHeight().padding(end = 55.dp)){
+            Button(
+                contentPadding = PaddingValues(0.dp),
+                shape = RoundedCornerShape(0.dp),
+                modifier = Modifier.size(60.dp,60.dp).padding(end = 5.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(166,69,76)
+                ),
+                 onClick = { /*TODO*/ }) {
+                Text(
+                    modifier = Modifier.fillMaxSize().padding(vertical = 10.dp),
+                    text = "隱藏\n打卡點",
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color(255,255,255)
+                )
+            }
+            Button(
+                contentPadding = PaddingValues(0.dp),
+                shape = RoundedCornerShape(0.dp),
+                modifier = Modifier.size(60.dp,60.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(79,143,193)
+                ),
+                onClick = { /*TODO*/ }) {
+                Text(
+                    modifier = Modifier.fillMaxSize().padding(vertical = 10.dp),
+                    text = "隱藏\n報修點",
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    color = Color(255,255,255)
+                )
             }
         }
     }

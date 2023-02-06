@@ -27,6 +27,9 @@ fun Navigation() {
         composable(route = Screen.changePassword.route) { entry ->
             changePassword(navController = navController)
         }
+        composable(route = Screen.changePassword_newPassword.route) { entry ->
+            changePassword_newPassword(navController = navController)
+        }
         composable(route = Screen.MA3_1_1.route) { entry ->
             MA3_1_1(navController = navController)
         }
