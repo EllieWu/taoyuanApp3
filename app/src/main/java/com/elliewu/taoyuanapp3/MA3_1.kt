@@ -35,7 +35,6 @@ import androidx.navigation.compose.rememberNavController
 import java.util.*
 
 var msggg by mutableStateOf(FakeData.workListData)
-const val title = "外巡巡檢工單"
 data class Lists(val state: String, val workID: String, val time: String)
 object FakeData {
     var workListData = listOf(
