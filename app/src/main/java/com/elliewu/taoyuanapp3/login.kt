@@ -126,10 +126,8 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             if(succeed == "TRUE")
                             {
                                 navController.navigate(Screen.MA3_1.route)
-                                //onClick();
                             }
                         }
-                        //onClick();
                     },
                 ) {
                     Text(text = "登入", fontSize = 24.sp, fontWeight = FontWeight.Bold,
