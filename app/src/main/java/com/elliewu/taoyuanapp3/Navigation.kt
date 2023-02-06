@@ -33,6 +33,9 @@ fun Navigation() {
         composable(route = Screen.MA3_1_1.route) { entry ->
             MA3_1_1(navController = navController)
         }
+        composable(route = Screen.MA3_1_1_info.route) { entry ->
+            MA3_1_1_info(navController = navController)
+        }
 
 
     }

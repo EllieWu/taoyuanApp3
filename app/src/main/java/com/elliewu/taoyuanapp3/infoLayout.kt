@@ -20,13 +20,15 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
 
 @Composable
-fun infoLayout(){
+fun infoLayout(navController: NavHostController = rememberNavController()){
     Row(
         modifier = Modifier
             .size(width = 1000.dp, height = 80.dp)
@@ -43,7 +45,7 @@ fun infoLayout(){
                 backgroundColor = Color(147,146,146)
             ),
             modifier = Modifier.size(width = 130.dp, height = 50.dp),
-            onClick = {}
+            onClick = {navController.navigate(Screen.MA3_1_1_info.route)}
         ){
             Row(
                 modifier = Modifier
@@ -78,7 +80,7 @@ fun infoLayout(){
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color(166,69,76)
                 ),
-                 onClick = { /*TODO*/ }) {
+                 onClick = {  }) {
                 Text(
                     modifier = Modifier.fillMaxSize().padding(vertical = 10.dp),
                     text = "隱藏\n打卡點",

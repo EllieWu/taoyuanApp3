@@ -118,24 +118,21 @@ fun BottomBtnCard2(btnList: buttonBtn2) {
             Image(
                 painterResource(id = btnList.icon),
                 contentDescription = "",
-                modifier = Modifier.size(30.dp).padding(bottom = 5.dp),
+                modifier = Modifier.size(35.dp).padding(bottom = 5.dp),
                 colorFilter = ColorFilter.tint(Color(255,255,255))
             )
             Text(
                 text = btnList.text,
                 color = Color(255,255,255),
                 fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
+                fontSize = 14.sp,
             )
         }
 
     }
 }
 
-@Composable
-fun info(){
 
-}
 
 @Composable
 fun BottomBtn2(messages: List<buttonBtn2>) {

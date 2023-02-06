@@ -75,7 +75,6 @@ fun MA3_1_1( navController: NavHostController = rememberNavController()){
                 color = Color(255, 255, 255),
             )
 
-            //var enabled by remember { mutableStateOf(true)}
 
         }
         Column(modifier = Modifier.fillMaxSize()) {
@@ -86,7 +85,7 @@ fun MA3_1_1( navController: NavHostController = rememberNavController()){
                     .fillMaxWidth()
                     .padding(bottom = 10.dp)
             ) {
-                infoLayout()
+                infoLayout(navController)
             }
             BottomSpace2();
         }

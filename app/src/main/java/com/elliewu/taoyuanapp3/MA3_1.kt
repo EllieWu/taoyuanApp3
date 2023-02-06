@@ -287,7 +287,7 @@ fun MA3_1_MakeList(coroutineScope:CoroutineScope,Date:String,UserID:String){
 fun listCard(list: Lists,navController :NavHostController = rememberNavController()) {
     //Column(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
     Button(
-        modifier = Modifier.padding(start = 40.dp, end = 40.dp, bottom = 5.dp).fillMaxSize(),
+        modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 5.dp).fillMaxSize(),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
@@ -304,16 +304,22 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
                     //.size(width = 0.dp, height = 100.dp)
                     .background(Color(255, 255, 255))
             ) {
+                val stateColor = if(list.state == "已完工"){
+                    Color(128,128,128)
+                }else{
+                    Color(65, 89, 151)
+                }
                 Box(
                     contentAlignment = Alignment.Center, modifier = Modifier
                         .size(width = 100.dp, height = 100.dp)
-                        .background(Color(65, 89, 151))
+                        .background(stateColor)
                 ) {
                     Text(
                         text = list.state,
                         Modifier.padding(16.dp),
                         textAlign = TextAlign.Center,
-                        color = White
+                        color = White,
+                        fontSize = 18.sp,
                     )
                 }
                 Column(
@@ -326,10 +332,12 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
                         text = list.workID,
+                        fontSize = 18.sp,
                         color = Color(105, 105, 105)
                     )
                     Text(
                         text = list.time,
+                        fontSize = 18.sp,
                         color = Color(200, 71, 52),
                         fontWeight = FontWeight.Bold
                     )
