@@ -110,16 +110,16 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         coroutineScope.launch {
                             var loginJsonObject = JSONObject();
                             loginJsonObject.put("Function", "Login")
-//                            loginJsonObject.put("UserID", account)
-//                            loginJsonObject.put("UserPW", password)
-                            loginJsonObject.put("UserID", "F123332212")
-                            loginJsonObject.put("UserPW", "Abc1234")
+                            //TODO : 正式上線請把預設值改掉換下面那個
+                            loginJsonObject.put("UserID", account)
+                            loginJsonObject.put("UserPW", password)
+                            //loginJsonObject.put("UserID", "F123332212")
+                            //loginJsonObject.put("UserPW", "Abc1234")
                             val responseString = HttpRequestTest(loginJsonObject)
                             Log.d("Login Response",responseString)
                             if(responseString == "Error")
                             {
                                 //TODO :網路連線異常的通知
-                                //coroutineScope.cancel();
                             }
                             val jResponse = JSONObject(responseString);
                             val succeed:String? = jResponse.getString("Feedback").toString();
@@ -128,7 +128,6 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                                 navController.navigate(Screen.MA3_1.route)
                                 //onClick();
                             }
-                            //coroutineScope.cancel();
                         }
                         //onClick();
                     },
