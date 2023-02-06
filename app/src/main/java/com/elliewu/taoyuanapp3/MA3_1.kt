@@ -39,9 +39,11 @@ import com.google.gson.JsonArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
 
 var msggg by mutableStateOf(FakeData.workListData)
+var MA3_1_date by mutableStateOf(SimpleDateFormat("yyyy-MM-dd").format(Date()));
 data class Lists(val state: String, val workID: String, val time: String)
 object FakeData {
     var workListData = listOf(
@@ -80,7 +82,6 @@ fun MA3_1(
     navController: NavHostController = rememberNavController()
 ) {
     //TODO:Jeremy增加根據request塞入變數 下方的Date跟UserID會根據外部變化
-    MA3_1_MakeListCom("2023-02-06","F123332212");
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,12 +155,6 @@ fun MA3_1(
                     },
                 )
                 {
-//                        Text(
-//                            text = "今日",
-//                            fontSize = 15.sp,
-//                            fontWeight = FontWeight.Bold,
-//                            color = Color(202,140,62)
-//                        )
                     ClickableText(
                         text = AnnotatedString("今日"),
                         style = TextStyle(
@@ -169,7 +164,7 @@ fun MA3_1(
                         ),
                         onClick = {
                             //當天日期
-
+                             MA3_1_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                         })
                 }
 
@@ -185,8 +180,7 @@ fun MA3_1(
                         .size(38.dp)
                         .padding(end = 10.dp)
                 )
-                var datePicked by remember { mutableStateOf("") }
-
+                //var datePicked by remember { mutableStateOf("") }
                 val context = LocalContext.current
                 val year: Int
                 val month: Int
@@ -202,25 +196,32 @@ fun MA3_1(
                 val datePickerDialog = DatePickerDialog(
                     context,
                     { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-                        datePicked = "$year-$month-$dayOfMonth"
+                        val pickdatecalendar = Calendar.getInstance()
+                        pickdatecalendar.set(year,month,dayOfMonth)
+                        MA3_1_date = SimpleDateFormat("yyyy-MM-dd").format(pickdatecalendar.time)
                     }, year, month, day
                 )
 
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { datePickerDialog.show() }) {
-                    if (datePicked == "") {
-                        Text(
-                            text = "選擇日期",
-                            fontWeight = FontWeight.Bold,
-                            color = Color(105, 105, 105)
-                        )
-                    } else {
-                        Text(
-                            text = "${datePicked}",
-                            color = Color(200, 71, 52)
-                        )
-                    }
+//                    if (MA3_1_date == "") {
+//                        Text(
+//                            text = "選擇日期",
+//                            fontWeight = FontWeight.Bold,
+//                            color = Color(105, 105, 105)
+//                        )
+//                    } else {
+//                        Text(
+//                            text = "${MA3_1_date}",
+//                            color = Color(200, 71, 52)
+//                        )
+//                    }
+                    Text(
+                        text = MA3_1_date,
+                        color = Color(200, 71, 52)
+                    )
+                    MA3_1_MakeListCom(MA3_1_date,"F123332212");
                 }
             }
             Text(
