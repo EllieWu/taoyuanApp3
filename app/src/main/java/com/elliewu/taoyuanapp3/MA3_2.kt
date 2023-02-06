@@ -5,10 +5,6 @@ import android.widget.DatePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.Interaction
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,10 +14,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -32,19 +26,17 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import java.util.*
 
 //var msggg by mutableStateOf(FakeData.workListData)
 //
-//data class Lists(val state: String, val workID: String, val time: String)
-//object FakeData {
-//    var workListData = listOf(
-//        Lists(
-//            "待執行", "1090301001", "早班 08:00~12:00 "
-//        ),
+
+    var FixListData = listOf(
+        Lists(
+            "待執行", "1100515001", "早班 08:00~12:00 "
+        ),
 //        Lists(
 //            "待執行", "1090301002", "中班 13:00~17:00 "
 //        ),
@@ -60,13 +52,7 @@ import java.util.*
 //        Lists(
 //            "待執行", "1090301003", "晚班 19:00~23:00 "
 //        ),
-//    )
-//}
-//var list = FakeData;
-//@Composable
-//fun listCard(list: List){
-//    Text(text = list.state),
-//}
+    )
 
 //3-1巡檢工單
 @Preview(device = Devices.PIXEL_C)
@@ -209,7 +195,7 @@ fun MA3_2(
                 fontWeight = FontWeight.Bold
             )
         }
-        if (msggg.size == 0) {
+        if (FixListData.size == 0) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
@@ -217,18 +203,16 @@ fun MA3_2(
                     .fillMaxHeight()
                     .background(Color(238, 239, 241))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無巡檢工單")
+                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無維修工單")
             }
         } else {
-//            Button(onClick = { msggg = msggg - msggg[msggg.size -1] }) {
+//            Button(onClick = { FixListData = FixListData - FixListData[FixListData.size-1] }) {
 //
 //            }
-            //workList(msggg);
+            workList(FixListData);
         }
     }
     BottomSpace(navController)
 }
-
-
 
 

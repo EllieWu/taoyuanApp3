@@ -1,6 +1,7 @@
 package com.elliewu.taoyuanapp3
 
 import android.app.DatePickerDialog
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +37,6 @@ import androidx.navigation.compose.rememberNavController
 import java.util.*
 
 var msggg by mutableStateOf(FakeData.workListData)
-const val title = "外巡巡檢工單"
 data class Lists(val state: String, val workID: String, val time: String)
 object FakeData {
     var workListData = listOf(
@@ -236,52 +237,63 @@ fun MA3_1(
 //            Button(onClick = { msggg = msggg - msggg[msggg.size -1] }) {
 //
 //            }
-            workList(msggg);
+            workList(msggg,navController);
         }
     }
     BottomSpace(navController)
 }
 
 @Composable
-fun listCard(list: Lists) {
+fun listCard(list: Lists,navController :NavHostController = rememberNavController()) {
     //Column(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
-    Card(modifier = Modifier.padding(bottom = 20.dp)) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(width = 0.dp, height = 100.dp)
-                .background(Color(255, 255, 255))
-        ) {
-            Box(
-                contentAlignment = Alignment.Center, modifier = Modifier
-                    .size(width = 100.dp, height = 100.dp)
-                    .background(Color(65, 89, 151))
-            ) {
-                Text(
-                    text = list.state,
-                    Modifier.padding(16.dp),
-                    textAlign = TextAlign.Center,
-                    color = White
-                )
-            }
-            Column(
-                verticalArrangement = Arrangement.Center,
+    Button(
+        modifier = Modifier.padding(start = 40.dp, end = 40.dp, bottom = 5.dp).fillMaxSize(),
+        border = BorderStroke(0.dp, Color.Transparent),
+        elevation = null,
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+        onClick = {
+            Log.d("ButtonEvent", Screen.MA3_1_1.route)
+            navController.navigate(Screen.MA3_1_1.route)
+        })
+    {
+        Card(modifier = Modifier.fillMaxSize()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .fillMaxHeight()
                     .fillMaxWidth()
-                    .padding(start = 20.dp)
+                    //.size(width = 0.dp, height = 100.dp)
+                    .background(Color(255, 255, 255))
             ) {
-                Text(
-                    modifier = Modifier.padding(bottom = 10.dp),
-                    text = list.workID,
-                    color = Color(105, 105, 105)
-                )
-                Text(
-                    text = list.time,
-                    color = Color(200, 71, 52),
-                    fontWeight = FontWeight.Bold
-                )
+                Box(
+                    contentAlignment = Alignment.Center, modifier = Modifier
+                        .size(width = 100.dp, height = 100.dp)
+                        .background(Color(65, 89, 151))
+                ) {
+                    Text(
+                        text = list.state,
+                        Modifier.padding(16.dp),
+                        textAlign = TextAlign.Center,
+                        color = White
+                    )
+                }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .padding(start = 20.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        text = list.workID,
+                        color = Color(105, 105, 105)
+                    )
+                    Text(
+                        text = list.time,
+                        color = Color(200, 71, 52),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }
@@ -290,10 +302,10 @@ fun listCard(list: Lists) {
 
 
 @Composable
-fun workList(messages: List<Lists>) {
-    LazyColumn(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
+fun workList(messages: List<Lists>,navController :NavHostController = rememberNavController()) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(messages) { message ->
-            listCard(message)
+            listCard(message,navController)
         }
     }
 }

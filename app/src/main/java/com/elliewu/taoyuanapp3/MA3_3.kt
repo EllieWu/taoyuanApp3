@@ -31,6 +31,27 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import java.util.*
 
+var RepairListData = listOf(
+          Lists(
+            "待執行", "1100515001", "早班 08:00~12:00 "
+          ),
+          Lists(
+            "待執行", "1100515002", "中班 13:00~17:00 "
+          ),
+          Lists(
+            "待執行", "1100825001", "晚班 19:00~23:00 "
+          ),
+//        Lists(
+//            "待執行", "1090301003", "晚班 19:00~23:00 "
+//        ),
+//        Lists(
+//            "待執行", "1090301003", "晚班 19:00~23:00 "
+//        ),
+//        Lists(
+//            "待執行", "1090301003", "晚班 19:00~23:00 "
+//        ),
+)
+
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
@@ -72,7 +93,7 @@ fun MA3_3(
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
                     textDecoration = TextDecoration.Underline,
-                    ),
+                ),
                 onClick = {
                     //navController.navigate(Screen.login.route)
                 },
@@ -186,7 +207,7 @@ fun MA3_3(
                 fontWeight = FontWeight.Bold
             )
         }
-        if (msggg.size == 0) {
+        if (RepairListData.size == 0) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
@@ -200,7 +221,7 @@ fun MA3_3(
 //            Button(onClick = { msggg = msggg - msggg[msggg.size -1] }) {
 //
 //            }
-            workList(msggg);
+            workList(RepairListData);
         }
     }
     BottomSpace(navController);
