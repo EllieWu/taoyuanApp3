@@ -105,7 +105,7 @@ class RepairList_Request(
     @SerializedName("UserID")var UserID : String?
 )
 class RepairList_Response(
-    @SerializedName("RepairList")var RepairList : List<RepairList>
+    @SerializedName("RepairList")var RepairList : List<RepairList>?
 )
 class RepairList(
     @SerializedName("State")var State : String?,

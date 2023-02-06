@@ -1,6 +1,7 @@
 package com.elliewu.taoyuanapp3
 
 import android.app.DatePickerDialog
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -28,32 +29,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
 
-//var msggg by mutableStateOf(FakeData.workListData)
-//
-
-    var FixListData = listOf(
-        Lists(
-            "待執行", "1100515001", "早班 08:00~12:00 "
-        ),
-//        Lists(
-//            "待執行", "1090301002", "中班 13:00~17:00 "
-//        ),
-//        Lists(
-//            "待執行", "1090301003", "晚班 19:00~23:00 "
-//        ),
-//        Lists(
-//            "待執行", "1090301003", "晚班 19:00~23:00 "
-//        ),
-//        Lists(
-//            "待執行", "1090301003", "晚班 19:00~23:00 "
-//        ),
-//        Lists(
-//            "待執行", "1090301003", "晚班 19:00~23:00 "
-//        ),
-    )
-
+var MA3_2_msggg by mutableStateOf(FakeData.workListData)
+var MA3_2_date by mutableStateOf(SimpleDateFormat("yyyy-MM-dd").format(Date()));
 //3-1巡檢工單
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
@@ -134,7 +118,7 @@ fun MA3_2(
                         ),
                         onClick = {
                             //當天日期
-
+                            MA3_2_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                         })
                 }
 
@@ -150,7 +134,6 @@ fun MA3_2(
                         .size(38.dp)
                         .padding(end = 10.dp)
                 )
-                var datePicked by remember { mutableStateOf("") }
 
                 val context = LocalContext.current
                 val year: Int
@@ -167,25 +150,19 @@ fun MA3_2(
                 val datePickerDialog = DatePickerDialog(
                     context,
                     { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-                        datePicked = "$year-$month-$dayOfMonth"
+                        val pickdatecalendar = Calendar.getInstance()
+                        pickdatecalendar.set(year,month,dayOfMonth)
+                        MA3_2_date = SimpleDateFormat("yyyy-MM-dd").format(pickdatecalendar.time)
                     }, year, month, day
                 )
-
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { datePickerDialog.show() }) {
-                    if (datePicked == "") {
-                        Text(
-                            text = "選擇日期",
-                            fontWeight = FontWeight.Bold,
-                            color = Color(105, 105, 105)
-                        )
-                    } else {
-                        Text(
-                            text = "${datePicked}",
-                            color = Color(255, 0, 0)
-                        )
-                    }
+                    Text(
+                        text = MA3_2_date,
+                        color = Color(255, 0, 0)
+                    )
+                    MA3_2_MakeListCom(MA3_2_date,"F123332212");
                 }
             }
             Text(
@@ -195,7 +172,7 @@ fun MA3_2(
                 fontWeight = FontWeight.Bold
             )
         }
-        if (FixListData.size == 0) {
+        if (MA3_2_msggg.size == 0) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
@@ -206,13 +183,41 @@ fun MA3_2(
                 Text(modifier = Modifier.padding(top = 180.dp), text = "暫無維修工單")
             }
         } else {
-//            Button(onClick = { FixListData = FixListData - FixListData[FixListData.size-1] }) {
-//
-//            }
-            workList(FixListData);
+            workList(MA3_2_msggg);
         }
     }
     BottomSpace(navController)
 }
-
+@Composable
+fun MA3_2_MakeListCom(Date:String,UserID:String){
+    val coroutineScope = rememberCoroutineScope()
+    MA3_2_MakeList(coroutineScope,Date,UserID)
+}
+fun MA3_2_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
+    coroutineScope.launch {
+        var MA3_RequestJsonObject = JSONObject();
+        MA3_RequestJsonObject.put("Function", "RepairList")
+        MA3_RequestJsonObject.put("Date", Date)
+        MA3_RequestJsonObject.put("UserID", UserID)
+        val responseString = HttpRequestTest(MA3_RequestJsonObject)
+        Log.d("MA3_1",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var TestWorkList:RepairList_Response = gson.fromJson(responseString,RepairList_Response::class.java)
+            var workListDatas = listOf(
+                Lists(
+                    "", "", ""
+                )
+            )
+            workListDatas = workListDatas - workListDatas[workListDatas.size -1]
+            if(TestWorkList.RepairList != null){
+                TestWorkList.RepairList!!.forEach {
+                    var worklistd = Lists(it.State.toString(),it.RepairCode.toString(),it.RepairTitle.toString())
+                    workListDatas += worklistd
+                }
+            }
+            MA3_2_msggg = workListDatas
+        }
+    }
+}
 
