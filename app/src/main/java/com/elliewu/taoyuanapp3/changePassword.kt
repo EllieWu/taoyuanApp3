@@ -1,6 +1,7 @@
 package com.elliewu.taoyuanapp3
 
 import android.app.DatePickerDialog
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -26,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.util.*
 
 @Preview(device = Devices.PIXEL_C)
@@ -35,6 +38,7 @@ import java.util.*
 fun changePassword(
     navController: NavHostController = rememberNavController()
 ) {
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -101,7 +105,33 @@ fun changePassword(
                     .fillMaxWidth()
                     .size(width = 50.dp, height = 60.dp),
                 onClick = {
-
+                  //TODO :跳到新密碼輸入頁面
+                    coroutineScope.launch {
+                        var loginJsonObject = JSONObject();
+                        loginJsonObject.put("Function", "Login")
+                        //TODO : 正式上線請把預設值改掉換下面那個
+                        //loginJsonObject.put("UserID", account)
+                        //loginJsonObject.put("UserPW", password)
+                        loginJsonObject.put("UserID", "F123332212")
+                        loginJsonObject.put("UserPW", "Abc1234")
+                        val responseString = HttpRequestTest(loginJsonObject)
+                        Log.d("Login Response",responseString)
+                        if(responseString == "Error")
+                        {
+                            //TODO :網路連線異常的通知
+                        }
+                        val jResponse = JSONObject(responseString);
+                        val succeed:String? = jResponse.getString("Feedback").toString();
+                        if(succeed == "TRUE")
+                        {
+                            //navController.navigate(Screen.MA3_1.route)
+                            //TODO:成功後跳轉得頁面，下一頁才會正式修改密碼
+                        }
+                        else
+                        {
+                            //TODO:登入失敗跳的東西
+                        }
+                    }
                 },) {
                 Text(text = "下一步", fontSize = 24.sp, fontWeight = FontWeight.Bold,
                     color = Color(255,255,255),
