@@ -80,7 +80,7 @@ fun MA3_1(
     navController: NavHostController = rememberNavController()
 ) {
     //TODO:Jeremy增加根據request塞入變數 下方的Date跟UserID會根據外部變化
-    MA3_1_MakeListCom("2023-02-02","F123332212");
+    MA3_1_MakeListCom("2023-02-06","F123332212");
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -218,7 +218,7 @@ fun MA3_1(
                     } else {
                         Text(
                             text = "${datePicked}",
-                            color = Color(255, 0, 0)
+                            color = Color(200, 71, 52)
                         )
                     }
                 }
