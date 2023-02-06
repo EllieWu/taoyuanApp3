@@ -106,15 +106,16 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         .fillMaxWidth()
                         .size(width = 50.dp, height = 60.dp),
                     onClick = {
+                        //TODO:之後須在外層補入請輸入帳號/請輸入密碼
                         Log.d("Login","嘗試登入");
                         coroutineScope.launch {
                             var loginJsonObject = JSONObject();
                             loginJsonObject.put("Function", "Login")
                             //TODO : 正式上線請把預設值改掉換下面那個
-                            loginJsonObject.put("UserID", account)
-                            loginJsonObject.put("UserPW", password)
-                            //loginJsonObject.put("UserID", "F123332212")
-                            //loginJsonObject.put("UserPW", "Abc1234")
+                            //loginJsonObject.put("UserID", account)
+                            //loginJsonObject.put("UserPW", password)
+                            loginJsonObject.put("UserID", "F123332212")
+                            loginJsonObject.put("UserPW", "Abc1234")
                             val responseString = HttpRequestTest(loginJsonObject)
                             Log.d("Login Response",responseString)
                             if(responseString == "Error")
@@ -126,10 +127,12 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             if(succeed == "TRUE")
                             {
                                 navController.navigate(Screen.MA3_1.route)
-                                //onClick();
+                            }
+                            else
+                            {
+                                //TODO:登入失敗跳的東西
                             }
                         }
-                        //onClick();
                     },
                 ) {
                     Text(text = "登入", fontSize = 24.sp, fontWeight = FontWeight.Bold,
