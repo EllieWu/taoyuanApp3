@@ -20,6 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -106,20 +107,25 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         .size(width = 50.dp, height = 60.dp),
                     onClick = {
                         coroutineScope.launch {
-                            var jsonObject = JSONObject()
-                            var loginJsonObject = jsonObject;
+                            var loginJsonObject = JSONObject();
                             loginJsonObject.put("Function", "Login")
                             loginJsonObject.put("UserID", "F123332212")
                             loginJsonObject.put("UserPW", "Abc1234")
                             val responseString = HttpRequestTest(loginJsonObject)
                             Log.d("Login Response",responseString)
+                            if(responseString == "Error")
+                            {
+                                //TODO :網路連線異常的通知
+                                coroutineScope.cancel();
+                            }
                             val jResponse = JSONObject(responseString);
-                            val succeed:String = jResponse.getString("Feedback");
+                            val succeed:String? = jResponse.getString("Feedback").toString();
                             if(succeed == "TRUE")
                             {
                                 navController.navigate(Screen.MA3_1.route)
                                 //onClick();
                             }
+                            coroutineScope.cancel();
                         }
                         //onClick();
                     },
