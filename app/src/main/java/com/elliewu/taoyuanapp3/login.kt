@@ -106,9 +106,12 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         .fillMaxWidth()
                         .size(width = 50.dp, height = 60.dp),
                     onClick = {
+                        Log.d("Login","嘗試登入");
                         coroutineScope.launch {
                             var loginJsonObject = JSONObject();
                             loginJsonObject.put("Function", "Login")
+//                            loginJsonObject.put("UserID", account)
+//                            loginJsonObject.put("UserPW", password)
                             loginJsonObject.put("UserID", "F123332212")
                             loginJsonObject.put("UserPW", "Abc1234")
                             val responseString = HttpRequestTest(loginJsonObject)
@@ -116,7 +119,7 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             if(responseString == "Error")
                             {
                                 //TODO :網路連線異常的通知
-                                coroutineScope.cancel();
+                                //coroutineScope.cancel();
                             }
                             val jResponse = JSONObject(responseString);
                             val succeed:String? = jResponse.getString("Feedback").toString();
@@ -125,7 +128,7 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                                 navController.navigate(Screen.MA3_1.route)
                                 //onClick();
                             }
-                            coroutineScope.cancel();
+                            //coroutineScope.cancel();
                         }
                         //onClick();
                     },
