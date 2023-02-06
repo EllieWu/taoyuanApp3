@@ -50,7 +50,7 @@ fun BottomSpace2() {
                 .fillMaxWidth()
                 .size(width = 1000.dp, height = 80.dp)
                 .fillMaxHeight()
-                .background(Color(253, 253, 253)),
+                .background(Color(232, 232, 232)),
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
 //            var selected by remember { mutableStateOf(false) }
