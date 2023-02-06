@@ -111,10 +111,10 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             var loginJsonObject = JSONObject();
                             loginJsonObject.put("Function", "Login")
                             //TODO : 正式上線請把預設值改掉換下面那個
-                            loginJsonObject.put("UserID", account)
-                            loginJsonObject.put("UserPW", password)
-                            //loginJsonObject.put("UserID", "F123332212")
-                            //loginJsonObject.put("UserPW", "Abc1234")
+                            //loginJsonObject.put("UserID", account)
+                            //loginJsonObject.put("UserPW", password)
+                            loginJsonObject.put("UserID", "F123332212")
+                            loginJsonObject.put("UserPW", "Abc1234")
                             val responseString = HttpRequestTest(loginJsonObject)
                             Log.d("Login Response",responseString)
                             if(responseString == "Error")
