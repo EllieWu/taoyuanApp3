@@ -106,6 +106,7 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         .fillMaxWidth()
                         .size(width = 50.dp, height = 60.dp),
                     onClick = {
+                        //TODO:之後須在外層補入請輸入帳號/請輸入密碼
                         Log.d("Login","嘗試登入");
                         coroutineScope.launch {
                             var loginJsonObject = JSONObject();
@@ -126,6 +127,10 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             if(succeed == "TRUE")
                             {
                                 navController.navigate(Screen.MA3_1.route)
+                            }
+                            else
+                            {
+                                //TODO:登入失敗跳的東西
                             }
                         }
                     },
