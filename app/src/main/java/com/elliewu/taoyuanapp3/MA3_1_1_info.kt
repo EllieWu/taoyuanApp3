@@ -154,7 +154,7 @@ fun infoTable(list: listInfo){
                                    //.fillMaxWidth(),
                 textAlign = TextAlign.Start,
             )
-           Row(modifier = Modifier.fillMaxWidth().padding(start = 90.dp), horizontalArrangement = Arrangement.Start)
+           Row(modifier = Modifier.fillMaxWidth().padding(start = 92.dp), horizontalArrangement = Arrangement.Start)
            {
                Text(
                    text = list.date,
