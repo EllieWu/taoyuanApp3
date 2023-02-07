@@ -44,6 +44,8 @@ import java.util.*
 
 var msggg by mutableStateOf(FakeData.workListData)
 var MA3_1_date by mutableStateOf(SimpleDateFormat("yyyy-MM-dd").format(Date()));
+//Jeremy新增不確定穩定性
+var MA3_1_WorkCode_Clicked by mutableStateOf("")
 data class Lists(val state: String, val workID: String, val time: String)
 object FakeData {
     var workListData = listOf(
@@ -277,6 +279,7 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_1_1.route)
             navController.navigate(Screen.MA3_1_1.route)
+            MA3_1_WorkCode_Clicked = list.workID
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {

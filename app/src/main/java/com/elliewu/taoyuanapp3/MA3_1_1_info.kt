@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.util.Log
 import android.util.Size
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -31,6 +32,10 @@ import androidx.core.graphics.component1
 import androidx.core.graphics.component2
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 
 data class listInfo(
@@ -50,8 +55,14 @@ data class listInfo(
             "執行中"
         ),
     )
-
-
+var MA3_1_1_info_msggg by mutableStateOf(listInfo(
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+))
 
 
 
@@ -63,6 +74,7 @@ data class listInfo(
 fun MA3_1_1_info(
    navController: NavHostController = rememberNavController()
 ) {
+    MA3_1_1_Info_MakeListCom("112020601");
 //    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = Modifier
@@ -120,7 +132,8 @@ fun MA3_1_1_info(
                 Column(modifier = Modifier
                     .fillMaxWidth()
                     .background(Color(255, 255, 255))) {
-                    infoTable(listInfoData[0]);
+                    //infoTable(listInfoData[0]);
+                    infoTable(MA3_1_1_info_msggg);
                 }
             //}
         }
@@ -135,7 +148,7 @@ fun infoTable(list: listInfo){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
-                .bottomBorder(1.dp, Color(232,232,232)),
+                .bottomBorder(1.dp, Color(232, 232, 232)),
         )
         {
             Text(
@@ -148,7 +161,9 @@ fun infoTable(list: listInfo){
                                    //.fillMaxWidth(),
                 textAlign = TextAlign.Start,
             )
-           Row(modifier = Modifier.fillMaxWidth().padding(start = 90.dp), horizontalArrangement = Arrangement.Start)
+           Row(modifier = Modifier
+               .fillMaxWidth()
+               .padding(start = 90.dp), horizontalArrangement = Arrangement.Start)
            {
                Text(
                    text = list.date,
@@ -167,7 +182,7 @@ fun infoTable(list: listInfo){
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .bottomBorder(1.dp, Color(232,232,232)),
+            .bottomBorder(1.dp, Color(232, 232, 232)),
     )
     {
         Text(
@@ -180,7 +195,9 @@ fun infoTable(list: listInfo){
             //.fillMaxWidth(),
             textAlign = TextAlign.Start,
         )
-        Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
                 text = list.classes,
@@ -199,7 +216,7 @@ fun infoTable(list: listInfo){
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .bottomBorder(1.dp, Color(232,232,232)),
+            .bottomBorder(1.dp, Color(232, 232, 232)),
     )
     {
         Text(
@@ -212,7 +229,9 @@ fun infoTable(list: listInfo){
             //.fillMaxWidth(),
             textAlign = TextAlign.Start,
         )
-        Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
                 text = list.roadLine,
@@ -231,7 +250,7 @@ fun infoTable(list: listInfo){
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .bottomBorder(1.dp, Color(232,232,232)),
+            .bottomBorder(1.dp, Color(232, 232, 232)),
     )
     {
         Text(
@@ -244,7 +263,9 @@ fun infoTable(list: listInfo){
             //.fillMaxWidth(),
             textAlign = TextAlign.Start,
         )
-        Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
                 text = list.workID,
@@ -263,7 +284,7 @@ fun infoTable(list: listInfo){
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .bottomBorder(1.dp, Color(232,232,232)),
+            .bottomBorder(1.dp, Color(232, 232, 232)),
     )
     {
         Text(
@@ -276,7 +297,9 @@ fun infoTable(list: listInfo){
             //.fillMaxWidth(),
             textAlign = TextAlign.Start,
         )
-        Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
                 text = list.worker,
@@ -308,7 +331,9 @@ fun infoTable(list: listInfo){
             //.fillMaxWidth(),
             textAlign = TextAlign.Start,
         )
-        Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
                 text = list.state,
@@ -341,3 +366,34 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
         }
     }
 )
+//TODO:Jeremy增加
+@Composable
+fun MA3_1_1_Info_MakeListCom(WorkCode:String){
+    val coroutineScope = rememberCoroutineScope()
+    MA3_1_1_Info_MakeList(coroutineScope,WorkCode)
+}
+fun MA3_1_1_Info_MakeList(coroutineScope: CoroutineScope, WorkCode:String){
+    coroutineScope.launch {
+        var RequestJsonObject = JSONObject();
+        RequestJsonObject.put("Function", "WorkInfo")
+        RequestJsonObject.put("WorkCode", WorkCode)
+        val responseString = HttpRequestTest(RequestJsonObject)
+        Log.d("MA3_1_1_Info",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var WorkInfoResponse:WorkInfo_Response = gson.fromJson(responseString,WorkInfo_Response::class.java)
+            var workListDatas = MA3_1_1_info_msggg
+            if(WorkInfoResponse.WorkCode != null){
+                workListDatas = listInfo(
+                    WorkInfoResponse.Date.toString(),
+                    WorkInfoResponse.WorkTime.toString(),
+                    WorkInfoResponse.WorkPath.toString(),
+                    WorkInfoResponse.WorkCode.toString(),
+                    WorkInfoResponse.UserName.toString(),
+                    WorkInfoResponse.State.toString()
+                )
+            }
+            MA3_1_1_info_msggg = workListDatas
+        }
+    }
+}
