@@ -82,6 +82,9 @@ dependencies {
     //google maps
     implementation 'com.google.maps.android:maps-compose:2.9.1'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1' //new
 
-    //implementation 'com.google.accompanist:accompanist-permission:0.24.13-rc'
+    //location permission
+    implementation 'com.google.accompanist:accompanist-permissions:0.24.13-rc'
+
 }
