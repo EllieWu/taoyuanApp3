@@ -96,9 +96,9 @@ fun MA3_1_1(WorkCode: String? = "",navController: NavHostController = rememberNa
                 infoLayout(navController,WorkCode.toString())
             }
 
-
+            //Maps_start
             val locationSource = MyLocationSource()
-            val taiwan = LatLng(25.17403,121.40338) //Param(緯度,經度) 北緯南緯 & 東西經 以正負號表示
+            val taiwan = LatLng(25.17403,121.40338) //Param(緯度,經度) 南北緯 & 東西經 以正負號表示
             val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(taiwan, 8f)
             }
