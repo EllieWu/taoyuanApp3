@@ -234,7 +234,7 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
                 }
                 Box(
                     contentAlignment = Alignment.Center, modifier = Modifier
-                        .size(width = 80.dp, height = 30.dp)
+                        .size(width = 70.dp, height = 30.dp)
                         .background(stateColor)
                 ) {
                     Text(

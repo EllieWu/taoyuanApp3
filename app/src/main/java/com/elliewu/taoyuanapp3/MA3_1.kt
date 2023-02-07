@@ -101,7 +101,6 @@ fun MA3_1(
                     color = White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
-                    textDecoration = TextDecoration.Underline,
                     ),
                 onClick = {
                     navController.navigate(Screen.login.route)
@@ -111,7 +110,7 @@ fun MA3_1(
             //var enabled by remember { mutableStateOf(true)}
 
         }
-        Column(modifier = Modifier.padding(top = 20.dp, start = 40.dp, end = 40.dp)) {
+        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -122,6 +121,7 @@ fun MA3_1(
                 Text(
                     text = "選擇日期",
                     fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
                     color = Color(105, 105, 105)
                 )
                 Button(
@@ -133,10 +133,11 @@ fun MA3_1(
                         )
                     ),
                     border = BorderStroke(1.dp, Color(202, 140, 62)),
+                    contentPadding = PaddingValues(0.dp),
                     shape = RoundedCornerShape(50),
-                    modifier = Modifier.size(width = 70.dp, height = 40.dp),
+                    modifier = Modifier.size(width = 60.dp, height = 30.dp),
                     onClick = {
-                        navController.navigate(Screen.login.route)
+                        MA3_2_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                     },
                 )
                 {
@@ -144,7 +145,7 @@ fun MA3_1(
                         text = AnnotatedString("今日"),
                         style = TextStyle(
                             color = Color(202, 140, 62),
-                            fontSize = 15.sp,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         ),
                         onClick = {
@@ -190,20 +191,9 @@ fun MA3_1(
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { datePickerDialog.show() }) {
-//                    if (MA3_1_date == "") {
-//                        Text(
-//                            text = "選擇日期",
-//                            fontWeight = FontWeight.Bold,
-//                            color = Color(105, 105, 105)
-//                        )
-//                    } else {
-//                        Text(
-//                            text = "${MA3_1_date}",
-//                            color = Color(200, 71, 52)
-//                        )
-//                    }
                     Text(
                         text = MA3_1_date,
+                        fontSize = 18.sp,
                         color = Color(200, 71, 52)
                     )
                     MA3_1_MakeListCom(MA3_1_date,Login_UserId);
@@ -272,7 +262,7 @@ fun MA3_1_MakeList(coroutineScope:CoroutineScope,Date:String,UserID:String){
 fun listCard(list: Lists,navController :NavHostController = rememberNavController()) {
     Button(
         modifier = Modifier
-            .padding(start = 25.dp, end = 25.dp, bottom = 5.dp)
+            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
             .fillMaxSize(),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,

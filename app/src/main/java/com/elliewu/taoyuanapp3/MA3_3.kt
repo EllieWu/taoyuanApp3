@@ -91,7 +91,6 @@ fun MA3_3(
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
-                    textDecoration = TextDecoration.Underline,
                 ),
                 onClick = {
                     //navController.navigate(Screen.login.route)
@@ -101,7 +100,7 @@ fun MA3_3(
             //var enabled by remember { mutableStateOf(true)}
 
         }
-        Column(modifier = Modifier.padding(top = 20.dp, start = 40.dp, end = 40.dp)) {
+        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -112,6 +111,7 @@ fun MA3_3(
                 Text(
                     text = "選擇日期",
                     fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
                     color = Color(105, 105, 105)
                 )
                 Button(
@@ -123,10 +123,11 @@ fun MA3_3(
                         )
                     ),
                     border = BorderStroke(1.dp, Color(202, 140, 62)),
+                    contentPadding = PaddingValues(0.dp),
                     shape = RoundedCornerShape(50),
-                    modifier = Modifier.size(width = 70.dp, height = 40.dp),
+                    modifier = Modifier.size(width = 60.dp, height = 30.dp),
                     onClick = {
-
+                        MA3_2_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                     },
                 )
                 {
@@ -134,8 +135,9 @@ fun MA3_3(
                         text = AnnotatedString("今日"),
                         style = TextStyle(
                             color = Color(202, 140, 62),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
                         ),
                         onClick = {
                             //當天日期
@@ -182,6 +184,7 @@ fun MA3_3(
                     onClick = { datePickerDialog.show() }) {
                     Text(
                         text = MA3_3_date,
+                        fontSize = 18.sp,
                         color = Color(200, 71, 52)
                     )
                     MA3_3_MakeListCom(MA3_3_date,Login_UserId);
@@ -209,7 +212,7 @@ fun MA3_3(
 fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavController()) {
     Button(
         modifier = Modifier
-            .padding(start = 25.dp, end = 25.dp, bottom = 5.dp)
+            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
             .fillMaxSize(),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
@@ -236,7 +239,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
                 }
                 Box(
                     contentAlignment = Alignment.Center, modifier = Modifier
-                        .size(width = 60.dp, height = 30.dp)
+                        .size(width = 70.dp, height = 30.dp)
                         .background(stateColor)
                 ) {
                     Text(
@@ -260,14 +263,14 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
                         text = "報修時間:",
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(105, 105, 105)
                     )
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
                         text = list.ReportTime,
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         color = Color(105, 105, 105)
                     )
                 }
