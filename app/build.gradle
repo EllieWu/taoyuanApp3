@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.elliewu.taoyuanapp3'
-    compileSdk 33
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.elliewu.taoyuanapp3"
-        minSdk 30
-        targetSdk 33
+        minSdk 31
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -76,10 +76,4 @@ dependencies {
 
     // Gson (To convert raw JSON to pretty JSON)
     implementation 'com.google.code.gson:gson:2.8.9'
-
-    //google maps
-    implementation 'com.google.maps.android:maps-compose:2.9.1'
-    implementation 'com.google.android.gms:play-services-maps:18.1.0'
-    //allow location permission
-    implementation 'com.google.accompanist:accompanist-permission:0.24.13-rc'
 }
