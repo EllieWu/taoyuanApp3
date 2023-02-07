@@ -180,7 +180,7 @@ fun MA3_2(
                     Text(
                         text = MA3_2_date,
                         fontSize = 18.sp,
-                        color = Color(200, 71, 52)
+                        color = Color(163,76,60)
                     )
                     MA3_2_MakeListCom(MA3_2_date,Login_UserId);
                 }
@@ -194,10 +194,15 @@ fun MA3_2(
                     .fillMaxHeight()
                     .background(Color(238, 239, 241))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無維修工單")
+                Text(
+                    modifier = Modifier.padding(top = 180.dp),
+                    text = "暫無維修工單",
+                    color = Color(131,132,134),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         } else {
-            RepairList(MA3_2_msggg);
+            RepairList(MA3_2_msggg,navController);
         }
     }
     BottomSpace(navController)
@@ -215,7 +220,7 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_1_1.route)
             //val screen = Screen.MA3_1_1.route
-            navController.navigate(Screen.MA3_1_1.withArgs(list.RepairCode))
+            navController.navigate(Screen.MA3_2_1.route)
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {
@@ -258,22 +263,15 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
                         text = "維修單號: ${list.RepairCode.toString()}",
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(105, 105, 105)
                     )
-//                    Text(
-//                        modifier = Modifier.padding(bottom = 10.dp),
-//                        text = list.RepairCode,
-//                        fontWeight = FontWeight.Bold,
-//                        fontSize = 18.sp,
-//                        color = Color(105, 105, 105)
-//                    )
                 }
                 Text(
                     text = list.RepairTitle,
                     fontSize = 18.sp,
-                    color = Color(200, 71, 52),
+                    color = Color(163,76,60),
                     fontWeight = FontWeight.Bold
                 )
 

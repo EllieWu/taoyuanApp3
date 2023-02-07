@@ -185,7 +185,7 @@ fun MA3_3(
                     Text(
                         text = MA3_3_date,
                         fontSize = 18.sp,
-                        color = Color(200, 71, 52)
+                        color = Color(163,76,60)
                     )
                     MA3_3_MakeListCom(MA3_3_date,Login_UserId);
                 }
@@ -199,7 +199,12 @@ fun MA3_3(
                     .fillMaxHeight()
                     .background(Color(238, 239, 241))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無報修工單")
+                Text(
+                    modifier = Modifier.padding(top = 180.dp),
+                    text = "暫無報修工單",
+                    color = Color(131,132,134),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         } else {
             ReportList(MA3_3_msggg);
@@ -259,7 +264,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
                     .fillMaxWidth()
                     .padding(top = 20.dp, bottom = 20.dp,start = 20.dp)
             ) {
-                Row(){
+                Row(verticalAlignment = Alignment.CenterVertically){
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
                         text = "報修時間:",
@@ -277,7 +282,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
                 Text(
                     text = list.ReportTitle,
                     fontSize = 18.sp,
-                    color = Color(200, 71, 52),
+                    color = Color(163,76,60),
                     fontWeight = FontWeight.Bold
                 )
 

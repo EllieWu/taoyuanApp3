@@ -10,6 +10,7 @@ sealed class Screen(val route: String){
     object MA3_1_1 : Screen("MA3_3_1")
     object MA3_1_1_info : Screen("MA3_3_1_info")
     object CameraTest : Screen("CameraTest")
+    object MA3_2_1 : Screen("MA3_2_1")
 
 
 

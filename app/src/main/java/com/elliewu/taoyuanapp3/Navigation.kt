@@ -74,6 +74,9 @@ fun Navigation() {
         composable(route = Screen.CameraTest.route) { entry ->
             CameraTest(navController = navController)
         }
+        composable(route = Screen.MA3_2_1.route) { entry ->
+            MA3_2_1(navController = navController)
+        }
     }
 
 

@@ -194,7 +194,7 @@ fun MA3_1(
                     Text(
                         text = MA3_1_date,
                         fontSize = 18.sp,
-                        color = Color(200, 71, 52)
+                        color = Color(163,76,60)
                     )
                     MA3_1_MakeListCom(MA3_1_date,Login_UserId);
                 }
@@ -214,7 +214,12 @@ fun MA3_1(
                     .fillMaxHeight()
                     .background(Color(238, 239, 241))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無巡檢工單")
+                Text(
+                    modifier = Modifier.padding(top = 180.dp),
+                    text = "暫無巡檢工單",
+                    color = Color(131,132,134),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         } else {
 //            Button(onClick = { msggg = msggg - msggg[msggg.size -1] }) {
@@ -315,7 +320,7 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
                     Text(
                         text = list.time,
                         fontSize = 18.sp,
-                        color = Color(200, 71, 52),
+                        color = Color(163,76,60),
                         fontWeight = FontWeight.Bold
                     )
 
