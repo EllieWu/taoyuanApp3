@@ -160,7 +160,7 @@ fun MA3_2(
                     onClick = { datePickerDialog.show() }) {
                     Text(
                         text = MA3_2_date,
-                        color = Color(255, 0, 0)
+                        color = Color(200, 71, 52)
                     )
                     MA3_2_MakeListCom(MA3_2_date,Login_UserId);
                 }
