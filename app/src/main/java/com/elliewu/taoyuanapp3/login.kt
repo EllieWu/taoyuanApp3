@@ -31,6 +31,7 @@ var Login_UserId by mutableStateOf("F123332212");
 @Preview(device= Devices.PIXEL_3A)
 @Composable
 fun login(navController: NavHostController = rememberNavController(), onClick: () -> Unit = {}){
+    Log.d("Login","APP仔入中")
     val coroutineScope = rememberCoroutineScope()
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -126,15 +127,17 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             {
                                 //TODO :網路連線異常的通知
                             }
-                            val jResponse = JSONObject(responseString);
-                            val succeed:String? = jResponse.getString("Feedback").toString();
-                            if(succeed == "TRUE")
-                            {
-                                navController.navigate(Screen.MA3_1.route)
-                            }
-                            else
-                            {
-                                //TODO:登入失敗跳的東西
+                            else{
+                                val jResponse = JSONObject(responseString);
+                                val succeed:String? = jResponse.getString("Feedback").toString();
+                                if(succeed == "TRUE")
+                                {
+                                    navController.navigate(Screen.MA3_1.route)
+                                }
+                                else
+                                {
+                                    //TODO:登入失敗跳的東西
+                                }
                             }
                         }
                     },

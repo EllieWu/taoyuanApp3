@@ -27,6 +27,7 @@ suspend fun HttpRequestTest(jsonObject: JSONObject):String {
         .method("POST",requestBody)
         .url("http://api.taoyuan.isayso.de/api/app")
         .build()
+    Log.d("HttpRequest","Start")
     try {
         var response = client.newCall(request).await();
         return  response.body?.string().toString();
