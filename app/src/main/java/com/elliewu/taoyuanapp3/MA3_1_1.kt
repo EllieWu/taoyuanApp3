@@ -1,35 +1,29 @@
 package com.elliewu.taoyuanapp3
 
-import android.app.DatePickerDialog
+import android.Manifest
+import android.content.pm.PackageManager
 import android.location.Location
-import android.widget.DatePicker
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.common.internal.service.Common
 import com.google.android.gms.maps.LocationSource
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -37,7 +31,18 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberMarkerState
-import java.util.*
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material.Button
+import android.app.Activity.RESULT_OK
+import android.content.Context
+import android.content.IntentSender
+import android.util.Log
+import androidx.compose.runtime.SideEffect
 
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
@@ -97,10 +102,31 @@ fun MA3_1_1(WorkCode: String? = "",navController: NavHostController = rememberNa
             }
 
             //Maps_start
+            val locationPermissionRequest = rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestMultiplePermissions()
+            ) { permissions ->
+                when {
+                    permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                        // Precise location access granted.
+                    }
+                    permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                        // Only approximate location access granted.
+                    } else -> {
+                    // No location access granted.
+                }
+                }
+            }
+            SideEffect {
+                locationPermissionRequest.launch(arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION))
+
+            }
+
             val locationSource = MyLocationSource()
             val taiwan = LatLng(25.17403,121.40338) //Param(緯度,經度) 南北緯 & 東西經 以正負號表示
             val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(taiwan, 8f)
+                position = CameraPosition.fromLatLngZoom(taiwan, 8f) //zoom 放大參數 數字越則越放大
             }
             val taiwanMarker = rememberMarkerState(position = taiwan)
             GoogleMap(
@@ -113,11 +139,15 @@ fun MA3_1_1(WorkCode: String? = "",navController: NavHostController = rememberNa
                     title = "Here is Taiwan!"
                 )
             }
+
+            //Maps_End
             BottomSpace2(navController);
 
         }
     }
 }
+
+
 
 private class MyLocationSource : LocationSource {
 
