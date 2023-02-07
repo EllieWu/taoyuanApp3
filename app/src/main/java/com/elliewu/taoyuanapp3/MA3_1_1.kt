@@ -87,6 +87,9 @@ fun MA3_1_1(WorkCode: String? = "",navController: NavHostController = rememberNa
             ) {
                 infoLayout(navController,WorkCode.toString())
             }
+            //map_start
+
+            //map
             BottomSpace2();
         }
     }
