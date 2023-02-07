@@ -272,7 +272,7 @@ fun MA3_1_MakeList(coroutineScope:CoroutineScope,Date:String,UserID:String){
 fun listCard(list: Lists,navController :NavHostController = rememberNavController()) {
     Button(
         modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, bottom = 5.dp)
+            .padding(start = 25.dp, end = 25.dp, bottom = 5.dp)
             .fillMaxSize(),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.elliewu.taoyuanapp3.RepairFakeData.RepairListData
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -36,17 +37,17 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
-var MA3_2_msggg by mutableStateOf(FakeData.workListData)
+var MA3_2_msggg by mutableStateOf(RepairFakeData.RepairListData)
 var MA3_2_date by mutableStateOf(SimpleDateFormat("yyyy-MM-dd").format(Date()));
 
-data class FiexLists(val state: String, val workID: String, val time: String)
-object FiexFakeData {
-    var fixListData = listOf(
-        FiexLists(
-            "待執行", "1090301001", "早班 08:00~12:00 "
+data class RepairLists(val State: String, val RepairCode: String, val RepairTitle: String)
+object RepairFakeData {
+    var RepairListData = listOf(
+        RepairLists(
+            "執行中", "111032201", "欄杆損壞"
         ),
-        FiexLists(
-            "待執行", "1090301002", "中班 13:00~17:00 "
+        RepairLists(
+            "執行中", "111032202", "欄杆損壞、欄杆損壞"
         )
     )
 }
@@ -191,17 +192,17 @@ fun MA3_2(
                 Text(modifier = Modifier.padding(top = 180.dp), text = "暫無維修工單")
             }
         } else {
-            workList(MA3_2_msggg);
+            RepairList(MA3_2_msggg);
         }
     }
     BottomSpace(navController)
 }
 
 @Composable
-fun FixCard(list: Lists,navController :NavHostController = rememberNavController()) {
+fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavController()) {
     Button(
         modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, bottom = 5.dp)
+            .padding(start = 25.dp, end = 25.dp, bottom = 5.dp)
             .fillMaxSize(),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
@@ -209,93 +210,82 @@ fun FixCard(list: Lists,navController :NavHostController = rememberNavController
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_1_1.route)
             //val screen = Screen.MA3_1_1.route
-            navController.navigate(Screen.MA3_1_1.withArgs(list.workID))
+            navController.navigate(Screen.MA3_1_1.withArgs(list.RepairCode))
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
                 modifier = Modifier
+                    .size(100.dp,100.dp)
                     .fillMaxWidth()
                     //.size(width = 0.dp, height = 100.dp)
                     .background(Color(255, 255, 255))
             ) {
-                val stateColor = if(list.state == "已完工"){
+                val stateColor = if(list.State == "已完工"){
                     Color(128,128,128)
                 }else{
                     Color(65, 89, 151)
                 }
                 Box(
                     contentAlignment = Alignment.Center, modifier = Modifier
-                        .size(width = 100.dp, height = 100.dp)
+                        .size(width = 80.dp, height = 30.dp)
                         .background(stateColor)
                 ) {
                     Text(
-                        text = list.state,
-                        Modifier.padding(16.dp),
+                        text = list.State,
+//                        Modifier.padding(16.dp),
                         textAlign = TextAlign.Center,
                         color = White,
-                        fontSize = 18.sp,
+                        fontSize = 12.sp,
                     )
                 }
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth()
-                        .padding(start = 20.dp)
-                ) {
+
+            }
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(top = 20.dp, bottom = 20.dp,start = 20.dp)
+            ) {
+                Row(){
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
-                        text = list.workID,
+                        text = "維修單號:",
                         fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
                         color = Color(105, 105, 105)
                     )
                     Text(
-                        text = list.time,
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        text = list.RepairCode,
                         fontSize = 18.sp,
-                        color = Color(200, 71, 52),
-                        fontWeight = FontWeight.Bold
+                        color = Color(105, 105, 105)
                     )
-
                 }
+                Text(
+                    text = list.RepairTitle,
+                    fontSize = 18.sp,
+                    color = Color(200, 71, 52),
+                    fontWeight = FontWeight.Bold
+                )
+
             }
+        }
+
+    }
+}
+
+@Composable
+fun RepairList(messages: List<RepairLists>,navController :NavHostController = rememberNavController()) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(messages) { message ->
+            RepairCard(message,navController)
         }
     }
 }
 
-//@Composable
-//fun MA3_2_MakeListCom(Date:String,UserID:String){
-//    val coroutineScope = rememberCoroutineScope()
-//    MA3_2_MakeList(coroutineScope,Date,UserID)
-//}
-//fun MA3_2_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
-//    coroutineScope.launch {
-//        var MA3_RequestJsonObject = JSONObject();
-//        MA3_RequestJsonObject.put("Function", "RepairList")
-//        MA3_RequestJsonObject.put("Date", Date)
-//        MA3_RequestJsonObject.put("UserID", UserID)
-//        val responseString = HttpRequestTest(MA3_RequestJsonObject)
-//        Log.d("MA3_2",responseString)
-//        if(responseString!="Error"){
-//            var gson = Gson();
-//            var TestWorkList:RepairList_Response = gson.fromJson(responseString,RepairList_Response::class.java)
-//            var workListDatas = listOf(
-//                Lists(
-//                    "", "", ""
-//                )
-//            )
-//            workListDatas = workListDatas - workListDatas[workListDatas.size -1]
-//            if(TestWorkList.RepairList != null){
-//                TestWorkList.RepairList!!.forEach {
-//                    var worklistd = Lists(it.State.toString(),it.RepairCode.toString(),it.RepairTitle.toString())
-//                    workListDatas += worklistd
-//                }
-//            }
-//            MA3_2_msggg = workListDatas
-//        }
-//    }
-//}
 
 @Composable
 fun MA3_2_MakeListCom(Date:String,UserID:String){
@@ -313,19 +303,19 @@ fun MA3_2_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
         if(responseString!="Error"){
             var gson = Gson();
             var TestWorkList:RepairList_Response = gson.fromJson(responseString,RepairList_Response::class.java)
-            var workListDatas = listOf(
-                Lists(
+            var RepairListDatas = listOf(
+                RepairLists(
                     "", "", ""
                 )
             )
-            workListDatas = workListDatas - workListDatas[workListDatas.size -1]
+            RepairListDatas = RepairListDatas - RepairListDatas[RepairListDatas.size -1]
             if(TestWorkList.RepairList != null){
                 TestWorkList.RepairList!!.forEach {
-                    var worklistd = Lists(it.State.toString(),it.RepairCode.toString(),it.RepairTitle.toString())
-                    workListDatas += worklistd
+                    var RepairListd = RepairLists(it.State.toString(),it.RepairCode.toString(),it.RepairTitle.toString())
+                    RepairListDatas += RepairListd
                 }
             }
-            MA3_2_msggg = workListDatas
+            MA3_2_msggg = RepairListDatas
         }
     }
 }
