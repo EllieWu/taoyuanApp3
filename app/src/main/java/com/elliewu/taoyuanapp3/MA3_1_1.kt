@@ -96,6 +96,7 @@ fun MA3_1_1(WorkCode: String? = "",navController: NavHostController = rememberNa
                 infoLayout(navController,WorkCode.toString())
             }
 
+
             val locationSource = MyLocationSource()
             val taiwan = LatLng(25.17403,121.40338) //Param(緯度,經度) 北緯南緯 & 東西經 以正負號表示
             val cameraPositionState = rememberCameraPositionState {
@@ -112,8 +113,8 @@ fun MA3_1_1(WorkCode: String? = "",navController: NavHostController = rememberNa
                     title = "Here is Taiwan!"
                 )
             }
+            BottomSpace2(navController);
 
-            BottomSpace2();
         }
     }
 }

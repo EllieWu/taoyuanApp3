@@ -43,9 +43,6 @@ fun Navigation() {
         composable(route = Screen.changePassword_newPassword.route) { entry ->
             changePassword_newPassword(navController = navController)
         }
-//        composable(route = Screen.MA3_1_1.route) { entry ->
-//            MA3_1_1(navController = navController)
-//        }
         composable(
             route = Screen.MA3_1_1.route + "/{WorkCode}",
             arguments = listOf(
@@ -60,9 +57,6 @@ fun Navigation() {
                 navController = navController,
                 WorkCode = entry.arguments?.getString("WorkCode"))
         }
-//        composable(route = Screen.MA3_1_1_info.route) { entry ->
-//            MA3_1_1_info(navController = navController)
-//        }
         composable(
             route = Screen.MA3_1_1_info.route + "/{WorkCode}",
             arguments = listOf(
@@ -77,70 +71,11 @@ fun Navigation() {
                 navController = navController,
                 WorkCode = entry.arguments?.getString("WorkCode"))
         }
-
-
+        composable(route = Screen.CameraTest.route) { entry ->
+            CameraTest(navController = navController)
+        }
     }
 
 
 }
-
-//@Composable
-//fun MA3_1_1(WorkCode: String?,navController: NavHostController = rememberNavController()){
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .fillMaxHeight()
-//            .background(Color(232, 232, 232)),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .size(width = 250.dp, 50.dp)
-//                .background(Color(62, 83, 140)),
-//            verticalAlignment = Alignment.CenterVertically,
-//        ) {
-//            ClickableText(
-//                text = AnnotatedString("返回"),
-//                style = TextStyle(
-//                    color = Color.White,
-//                    fontSize = 20.sp,
-//                    textAlign = TextAlign.End,
-//                    textDecoration = TextDecoration.Underline,
-//                ),
-//                onClick = {
-//                    navController.navigate(Screen.MA3_1.route)
-//                },
-//                modifier = Modifier.padding(start = 20.dp)
-//            )
-//            Text(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .weight(1f)
-//                    .padding(end = 40.dp),
-//                //size(width = 250.dp, height = 30.dp),
-//
-//                text = "巡檢打卡填報",
-//                fontSize = 20.sp,
-//                textAlign = TextAlign.Center,
-//                color = Color(255, 255, 255),
-//            )
-//
-//
-//        }
-//        Column(modifier = Modifier.fillMaxSize()) {
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 10.dp)
-//            ) {
-//                //infoLayout(navController)
-//                Text(text = "yoyo, $WorkCode")
-//            }
-//            BottomSpace2();
-//        }
-//    }
-//}
 

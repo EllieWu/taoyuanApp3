@@ -20,12 +20,14 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 data class buttonBtn2(val icon: Int, val text: String,val screen: Screen)
 
 var buttonBtnData2 = listOf(
     buttonBtn2(
-        R.drawable.btn1, "巡檢打卡",Screen.MA3_1
+        R.drawable.btn1, "巡檢打卡",Screen.CameraTest
     ),
     buttonBtn2(
         R.drawable.btn2, "完工填報",Screen.MA3_2
@@ -42,7 +44,7 @@ var buttonBtnData2 = listOf(
 
 
 @Composable
-fun BottomSpace2() {
+fun BottomSpace2(navController : NavHostController = rememberNavController()) {
     Box(modifier = Modifier.fillMaxSize(), Alignment.BottomCenter) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -75,13 +77,13 @@ fun BottomSpace2() {
 //            }else{
 //                Color(157,157,157)
 //            }
-            BottomBtn2(buttonBtnData2);
+            BottomBtn2(buttonBtnData2,navController);
         }
     }
 }
 
 @Composable
-fun BottomBtnCard2(btnList: buttonBtn2) {
+fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = rememberNavController()) {
     val bgColor =
         if (btnList.text == "巡檢打卡") {
             Color(235, 166, 59)
@@ -103,7 +105,7 @@ fun BottomBtnCard2(btnList: buttonBtn2) {
 
 
 //                val screen = btnList.screen
-//                navController.navigate(screen.route)
+                navController.navigate(btnList.screen.route)
 
 //            println(value);
 //
@@ -135,10 +137,10 @@ fun BottomBtnCard2(btnList: buttonBtn2) {
 
 
 @Composable
-fun BottomBtn2(messages: List<buttonBtn2>) {
+fun BottomBtn2(messages: List<buttonBtn2>,navController : NavHostController = rememberNavController()) {
     LazyRow(modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 5.dp),horizontalArrangement = Arrangement.SpaceAround) {
         items(messages) { message ->
-            BottomBtnCard2(message)
+            BottomBtnCard2(message,navController)
         }
     }
 }
