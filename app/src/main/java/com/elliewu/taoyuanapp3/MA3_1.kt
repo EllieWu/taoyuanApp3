@@ -52,26 +52,9 @@ object FakeData {
         ),
         Lists(
             "待執行", "1090301002", "中班 13:00~17:00 "
-        ),
-        Lists(
-            "待執行", "1090301003", "晚班 19:00~23:00 "
-        ),
-        Lists(
-            "待執行", "1090301003", "晚班 19:00~23:00 "
-        ),
-        Lists(
-            "待執行", "1090301003", "晚班 19:00~23:00 "
-        ),
-        Lists(
-            "待執行", "1090301003", "晚班 19:00~23:00 "
-        ),
+        )
     )
 }
-//var list = FakeData;
-//@Composable
-//fun listCard(list: List){
-//    Text(text = list.state),
-//}
 
 //3-1巡檢工單
 @Preview(device = Devices.PIXEL_C)
@@ -221,7 +204,7 @@ fun MA3_1(
                         text = MA3_1_date,
                         color = Color(200, 71, 52)
                     )
-                    MA3_1_MakeListCom(MA3_1_date,"F123332212");
+                    MA3_1_MakeListCom(MA3_1_date,Login_UserId);
                 }
             }
             Text(

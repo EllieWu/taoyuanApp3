@@ -23,7 +23,10 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-
+import java.text.SimpleDateFormat
+import java.util.*
+//TODO:未來請將預設UserId設為空字串
+var Login_UserId by mutableStateOf("F123332212");
 @Preview(device= Devices.PIXEL_C)
 @Preview(device= Devices.PIXEL_3A)
 @Composable
@@ -114,6 +117,7 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             //TODO : 正式上線請把預設值改掉換下面那個
                             //loginJsonObject.put("UserID", account)
                             //loginJsonObject.put("UserPW", password)
+                            //Login_UserId = account
                             loginJsonObject.put("UserID", "F123332212")
                             loginJsonObject.put("UserPW", "Abc1234")
                             val responseString = HttpRequestTest(loginJsonObject)

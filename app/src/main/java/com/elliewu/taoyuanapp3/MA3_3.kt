@@ -172,7 +172,7 @@ fun MA3_3(
                         text = MA3_3_date,
                         color = Color(255, 0, 0)
                     )
-                    MA3_3_MakeListCom(MA3_3_date,"F123332212");
+                    MA3_3_MakeListCom(MA3_3_date,Login_UserId);
                 }
             }
             Text(
