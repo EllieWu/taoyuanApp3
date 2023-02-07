@@ -200,7 +200,7 @@ fun MA3_2_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
         MA3_RequestJsonObject.put("Date", Date)
         MA3_RequestJsonObject.put("UserID", UserID)
         val responseString = HttpRequestTest(MA3_RequestJsonObject)
-        Log.d("MA3_1",responseString)
+        Log.d("MA3_2",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var TestWorkList:RepairList_Response = gson.fromJson(responseString,RepairList_Response::class.java)

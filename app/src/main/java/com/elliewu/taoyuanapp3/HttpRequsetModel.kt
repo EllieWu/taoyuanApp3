@@ -140,7 +140,7 @@ class ReportList_Request(
     @SerializedName("UserID")var UserID : String?
 )
 class ReportList_Response(
-    @SerializedName("ReportList")var ReportList : List<ReportList>
+    @SerializedName("ReportList")var ReportList : List<ReportList>?
 )
 class ReportList(
     @SerializedName("ReportCode")var ReportCode : String?,
