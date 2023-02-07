@@ -14,6 +14,8 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -270,13 +272,16 @@ fun MA3_1_MakeList(coroutineScope:CoroutineScope,Date:String,UserID:String){
 fun listCard(list: Lists,navController :NavHostController = rememberNavController()) {
     //Column(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
     Button(
-        modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 5.dp).fillMaxSize(),
+        modifier = Modifier
+            .padding(start = 20.dp, end = 20.dp, bottom = 5.dp)
+            .fillMaxSize(),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_1_1.route)
-            navController.navigate(Screen.MA3_1_1.route)
+            //val screen = Screen.MA3_1_1.route
+                navController.navigate(Screen.MA3_1_1.withArgs(list.workID))
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {
@@ -324,6 +329,7 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
                         color = Color(200, 71, 52),
                         fontWeight = FontWeight.Bold
                     )
+
                 }
             }
         }

@@ -28,7 +28,7 @@ import androidx.navigation.compose.rememberNavController
 @Preview(showBackground = true)
 
 @Composable
-fun infoLayout(navController: NavHostController = rememberNavController()){
+fun infoLayout(navController: NavHostController = rememberNavController(),WorkCode:String = ""){
     Row(
         modifier = Modifier
             .size(width = 1000.dp, height = 80.dp)
@@ -45,7 +45,7 @@ fun infoLayout(navController: NavHostController = rememberNavController()){
                 backgroundColor = Color(147,146,146)
             ),
             modifier = Modifier.size(width = 130.dp, height = 50.dp),
-            onClick = {navController.navigate(Screen.MA3_1_1_info.route)}
+            onClick = {navController.navigate(Screen.MA3_1_1_info.withArgs(WorkCode))}
         ){
             Row(
                 modifier = Modifier

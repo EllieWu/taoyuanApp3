@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.util.Log
 import android.util.Size
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -31,6 +32,10 @@ import androidx.core.graphics.component1
 import androidx.core.graphics.component2
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 
 data class listInfo(
@@ -39,18 +44,16 @@ data class listInfo(
     val roadLine: String,
     val workID:String,
     val worker:String,
-    val state:String)
-    var listInfoData = listOf(
-        listInfo(
-            "2022-04-06",
-            "早班",
-            "高鐵特定區",
-            "111040601",
-            "黃士昭",
-            "執行中"
-        ),
+    val state:String
     )
-
+var MA3_1_1_info_msggg by mutableStateOf(listInfo(
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+))
 
 
 
@@ -61,8 +64,11 @@ data class listInfo(
 @Preview(showBackground = true)
 @Composable
 fun MA3_1_1_info(
-   navController: NavHostController = rememberNavController()
+   navController: NavHostController = rememberNavController(),
+   WorkCode: String? = ""
 ) {
+    Log.d("Workcode","$WorkCode")
+    MA3_1_1_Info_MakeListCom(WorkCode.toString());
 //    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = Modifier
@@ -88,7 +94,7 @@ fun MA3_1_1_info(
                     textDecoration = TextDecoration.Underline,
                 ),
                 onClick = {
-                    navController.navigate(Screen.MA3_1_1.route)
+                    navController.navigate(Screen.MA3_1_1.withArgs(WorkCode.toString()))
                 },
                 modifier = Modifier.padding(start = 20.dp)
             )
@@ -120,7 +126,7 @@ fun MA3_1_1_info(
                 Column(modifier = Modifier
                     .fillMaxWidth()
                     .background(Color(255, 255, 255))) {
-                    infoTable(listInfoData[0]);
+                    infoTable(MA3_1_1_info_msggg);
                 }
             //}
         }
@@ -341,3 +347,34 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
         }
     }
 )
+//TODO:Jeremy增加
+@Composable
+fun MA3_1_1_Info_MakeListCom(WorkCode:String){
+    val coroutineScope = rememberCoroutineScope()
+    MA3_1_1_Info_MakeList(coroutineScope,WorkCode)
+}
+fun MA3_1_1_Info_MakeList(coroutineScope: CoroutineScope, WorkCode:String){
+    coroutineScope.launch {
+        var RequestJsonObject = JSONObject();
+        RequestJsonObject.put("Function", "WorkInfo")
+        RequestJsonObject.put("WorkCode", WorkCode)
+        val responseString = HttpRequestTest(RequestJsonObject)
+        Log.d("MA3_1_1_Info",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var WorkInfoResponse:WorkInfo_Response = gson.fromJson(responseString,WorkInfo_Response::class.java)
+            var workListDatas = MA3_1_1_info_msggg
+            if(WorkInfoResponse.WorkCode != null){
+                workListDatas = listInfo(
+                    WorkInfoResponse.Date.toString(),
+                    WorkInfoResponse.WorkTime.toString(),
+                    WorkInfoResponse.WorkPath.toString(),
+                    WorkInfoResponse.WorkCode.toString(),
+                    WorkInfoResponse.UserName.toString(),
+                    WorkInfoResponse.State.toString()
+                )
+            }
+            MA3_1_1_info_msggg = workListDatas
+        }
+    }
+}

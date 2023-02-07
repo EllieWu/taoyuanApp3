@@ -34,7 +34,7 @@ import java.util.*
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
-fun MA3_1_1( navController: NavHostController = rememberNavController()){
+fun MA3_1_1(WorkCode: String? = "",navController: NavHostController = rememberNavController()){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,7 +85,7 @@ fun MA3_1_1( navController: NavHostController = rememberNavController()){
                     .fillMaxWidth()
                     .padding(bottom = 10.dp)
             ) {
-                infoLayout(navController)
+                infoLayout(navController,WorkCode.toString())
             }
             BottomSpace2();
         }
