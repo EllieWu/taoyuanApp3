@@ -134,7 +134,7 @@ fun MA3_3(
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 30.dp)
+                modifier = Modifier.padding(bottom = 15.dp)
             ) {
                 Image(
                     painterResource(id = R.drawable.calendar),
@@ -175,12 +175,6 @@ fun MA3_3(
                     MA3_3_MakeListCom(MA3_3_date,Login_UserId);
                 }
             }
-            Text(
-                modifier = Modifier.padding(bottom = 20.dp),
-                text = "選擇巡檢工單",
-                color = Color(105, 105, 105),
-                fontWeight = FontWeight.Bold
-            )
         }
         if (MA3_3_msggg.size == 0) {
             Row(
@@ -190,7 +184,7 @@ fun MA3_3(
                     .fillMaxHeight()
                     .background(Color(238, 239, 241))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無巡檢工單")
+                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無報修工單")
             }
         } else {
             workList(MA3_3_msggg);

@@ -156,7 +156,7 @@ fun MA3_1(
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 30.dp)
+                modifier = Modifier.padding(bottom = 15.dp)
             ) {
                 Image(
                     painterResource(id = R.drawable.calendar),
@@ -210,7 +210,7 @@ fun MA3_1(
                 }
             }
             Text(
-                modifier = Modifier.padding(bottom = 20.dp),
+                modifier = Modifier.padding(bottom = 10.dp),
                 text = "選擇巡檢工單",
                 color = Color(105, 105, 105),
                 fontWeight = FontWeight.Bold
@@ -270,7 +270,6 @@ fun MA3_1_MakeList(coroutineScope:CoroutineScope,Date:String,UserID:String){
 }
 @Composable
 fun listCard(list: Lists,navController :NavHostController = rememberNavController()) {
-    //Column(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
     Button(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, bottom = 5.dp)
@@ -335,7 +334,7 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
         }
     }
 }
-//}
+
 
 
 @Composable

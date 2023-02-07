@@ -38,7 +38,21 @@ import java.util.*
 
 var MA3_2_msggg by mutableStateOf(FakeData.workListData)
 var MA3_2_date by mutableStateOf(SimpleDateFormat("yyyy-MM-dd").format(Date()));
-//3-1巡檢工單
+
+data class FiexLists(val state: String, val workID: String, val time: String)
+object FiexFakeData {
+    var fixListData = listOf(
+        FiexLists(
+            "待執行", "1090301001", "早班 08:00~12:00 "
+        ),
+        FiexLists(
+            "待執行", "1090301002", "中班 13:00~17:00 "
+        )
+    )
+}
+
+
+//3-2維修工單
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
@@ -125,7 +139,7 @@ fun MA3_2(
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = 30.dp)
+                modifier = Modifier.padding(bottom = 15.dp)
             ) {
                 Image(
                     painterResource(id = R.drawable.calendar),
@@ -165,12 +179,6 @@ fun MA3_2(
                     MA3_2_MakeListCom(MA3_2_date,Login_UserId);
                 }
             }
-            Text(
-                modifier = Modifier.padding(bottom = 20.dp),
-                text = "選擇巡檢工單",
-                color = Color(105, 105, 105),
-                fontWeight = FontWeight.Bold
-            )
         }
         if (MA3_2_msggg.size == 0) {
             Row(
@@ -188,6 +196,107 @@ fun MA3_2(
     }
     BottomSpace(navController)
 }
+
+@Composable
+fun FixCard(list: Lists,navController :NavHostController = rememberNavController()) {
+    Button(
+        modifier = Modifier
+            .padding(start = 20.dp, end = 20.dp, bottom = 5.dp)
+            .fillMaxSize(),
+        border = BorderStroke(0.dp, Color.Transparent),
+        elevation = null,
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+        onClick = {
+            Log.d("ButtonEvent", Screen.MA3_1_1.route)
+            //val screen = Screen.MA3_1_1.route
+            navController.navigate(Screen.MA3_1_1.withArgs(list.workID))
+        })
+    {
+        Card(modifier = Modifier.fillMaxSize()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    //.size(width = 0.dp, height = 100.dp)
+                    .background(Color(255, 255, 255))
+            ) {
+                val stateColor = if(list.state == "已完工"){
+                    Color(128,128,128)
+                }else{
+                    Color(65, 89, 151)
+                }
+                Box(
+                    contentAlignment = Alignment.Center, modifier = Modifier
+                        .size(width = 100.dp, height = 100.dp)
+                        .background(stateColor)
+                ) {
+                    Text(
+                        text = list.state,
+                        Modifier.padding(16.dp),
+                        textAlign = TextAlign.Center,
+                        color = White,
+                        fontSize = 18.sp,
+                    )
+                }
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .padding(start = 20.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        text = list.workID,
+                        fontSize = 18.sp,
+                        color = Color(105, 105, 105)
+                    )
+                    Text(
+                        text = list.time,
+                        fontSize = 18.sp,
+                        color = Color(200, 71, 52),
+                        fontWeight = FontWeight.Bold
+                    )
+
+                }
+            }
+        }
+    }
+}
+
+//@Composable
+//fun MA3_2_MakeListCom(Date:String,UserID:String){
+//    val coroutineScope = rememberCoroutineScope()
+//    MA3_2_MakeList(coroutineScope,Date,UserID)
+//}
+//fun MA3_2_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
+//    coroutineScope.launch {
+//        var MA3_RequestJsonObject = JSONObject();
+//        MA3_RequestJsonObject.put("Function", "RepairList")
+//        MA3_RequestJsonObject.put("Date", Date)
+//        MA3_RequestJsonObject.put("UserID", UserID)
+//        val responseString = HttpRequestTest(MA3_RequestJsonObject)
+//        Log.d("MA3_2",responseString)
+//        if(responseString!="Error"){
+//            var gson = Gson();
+//            var TestWorkList:RepairList_Response = gson.fromJson(responseString,RepairList_Response::class.java)
+//            var workListDatas = listOf(
+//                Lists(
+//                    "", "", ""
+//                )
+//            )
+//            workListDatas = workListDatas - workListDatas[workListDatas.size -1]
+//            if(TestWorkList.RepairList != null){
+//                TestWorkList.RepairList!!.forEach {
+//                    var worklistd = Lists(it.State.toString(),it.RepairCode.toString(),it.RepairTitle.toString())
+//                    workListDatas += worklistd
+//                }
+//            }
+//            MA3_2_msggg = workListDatas
+//        }
+//    }
+//}
+
 @Composable
 fun MA3_2_MakeListCom(Date:String,UserID:String){
     val coroutineScope = rememberCoroutineScope()
