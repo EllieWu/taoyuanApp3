@@ -3,6 +3,7 @@ package com.elliewu.taoyuanapp3
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -61,6 +62,11 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
                 color = Color(255, 255, 255),
             )
         }
+    }
+    Button(onClick = {
+        
+    }) {
+        Text(text = "相機")
     }
 }
 
