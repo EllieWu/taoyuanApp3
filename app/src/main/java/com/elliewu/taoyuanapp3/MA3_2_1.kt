@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
-//var MA3_2_1_msggg by mutableStateOf(RepairInfoFakeData.RepairListData)
 data class RepairInfoList(
     val RepairCode: String,
     val State: String,
@@ -32,35 +31,25 @@ data class RepairInfoList(
     val RepairPhoto:String,
 
 )
-object RepairInfoFakeData {
-    var RepairListData = listOf(
-        RepairInfoList(
-            "111032504",
-            "測試中",
-            "陳慶明",
-            "121.798385",
-            "25.140054",
-            "階梯有幾處破損",
-            "教育中心外側階梯破損嚴重",
-            ""
-        )
-    )
-}
-//var MA3_2_1_info_msggg by mutableStateOf(RepairInfoList(
-//    "",
-//    "",
-//    "",
-//    "",
-//    "",
-//    ""
-//))
+var RepairListData = RepairInfoList(
+    "111032504",
+    "測試中",
+    "陳慶明",
+    "121.798385",
+    "25.140054",
+    "階梯有幾處破損",
+    "教育中心外側階梯破損嚴重",
+    ""
+)
+var MA3_2_1_msggg by mutableStateOf(RepairListData)
+
 
 
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
 @Composable
-fun MA3_2_1(navController : NavHostController = rememberNavController(),RepairCode: String? = ""){
+fun MA3_2_1(RepairCode: String? = "", navController : NavHostController = rememberNavController()){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -106,7 +95,7 @@ fun MA3_2_1(navController : NavHostController = rememberNavController(),RepairCo
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(255, 255, 255))) {
-                RepairInfoTable(RepairInfoFakeData.RepairListData)
+                RepairInfoTable(RepairListData)
             }
         }
 //        Text(text = "yoyo: ${RepairCode.toString()}")
@@ -114,7 +103,7 @@ fun MA3_2_1(navController : NavHostController = rememberNavController(),RepairCo
 }
 
 @Composable
-fun RepairInfoTable(list: List<RepairInfoList>){
+fun RepairInfoTable(list: RepairInfoList){
     Row(
         verticalAlignment = Alignment.CenterVertically,
         //horizontalArrangement = Arrangement.SpaceBetween,
@@ -139,7 +128,7 @@ fun RepairInfoTable(list: List<RepairInfoList>){
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = list[0].RepairCode,
+                text = list.RepairCode,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -173,7 +162,7 @@ fun RepairInfoTable(list: List<RepairInfoList>){
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = list[0].State,
+                text = list.State,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -205,7 +194,7 @@ fun RepairInfoTable(list: List<RepairInfoList>){
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = list[0].Manager,
+                text = list.Manager,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -236,7 +225,7 @@ fun RepairInfoTable(list: List<RepairInfoList>){
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = list[0].Longitude,
+                text = list.Longitude,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -268,7 +257,7 @@ fun RepairInfoTable(list: List<RepairInfoList>){
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = list[0].Latitude,
+                text = list.Latitude,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -299,7 +288,7 @@ fun RepairInfoTable(list: List<RepairInfoList>){
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = list[0].RepairTitle,
+                text = list.RepairTitle,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
@@ -331,7 +320,7 @@ fun RepairInfoTable(list: List<RepairInfoList>){
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = list[0].RepairContent,
+                text = list.RepairContent,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
@@ -362,7 +351,7 @@ fun RepairInfoTable(list: List<RepairInfoList>){
                 textAlign = TextAlign.Start,
             )
             Text(
-                text = list[0].RepairPhoto,
+                text = list.RepairPhoto,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,

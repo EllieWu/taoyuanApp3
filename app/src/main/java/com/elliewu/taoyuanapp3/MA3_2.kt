@@ -59,7 +59,7 @@ object RepairFakeData {
 @Preview(showBackground = true)
 @Composable
 fun MA3_2(
-    RepairCode: String? = "",navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController()
 ) {
     Column(
         modifier = Modifier
@@ -218,8 +218,8 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
         elevation = null,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
-            Log.d("ButtonEvent", Screen.MA3_1_1.route)
-            navController.navigate(Screen.MA3_2_1.route)
+            Log.d("ButtonEvent", Screen.MA3_2_1.route)
+                navController.navigate(Screen.MA3_2_1.withArgs(list.RepairCode))
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {
