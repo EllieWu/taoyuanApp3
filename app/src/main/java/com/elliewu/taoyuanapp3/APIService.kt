@@ -2,22 +2,14 @@ package com.elliewu.taoyuanapp3
 
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import kotlinx.coroutines.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
-import retrofit2.Retrofit
-import retrofit2.http.Body
-import retrofit2.http.POST
 import ru.gildor.coroutines.okhttp.await
-import java.io.IOException
 
 suspend fun HttpRequestTest(jsonObject: JSONObject):String {
-    // Create JSON using JSONObject
 
     // Convert JSONObject to String
     val jsonObjectString = jsonObject.toString()
