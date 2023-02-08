@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.util.Size
 import androidx.compose.foundation.*
@@ -34,6 +35,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -347,14 +350,15 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
         }
     }
 )
+
 //TODO:Jeremy增加
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_1_1_Info_MakeListCom(WorkCode:String){
-    val coroutineScope = rememberCoroutineScope()
-    MA3_1_1_Info_MakeList(coroutineScope,WorkCode)
+    MA3_1_1_Info_MakeList(WorkCode)
 }
-fun MA3_1_1_Info_MakeList(coroutineScope: CoroutineScope, WorkCode:String){
-    coroutineScope.launch {
+fun MA3_1_1_Info_MakeList( WorkCode:String){
+    GlobalScope.launch(Dispatchers.IO) {
         var RequestJsonObject = JSONObject();
         RequestJsonObject.put("Function", "WorkInfo")
         RequestJsonObject.put("WorkCode", WorkCode)

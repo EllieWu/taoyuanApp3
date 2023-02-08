@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.util.Log
 import android.widget.DatePicker
@@ -31,6 +32,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -62,7 +65,7 @@ fun MA3_3(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color(232, 232, 232)),
+            .background(Color(226,230,239)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -70,7 +73,7 @@ fun MA3_3(
             modifier = Modifier
                 .fillMaxWidth()
                 .size(width = 250.dp, 50.dp)
-                .background(Color(62, 83, 140)),
+                .background(Color(65,96,176)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -197,7 +200,7 @@ fun MA3_3(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .background(Color(238, 239, 241))
+                    .background(Color(231,238,248))
             ) {
                 Text(
                     modifier = Modifier.padding(top = 180.dp),
@@ -207,7 +210,15 @@ fun MA3_3(
                 )
             }
         } else {
-            ReportList(MA3_3_msggg);
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(Color(231,238,248))
+            ) {
+                ReportList(MA3_3_msggg,navController);
+            }
         }
     }
     BottomSpace(navController);
@@ -223,9 +234,9 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
         elevation = null,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
-            Log.d("ButtonEvent", Screen.MA3_1_1.route)
+            Log.d("ButtonEvent", Screen.MA3_3_1.route)
             //val screen = Screen.MA3_1_1.route
-            navController.navigate(Screen.MA3_1_1.withArgs(list.State))
+            navController.navigate(Screen.MA3_3_1.route)
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {
@@ -302,13 +313,13 @@ fun ReportList(messages: List<ReportLists>,navController :NavHostController = re
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_3_MakeListCom(Date:String,UserID:String){
-    val coroutineScope = rememberCoroutineScope()
-    MA3_3_MakeList(coroutineScope,Date,UserID)
+    MA3_3_MakeList(Date,UserID)
 }
-fun MA3_3_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
-    coroutineScope.launch {
+fun MA3_3_MakeList(Date:String, UserID:String){
+    GlobalScope.launch(Dispatchers.IO) {
         var MA3_RequestJsonObject = JSONObject();
         MA3_RequestJsonObject.put("Function", "ReportList")
         MA3_RequestJsonObject.put("Date", Date)
