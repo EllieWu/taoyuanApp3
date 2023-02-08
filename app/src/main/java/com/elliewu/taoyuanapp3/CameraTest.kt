@@ -64,7 +64,6 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
         }
     }
     Button(onClick = {
-        
     }) {
         Text(text = "相機")
     }
