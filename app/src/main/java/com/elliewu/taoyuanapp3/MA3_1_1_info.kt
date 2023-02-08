@@ -39,12 +39,12 @@ import org.json.JSONObject
 
 
 data class listInfo(
-    val date: String,
-    val classes: String,
-    val roadLine: String,
-    val workID:String,
-    val worker:String,
-    val state:String
+    val Date: String,
+    val WorkTime: String,
+    val WorkPath: String,
+    val WorkCode:String,
+    val UserName:String,
+    val State:String
     )
 var MA3_1_1_info_msggg by mutableStateOf(listInfo(
     "",
@@ -157,7 +157,7 @@ fun infoTable(list: listInfo){
            Row(modifier = Modifier.fillMaxWidth().padding(start = 92.dp), horizontalArrangement = Arrangement.Start)
            {
                Text(
-                   text = list.date,
+                   text = list.Date,
                    fontSize = 16.sp,
                    fontWeight = FontWeight.Bold,
 
@@ -189,7 +189,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.classes,
+                text = list.WorkTime,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
@@ -221,7 +221,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.roadLine,
+                text = list.WorkPath,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
@@ -253,7 +253,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.workID,
+                text = list.WorkCode,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
@@ -285,7 +285,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.worker,
+                text = list.UserName,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
@@ -317,7 +317,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.state,
+                text = list.State,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 

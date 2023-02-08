@@ -59,7 +59,7 @@ object RepairFakeData {
 @Preview(showBackground = true)
 @Composable
 fun MA3_2(
-    navController: NavHostController = rememberNavController()
+    RepairCode: String? = "",navController: NavHostController = rememberNavController()
 ) {
     Column(
         modifier = Modifier
