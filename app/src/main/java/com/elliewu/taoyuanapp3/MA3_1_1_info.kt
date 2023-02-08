@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -88,18 +90,22 @@ fun MA3_1_1_info(
                 .background(Color(62, 83, 140)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            Icon(
+                modifier = Modifier.padding(start = 5.dp).size(30.dp),
+                imageVector = Icons.Default.KeyboardArrowLeft,
+                contentDescription = "BackIcon",
+                tint = Color.White
+            )
             ClickableText(
                 text = AnnotatedString("返回"),
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
-                    textDecoration = TextDecoration.Underline,
                 ),
                 onClick = {
                     navController.navigate(Screen.MA3_1_1.withArgs(WorkCode.toString()))
                 },
-                modifier = Modifier.padding(start = 20.dp)
             )
             Text(
                 modifier = Modifier
@@ -164,7 +170,7 @@ fun infoTable(list: listInfo){
                    fontSize = 16.sp,
                    fontWeight = FontWeight.Bold,
 
-                   color = Color(200, 71, 52),
+                   color = Color(163,76,60),
                    modifier = Modifier.padding(bottom = 10.dp),
                    //.fillMaxWidth(),
                    textAlign = TextAlign.Center,
@@ -196,7 +202,7 @@ fun infoTable(list: listInfo){
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
-                color = Color(200, 71, 52),
+                color = Color(163,76,60),
                 modifier = Modifier.padding(bottom = 10.dp),
                 //.fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -228,7 +234,7 @@ fun infoTable(list: listInfo){
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
-                color = Color(200, 71, 52),
+                color = Color(163,76,60),
                 modifier = Modifier.padding(bottom = 10.dp),
                 //.fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -260,7 +266,7 @@ fun infoTable(list: listInfo){
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
-                color = Color(200, 71, 52),
+                color = Color(163,76,60),
                 modifier = Modifier.padding(bottom = 10.dp),
                 //.fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -292,7 +298,7 @@ fun infoTable(list: listInfo){
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
-                color = Color(200, 71, 52),
+                color = Color(163,76,60),
                 modifier = Modifier.padding(bottom = 10.dp),
                 //.fillMaxWidth(),
                 textAlign = TextAlign.Center,

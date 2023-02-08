@@ -2,19 +2,27 @@ package com.elliewu.taoyuanapp3
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Done
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Devices
@@ -27,11 +35,34 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+data class ReportInfoList(
+    val ReportCode: String,
+    val Longitude: String,
+    val Latitude: String,
+    val ReportTitle: String,
+    val ReportContent: String,
+    val ReportPhoto: String,
+    val Edit: String,
+
+    )
+
+var ReportListData = ReportInfoList(
+    "777777777",
+    "45.259898412",
+    "33.444444",
+    "測試中測試中",
+    "此內容為測試資料測試用",
+    "",
+    "TRUE",
+)
+
+var MA3_3_1_msggg by mutableStateOf(ReportListData)
+
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
 @Composable
-fun MA3_3_1(navController: NavHostController = rememberNavController()){
+fun MA3_3_1(navController: NavHostController = rememberNavController()) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,6 +78,14 @@ fun MA3_3_1(navController: NavHostController = rememberNavController()){
                 .background(Color(65, 96, 176)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            Icon(
+                modifier = Modifier
+                    .padding(start = 5.dp)
+                    .size(30.dp),
+                imageVector = Icons.Default.KeyboardArrowLeft,
+                contentDescription = "BackIcon",
+                tint = Color.White
+            )
             ClickableText(
                 text = AnnotatedString("返回"),
                 style = TextStyle(
@@ -56,8 +95,7 @@ fun MA3_3_1(navController: NavHostController = rememberNavController()){
                 ),
                 onClick = {
                     navController.navigate(Screen.MA3_3.route)
-                },
-                modifier = Modifier.padding(start = 20.dp)
+                }
             )
             Text(
                 modifier = Modifier
@@ -73,38 +111,285 @@ fun MA3_3_1(navController: NavHostController = rememberNavController()){
             )
         }
         Column(
-            modifier = Modifier.fillMaxWidth()
-                               .background(Color(236,243,253)),
-        ){
-            ReportInfo()
+            modifier = Modifier
+                .fillMaxWidth()
+                .bottomBorder(2.dp, Color(197, 202, 208))
+                .background(Color(236, 243, 253)),
+        ) {
+            ReportInfo(MA3_3_1_msggg)
         }
     }
 
 }
 
 @Composable
-fun ReportInfo() {
-    Column(modifier = Modifier.padding(start = 20.dp, end = 20.dp)) {
+fun ReportInfo(list: ReportInfoList) {
+    Column(modifier = Modifier.fillMaxSize()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+            //horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp,bottom = 10.dp)
+                .padding(top = 20.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
         ) {
             Text(
                 text = "報修單號:",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = Color(128,127,129)
+                color = Color(128, 127, 129)
             )
             Text(
-                text = "",
+                modifier = Modifier.padding(start = 45.dp),
+                text = list.ReportCode,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = Color(128,127,129)
-
+                color = Color(83, 84, 88),
             )
         }
-   }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .bottomBorder(2.dp, Color(197, 202, 208))
+                .background(Color(229, 236, 246)),
+        ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    //horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+                ) {
+                    Text(
+                        text = "GIS X座標:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color(128, 127, 129)
+                    )
+                    Text(
+                        modifier = Modifier.padding(start = 37.dp),
+                        text = list.Longitude,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color(50, 53, 60),
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    //horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+                ) {
+                    Text(
+                        text = "GIS Y座標:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color(128, 127, 129)
+                    )
+                    Text(
+                        modifier = Modifier.padding(start = 38.dp),
+                        text = list.Latitude,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color(50, 53, 60),
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    //horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 0.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+                ) {
+                    Text(
+                        text = "地圖:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color(128, 127, 129)
+                    )
+                    Button(
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Transparent
+                        ),
+                        elevation = null,
+                        modifier = Modifier.padding(start = 82.dp),
+                        contentPadding = PaddingValues(0.dp),
+                        onClick = {}
+                    ){
+                        Icon(
+                            //modifier = Modifier.padding(start = 82.dp),
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = "Favorite icon",
+                            tint = Color(64,111,158)
+                        )
+                        Text(
+                            text = "GIS定位",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            color = Color(64,111,158),
+                            textDecoration = TextDecoration.Underline,
+                        )
+                    }
+                }
+        }
+        MyUI(ReportListData);
+    }
+}
+
+@Composable
+private fun MyUI(list: ReportInfoList) {
+    var titleValue by remember {
+        mutableStateOf("${list.ReportTitle}")
+    }
+    var contentValue by remember {
+        mutableStateOf("${list.ReportContent}")
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+    ) {
+        Text(
+            text = "報修主旨:",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            color = Color(85,86,90)
+        )
+        BasicTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = titleValue,
+            onValueChange = { newText ->
+                titleValue = newText
+            },
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(50, 53, 60),
+            ),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = Modifier
+                        .padding(start = 36.dp) // margin left and right
+                        .fillMaxWidth()
+                        .background(color = Color.White, shape = RoundedCornerShape(size = 8.dp))
+                        .border(
+                            width = 2.dp,
+                            color = Color.White,
+                            shape = RoundedCornerShape(size = 8.dp)
+                        )
+                        .padding(
+                            start = 8.dp,
+                            end = 16.dp,
+                            top = 8.dp,
+                            bottom = 8.dp
+                        ), // inner padding
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Spacer(modifier = Modifier.width(width = 8.dp))
+                    innerTextField()
+                }
+            }
+        )
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+    )
+    {
+        Text(
+            text = "報修內容",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            color = Color(85,86,90)
+        )
+    }
+    TextField(
+        modifier = Modifier
+
+            .size(2000.dp, 180.dp)
+            .fillMaxSize()
+            .padding(start = 20.dp, 0.dp, 20.dp, 0.dp),
+        value = contentValue,
+        textStyle = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(50, 53, 60),
+        ),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.White,
+            cursorColor = Color.Black,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        onValueChange = {
+
+        },
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.None,
+            autoCorrect = true, keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+        ),
+    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp))
+    {
+        Button(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(170,170,170)),
+            shape = RoundedCornerShape(50),
+            elevation = null,
+            onClick = {},
+        )
+        {
+            Row(verticalAlignment = Alignment.CenterVertically,
+            ){
+                Icon(
+                    modifier = Modifier
+                        .size(25.dp),
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "BackIcon",
+                    tint = Color.White
+                )
+                Text(
+                    text = "更換照片",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    textDecoration = TextDecoration.Underline
+                )
+            }
+        }
+    }
+    //照片位置
+
+
+
+
+
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp, start = 80.dp, end = 80.dp)){
+        Button(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(84,117,162)),
+            elevation = null,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+            onClick = {}
+        ){
+            Text(
+                text = "送出",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.White
+            )
+        }
+    }
+
 }

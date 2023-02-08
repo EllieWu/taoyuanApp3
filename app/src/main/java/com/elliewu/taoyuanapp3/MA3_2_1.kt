@@ -8,7 +8,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,18 +80,22 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
                 .background(Color(62, 83, 140)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            Icon(
+                modifier = Modifier.padding(start = 5.dp).size(30.dp),
+                imageVector = Icons.Default.KeyboardArrowLeft,
+                contentDescription = "BackIcon",
+                tint = Color.White
+            )
             ClickableText(
                 text = AnnotatedString("返回"),
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
-                    textDecoration = TextDecoration.Underline,
                 ),
                 onClick = {
                     navController.navigate(Screen.MA3_2.route)
                 },
-                modifier = Modifier.padding(start = 20.dp)
             )
             Text(
                 modifier = Modifier
@@ -372,7 +379,9 @@ fun RepairInfoTable(list: RepairInfoList){
 //            )
             val imageBytes = Base64.decode(list.RepairPhoto, 0)
             val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            Image(bitmap = image.asImageBitmap(), contentDescription = "contentDescription")
+            Image(
+                bitmap = image.asImageBitmap(),
+                contentDescription = "contentDescription")
         }
     }
 }
