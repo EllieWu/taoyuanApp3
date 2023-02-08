@@ -87,4 +87,6 @@ dependencies {
     //location permission
     implementation 'com.google.accompanist:accompanist-permissions:0.24.13-rc'
 
+    //viewModel
+    implementation"androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
 }
