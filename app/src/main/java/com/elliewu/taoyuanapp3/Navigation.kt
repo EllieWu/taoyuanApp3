@@ -70,9 +70,14 @@ fun Navigation() {
 //            MA3_2_1(navController = navController)
 //        }
         composable(
-            route = Screen.MA3_2_1.route + "/{RepairCode}",
+            route = Screen.MA3_2_1.route + "?RepairCode={RepairCode}&State={State}",
             arguments = listOf(
                 navArgument("RepairCode"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("State"){
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = true
@@ -81,7 +86,9 @@ fun Navigation() {
         ) { entry ->
             MA3_2_1(
                 navController = navController,
-                RepairCode = entry.arguments?.getString("RepairCode"))
+                RepairCode = entry.arguments?.getString("RepairCode"),
+                State = entry.arguments?.getString("State")
+            )
         }
 
 

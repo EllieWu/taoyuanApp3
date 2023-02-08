@@ -219,7 +219,8 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_2_1.route)
-                navController.navigate(Screen.MA3_2_1.withArgs(list.RepairCode))
+                var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${list.RepairCode}&State=${list.State}"
+                navController.navigate(fullMA3_2_1_path)
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {

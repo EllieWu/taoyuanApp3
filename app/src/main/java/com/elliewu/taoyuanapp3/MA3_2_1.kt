@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -19,6 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 data class RepairInfoList(
     val RepairCode: String,
@@ -44,12 +49,12 @@ var RepairListData = RepairInfoList(
 var MA3_2_1_msggg by mutableStateOf(RepairListData)
 
 
-
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
 @Composable
-fun MA3_2_1(RepairCode: String? = "", navController : NavHostController = rememberNavController()){
+fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostController = rememberNavController()){
+    MA3_2_1_MakeListCom(RepairCode,State)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,7 +100,7 @@ fun MA3_2_1(RepairCode: String? = "", navController : NavHostController = rememb
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(255, 255, 255))) {
-                RepairInfoTable(RepairListData)
+                RepairInfoTable(MA3_2_1_msggg)
             }
         }
 //        Text(text = "yoyo: ${RepairCode.toString()}")
@@ -361,4 +366,43 @@ fun RepairInfoTable(list: RepairInfoList){
         }
     }
 }
+//TODO:Jeremy增加
+@Composable
+fun MA3_2_1_MakeListCom(RepairCode:String?,State: String?){
+    val coroutineScope = rememberCoroutineScope()
+    MA3_2_1_MakeList(coroutineScope,RepairCode,State)
+}
+fun MA3_2_1_MakeList(coroutineScope: CoroutineScope, RepairCode:String?,State: String?){
+    coroutineScope.launch {
+        Log.d("RepairCode",RepairCode.toString())
+        Log.d("State",State.toString())
+        var RequestJsonObject = JSONObject();
+        RequestJsonObject.put("Function", "RepairContent")
+        RequestJsonObject.put("RepairCode", RepairCode.toString())
+        RequestJsonObject.put("ReportType", "外巡報修")
+        val responseString = HttpRequestTest(RequestJsonObject)
+        Log.d("MA3_2_1",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var WorkInfoResponse:RepairContent_Response = gson.fromJson(responseString,RepairContent_Response::class.java)
+            var workListDatas = MA3_2_1_msggg
+            if(WorkInfoResponse.OutsideRepair != null){
+                var outsiderepair = WorkInfoResponse.OutsideRepair;
+                workListDatas = RepairInfoList(
+                    outsiderepair.RepairCode.toString(),
+                    State.toString(),
+                    outsiderepair.Manager.toString(),
+                    outsiderepair.Longitude.toString(),
+                    outsiderepair.Latitude.toString(),
+                    outsiderepair.RepairTitle.toString(),
+                    outsiderepair.RepairContent.toString(),
+                    "",
+                )
+            }
+            MA3_2_1_msggg = workListDatas;
+        }
+//        val responsejsonobject = CustomMizeHttpRequestTest(RequestJsonObject)
+//        val a:String? = responsejsonobject.get("DevRepair").toString()
 
+    }
+}
