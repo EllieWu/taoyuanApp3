@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.util.Log
 import android.widget.DatePicker
@@ -31,6 +32,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -62,7 +65,7 @@ fun MA3_3(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color(232, 232, 232)),
+            .background(Color(226,230,239)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -70,7 +73,7 @@ fun MA3_3(
             modifier = Modifier
                 .fillMaxWidth()
                 .size(width = 250.dp, 50.dp)
-                .background(Color(62, 83, 140)),
+                .background(Color(65,96,176)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -91,7 +94,6 @@ fun MA3_3(
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
-                    textDecoration = TextDecoration.Underline,
                 ),
                 onClick = {
                     //navController.navigate(Screen.login.route)
@@ -101,7 +103,7 @@ fun MA3_3(
             //var enabled by remember { mutableStateOf(true)}
 
         }
-        Column(modifier = Modifier.padding(top = 20.dp, start = 40.dp, end = 40.dp)) {
+        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -112,6 +114,7 @@ fun MA3_3(
                 Text(
                     text = "選擇日期",
                     fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
                     color = Color(105, 105, 105)
                 )
                 Button(
@@ -123,10 +126,11 @@ fun MA3_3(
                         )
                     ),
                     border = BorderStroke(1.dp, Color(202, 140, 62)),
+                    contentPadding = PaddingValues(0.dp),
                     shape = RoundedCornerShape(50),
-                    modifier = Modifier.size(width = 70.dp, height = 40.dp),
+                    modifier = Modifier.size(width = 60.dp, height = 30.dp),
                     onClick = {
-
+                        MA3_2_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                     },
                 )
                 {
@@ -134,8 +138,9 @@ fun MA3_3(
                         text = AnnotatedString("今日"),
                         style = TextStyle(
                             color = Color(202, 140, 62),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
                         ),
                         onClick = {
                             //當天日期
@@ -182,7 +187,8 @@ fun MA3_3(
                     onClick = { datePickerDialog.show() }) {
                     Text(
                         text = MA3_3_date,
-                        color = Color(200, 71, 52)
+                        fontSize = 18.sp,
+                        color = Color(163,76,60)
                     )
                     MA3_3_MakeListCom(MA3_3_date,Login_UserId);
                 }
@@ -194,12 +200,25 @@ fun MA3_3(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .background(Color(238, 239, 241))
+                    .background(Color(231,238,248))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無報修工單")
+                Text(
+                    modifier = Modifier.padding(top = 180.dp),
+                    text = "暫無報修工單",
+                    color = Color(131,132,134),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         } else {
-            ReportList(MA3_3_msggg);
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(Color(231,238,248))
+            ) {
+                ReportList(MA3_3_msggg,navController);
+            }
         }
     }
     BottomSpace(navController);
@@ -209,15 +228,15 @@ fun MA3_3(
 fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavController()) {
     Button(
         modifier = Modifier
-            .padding(start = 25.dp, end = 25.dp, bottom = 5.dp)
+            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
             .fillMaxSize(),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
-            Log.d("ButtonEvent", Screen.MA3_1_1.route)
+            Log.d("ButtonEvent", Screen.MA3_3_1.route)
             //val screen = Screen.MA3_1_1.route
-            navController.navigate(Screen.MA3_1_1.withArgs(list.State))
+            navController.navigate(Screen.MA3_3_1.route)
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {
@@ -236,7 +255,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
                 }
                 Box(
                     contentAlignment = Alignment.Center, modifier = Modifier
-                        .size(width = 60.dp, height = 30.dp)
+                        .size(width = 70.dp, height = 30.dp)
                         .background(stateColor)
                 ) {
                     Text(
@@ -256,25 +275,25 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
                     .fillMaxWidth()
                     .padding(top = 20.dp, bottom = 20.dp,start = 20.dp)
             ) {
-                Row(){
+                Row(verticalAlignment = Alignment.CenterVertically){
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
                         text = "報修時間:",
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(105, 105, 105)
                     )
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
                         text = list.ReportTime,
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         color = Color(105, 105, 105)
                     )
                 }
                 Text(
                     text = list.ReportTitle,
                     fontSize = 18.sp,
-                    color = Color(200, 71, 52),
+                    color = Color(163,76,60),
                     fontWeight = FontWeight.Bold
                 )
 
@@ -294,13 +313,13 @@ fun ReportList(messages: List<ReportLists>,navController :NavHostController = re
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_3_MakeListCom(Date:String,UserID:String){
-    val coroutineScope = rememberCoroutineScope()
-    MA3_3_MakeList(coroutineScope,Date,UserID)
+    MA3_3_MakeList(Date,UserID)
 }
-fun MA3_3_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
-    coroutineScope.launch {
+fun MA3_3_MakeList(Date:String, UserID:String){
+    GlobalScope.launch(Dispatchers.IO) {
         var MA3_RequestJsonObject = JSONObject();
         MA3_RequestJsonObject.put("Function", "ReportList")
         MA3_RequestJsonObject.put("Date", Date)

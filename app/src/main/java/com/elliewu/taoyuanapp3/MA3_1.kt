@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.util.Log
 import android.widget.DatePicker
@@ -39,6 +40,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -101,7 +104,6 @@ fun MA3_1(
                     color = White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
-                    textDecoration = TextDecoration.Underline,
                     ),
                 onClick = {
                     navController.navigate(Screen.login.route)
@@ -111,7 +113,7 @@ fun MA3_1(
             //var enabled by remember { mutableStateOf(true)}
 
         }
-        Column(modifier = Modifier.padding(top = 20.dp, start = 40.dp, end = 40.dp)) {
+        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -122,6 +124,7 @@ fun MA3_1(
                 Text(
                     text = "選擇日期",
                     fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
                     color = Color(105, 105, 105)
                 )
                 Button(
@@ -133,10 +136,11 @@ fun MA3_1(
                         )
                     ),
                     border = BorderStroke(1.dp, Color(202, 140, 62)),
+                    contentPadding = PaddingValues(0.dp),
                     shape = RoundedCornerShape(50),
-                    modifier = Modifier.size(width = 70.dp, height = 40.dp),
+                    modifier = Modifier.size(width = 60.dp, height = 30.dp),
                     onClick = {
-                        navController.navigate(Screen.login.route)
+                        MA3_2_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                     },
                 )
                 {
@@ -144,7 +148,7 @@ fun MA3_1(
                         text = AnnotatedString("今日"),
                         style = TextStyle(
                             color = Color(202, 140, 62),
-                            fontSize = 15.sp,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         ),
                         onClick = {
@@ -190,21 +194,10 @@ fun MA3_1(
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = { datePickerDialog.show() }) {
-//                    if (MA3_1_date == "") {
-//                        Text(
-//                            text = "選擇日期",
-//                            fontWeight = FontWeight.Bold,
-//                            color = Color(105, 105, 105)
-//                        )
-//                    } else {
-//                        Text(
-//                            text = "${MA3_1_date}",
-//                            color = Color(200, 71, 52)
-//                        )
-//                    }
                     Text(
                         text = MA3_1_date,
-                        color = Color(200, 71, 52)
+                        fontSize = 18.sp,
+                        color = Color(163,76,60)
                     )
                     MA3_1_MakeListCom(MA3_1_date,Login_UserId);
                 }
@@ -224,7 +217,12 @@ fun MA3_1(
                     .fillMaxHeight()
                     .background(Color(238, 239, 241))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無巡檢工單")
+                Text(
+                    modifier = Modifier.padding(top = 180.dp),
+                    text = "暫無巡檢工單",
+                    color = Color(131,132,134),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         } else {
 //            Button(onClick = { msggg = msggg - msggg[msggg.size -1] }) {
@@ -235,14 +233,16 @@ fun MA3_1(
     }
     BottomSpace(navController)
 }
+
+
 //TODO:Jeremy增加
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_1_MakeListCom(Date:String,UserID:String){
-    val coroutineScope = rememberCoroutineScope()
-    MA3_1_MakeList(coroutineScope,Date,UserID)
+    MA3_1_MakeList(Date,UserID)
 }
-fun MA3_1_MakeList(coroutineScope:CoroutineScope,Date:String,UserID:String){
-    coroutineScope.launch {
+fun MA3_1_MakeList(Date:String,UserID:String){
+    GlobalScope.launch(Dispatchers.IO){
         var MA3_RequestJsonObject = JSONObject();
         MA3_RequestJsonObject.put("Function", "SelectWorkList")
         MA3_RequestJsonObject.put("Date", Date)
@@ -272,7 +272,7 @@ fun MA3_1_MakeList(coroutineScope:CoroutineScope,Date:String,UserID:String){
 fun listCard(list: Lists,navController :NavHostController = rememberNavController()) {
     Button(
         modifier = Modifier
-            .padding(start = 25.dp, end = 25.dp, bottom = 5.dp)
+            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
             .fillMaxSize(),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
@@ -325,7 +325,7 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
                     Text(
                         text = list.time,
                         fontSize = 18.sp,
-                        color = Color(200, 71, 52),
+                        color = Color(163,76,60),
                         fontWeight = FontWeight.Bold
                     )
 

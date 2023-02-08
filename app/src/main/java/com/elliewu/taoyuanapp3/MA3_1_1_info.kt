@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.util.Size
 import androidx.compose.foundation.*
@@ -34,17 +35,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 
 data class listInfo(
-    val date: String,
-    val classes: String,
-    val roadLine: String,
-    val workID:String,
-    val worker:String,
-    val state:String
+    val Date: String,
+    val WorkTime: String,
+    val WorkPath: String,
+    val WorkCode:String,
+    val UserName:String,
+    val State:String
     )
 var MA3_1_1_info_msggg by mutableStateOf(listInfo(
     "",
@@ -157,7 +160,7 @@ fun infoTable(list: listInfo){
            Row(modifier = Modifier.fillMaxWidth().padding(start = 92.dp), horizontalArrangement = Arrangement.Start)
            {
                Text(
-                   text = list.date,
+                   text = list.Date,
                    fontSize = 16.sp,
                    fontWeight = FontWeight.Bold,
 
@@ -189,7 +192,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.classes,
+                text = list.WorkTime,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
@@ -221,7 +224,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.roadLine,
+                text = list.WorkPath,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
@@ -253,7 +256,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.workID,
+                text = list.WorkCode,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
@@ -285,7 +288,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.worker,
+                text = list.UserName,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
@@ -317,7 +320,7 @@ fun infoTable(list: listInfo){
         Row(modifier = Modifier.fillMaxWidth().padding(start = 60.dp), horizontalArrangement = Arrangement.Start)
         {
             Text(
-                text = list.state,
+                text = list.State,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
@@ -347,14 +350,15 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
         }
     }
 )
+
 //TODO:Jeremy增加
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_1_1_Info_MakeListCom(WorkCode:String){
-    val coroutineScope = rememberCoroutineScope()
-    MA3_1_1_Info_MakeList(coroutineScope,WorkCode)
+    MA3_1_1_Info_MakeList(WorkCode)
 }
-fun MA3_1_1_Info_MakeList(coroutineScope: CoroutineScope, WorkCode:String){
-    coroutineScope.launch {
+fun MA3_1_1_Info_MakeList( WorkCode:String){
+    GlobalScope.launch(Dispatchers.IO) {
         var RequestJsonObject = JSONObject();
         RequestJsonObject.put("Function", "WorkInfo")
         RequestJsonObject.put("WorkCode", WorkCode)

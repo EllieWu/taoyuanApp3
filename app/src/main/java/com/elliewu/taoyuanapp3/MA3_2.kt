@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.util.Log
 import android.widget.DatePicker
@@ -32,6 +33,8 @@ import androidx.navigation.compose.rememberNavController
 import com.elliewu.taoyuanapp3.RepairFakeData.RepairListData
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -180,7 +183,7 @@ fun MA3_2(
                     Text(
                         text = MA3_2_date,
                         fontSize = 18.sp,
-                        color = Color(200, 71, 52)
+                        color = Color(163,76,60)
                     )
                     MA3_2_MakeListCom(MA3_2_date,Login_UserId);
                 }
@@ -194,10 +197,15 @@ fun MA3_2(
                     .fillMaxHeight()
                     .background(Color(238, 239, 241))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無維修工單")
+                Text(
+                    modifier = Modifier.padding(top = 180.dp),
+                    text = "暫無維修工單",
+                    color = Color(131,132,134),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         } else {
-            RepairList(MA3_2_msggg);
+            RepairList(MA3_2_msggg,navController);
         }
     }
     BottomSpace(navController)
@@ -213,9 +221,9 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
         elevation = null,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
-            Log.d("ButtonEvent", Screen.MA3_1_1.route)
-            //val screen = Screen.MA3_1_1.route
-            navController.navigate(Screen.MA3_1_1.withArgs(list.RepairCode))
+            Log.d("ButtonEvent", Screen.MA3_2_1.route)
+                var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${list.RepairCode}&State=${list.State}"
+                navController.navigate(fullMA3_2_1_path)
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {
@@ -234,7 +242,7 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
                 }
                 Box(
                     contentAlignment = Alignment.Center, modifier = Modifier
-                        .size(width = 80.dp, height = 30.dp)
+                        .size(width = 70.dp, height = 30.dp)
                         .background(stateColor)
                 ) {
                     Text(
@@ -258,22 +266,15 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
                         text = "維修單號: ${list.RepairCode.toString()}",
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(105, 105, 105)
                     )
-//                    Text(
-//                        modifier = Modifier.padding(bottom = 10.dp),
-//                        text = list.RepairCode,
-//                        fontWeight = FontWeight.Bold,
-//                        fontSize = 18.sp,
-//                        color = Color(105, 105, 105)
-//                    )
                 }
                 Text(
                     text = list.RepairTitle,
                     fontSize = 18.sp,
-                    color = Color(200, 71, 52),
+                    color = Color(163,76,60),
                     fontWeight = FontWeight.Bold
                 )
 
@@ -293,13 +294,13 @@ fun RepairList(messages: List<RepairLists>,navController :NavHostController = re
 }
 
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_2_MakeListCom(Date:String,UserID:String){
-    val coroutineScope = rememberCoroutineScope()
-    MA3_2_MakeList(coroutineScope,Date,UserID)
+    MA3_2_MakeList(Date,UserID)
 }
-fun MA3_2_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
-    coroutineScope.launch {
+fun MA3_2_MakeList(Date:String, UserID:String){
+    GlobalScope.launch(Dispatchers.IO){
         var MA3_RequestJsonObject = JSONObject();
         MA3_RequestJsonObject.put("Function", "RepairList")
         MA3_RequestJsonObject.put("Date", Date)
