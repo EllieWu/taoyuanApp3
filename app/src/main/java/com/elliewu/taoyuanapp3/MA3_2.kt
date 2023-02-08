@@ -219,7 +219,6 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_1_1.route)
-            //val screen = Screen.MA3_1_1.route
             navController.navigate(Screen.MA3_2_1.route)
         })
     {

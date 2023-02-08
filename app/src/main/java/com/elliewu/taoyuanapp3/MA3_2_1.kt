@@ -373,33 +373,3 @@ fun RepairInfoTable(list: List<RepairInfoList>){
     }
 }
 
-//@Composable
-//fun MA3_2_1_Info_MakeListCom(RepairCode:String){
-//    val coroutineScope = rememberCoroutineScope()
-//    MA3_2_1_Info_MakeList(coroutineScope,WorkCode)
-//}
-//fun MA3_2_1_Info_MakeList(coroutineScope: CoroutineScope, RepairCode:String){
-//    coroutineScope.launch {
-//        var RequestJsonObject = JSONObject();
-//        RequestJsonObject.put("Function", "WorkInfo")
-//        RequestJsonObject.put("WorkCode", WorkCode)
-//        val responseString = HttpRequestTest(RequestJsonObject)
-//        Log.d("MA3_1_1_Info",responseString)
-//        if(responseString!="Error"){
-//            var gson = Gson();
-//            var WorkInfoResponse:WorkInfo_Response = gson.fromJson(responseString,WorkInfo_Response::class.java)
-//            var workListDatas = MA3_1_1_info_msggg
-//            if(WorkInfoResponse.WorkCode != null){
-//                workListDatas = listInfo(
-//                    WorkInfoResponse.Date.toString(),
-//                    WorkInfoResponse.WorkTime.toString(),
-//                    WorkInfoResponse.WorkPath.toString(),
-//                    WorkInfoResponse.WorkCode.toString(),
-//                    WorkInfoResponse.UserName.toString(),
-//                    WorkInfoResponse.State.toString()
-//                )
-//            }
-//            MA3_1_1_info_msggg = workListDatas
-//        }
-//    }
-//}
