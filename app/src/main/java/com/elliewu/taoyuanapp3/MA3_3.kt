@@ -7,12 +7,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,8 +35,21 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-var MA3_3_msggg by mutableStateOf(FakeData.workListData)
+//var MA3_3_msggg by mutableStateOf(FakeData.workListData)
+var MA3_3_msggg by mutableStateOf(ReportFakeData.ReportListData)
 var MA3_3_date by mutableStateOf(SimpleDateFormat("yyyy-MM-dd").format(Date()));
+
+data class ReportLists(val ReportCode: String, val State: String, val ReportTime: String,val ReportTitle:String)
+object ReportFakeData {
+    var ReportListData = listOf(
+        ReportLists(
+            "111032201", "等待派工", "2022/3/22 7:37:46 AM","VP-6人口蓋異常"
+        ),
+        ReportLists(
+            "111032202", "測試中", "2022/3/22 13:42:07 AM","欄杆損壞"
+        )
+    )
+}
 
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
@@ -79,7 +91,6 @@ fun MA3_3(
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
-                    textDecoration = TextDecoration.Underline,
                 ),
                 onClick = {
                     //navController.navigate(Screen.login.route)
@@ -89,7 +100,7 @@ fun MA3_3(
             //var enabled by remember { mutableStateOf(true)}
 
         }
-        Column(modifier = Modifier.padding(top = 20.dp, start = 40.dp, end = 40.dp)) {
+        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -100,6 +111,7 @@ fun MA3_3(
                 Text(
                     text = "選擇日期",
                     fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
                     color = Color(105, 105, 105)
                 )
                 Button(
@@ -111,10 +123,11 @@ fun MA3_3(
                         )
                     ),
                     border = BorderStroke(1.dp, Color(202, 140, 62)),
+                    contentPadding = PaddingValues(0.dp),
                     shape = RoundedCornerShape(50),
-                    modifier = Modifier.size(width = 70.dp, height = 40.dp),
+                    modifier = Modifier.size(width = 60.dp, height = 30.dp),
                     onClick = {
-
+                        MA3_2_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                     },
                 )
                 {
@@ -122,8 +135,9 @@ fun MA3_3(
                         text = AnnotatedString("今日"),
                         style = TextStyle(
                             color = Color(202, 140, 62),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
                         ),
                         onClick = {
                             //當天日期
@@ -170,7 +184,8 @@ fun MA3_3(
                     onClick = { datePickerDialog.show() }) {
                     Text(
                         text = MA3_3_date,
-                        color = Color(200, 71, 52)
+                        fontSize = 18.sp,
+                        color = Color(163,76,60)
                     )
                     MA3_3_MakeListCom(MA3_3_date,Login_UserId);
                 }
@@ -184,14 +199,109 @@ fun MA3_3(
                     .fillMaxHeight()
                     .background(Color(238, 239, 241))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無報修工單")
+                Text(
+                    modifier = Modifier.padding(top = 180.dp),
+                    text = "暫無報修工單",
+                    color = Color(131,132,134),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         } else {
-            workList(MA3_3_msggg);
+            ReportList(MA3_3_msggg);
         }
     }
     BottomSpace(navController);
 }
+
+@Composable
+fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavController()) {
+    Button(
+        modifier = Modifier
+            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
+            .fillMaxSize(),
+        border = BorderStroke(0.dp, Color.Transparent),
+        elevation = null,
+        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+        onClick = {
+            Log.d("ButtonEvent", Screen.MA3_1_1.route)
+            //val screen = Screen.MA3_1_1.route
+            navController.navigate(Screen.MA3_1_1.withArgs(list.State))
+        })
+    {
+        Card(modifier = Modifier.fillMaxSize()) {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .size(100.dp,100.dp)
+                    .fillMaxWidth()
+                    //.size(width = 0.dp, height = 100.dp)
+                    .background(Color(255, 255, 255))
+            ) {
+                val stateColor = if(list.State == "已完工"){
+                    Color(128,128,128)
+                }else{
+                    Color(65, 89, 151)
+                }
+                Box(
+                    contentAlignment = Alignment.Center, modifier = Modifier
+                        .size(width = 70.dp, height = 30.dp)
+                        .background(stateColor)
+                ) {
+                    Text(
+                        text = list.State,
+//                        Modifier.padding(16.dp),
+                        textAlign = TextAlign.Center,
+                        color = Color.White,
+                        fontSize = 12.sp,
+                    )
+                }
+
+            }
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth()
+                    .padding(top = 20.dp, bottom = 20.dp,start = 20.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically){
+                    Text(
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        text = "報修時間:",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(105, 105, 105)
+                    )
+                    Text(
+                        modifier = Modifier.padding(bottom = 10.dp),
+                        text = list.ReportTime,
+                        fontSize = 16.sp,
+                        color = Color(105, 105, 105)
+                    )
+                }
+                Text(
+                    text = list.ReportTitle,
+                    fontSize = 18.sp,
+                    color = Color(163,76,60),
+                    fontWeight = FontWeight.Bold
+                )
+
+            }
+        }
+
+    }
+}
+
+
+@Composable
+fun ReportList(messages: List<ReportLists>,navController :NavHostController = rememberNavController()) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(messages) { message ->
+            ReportCard(message,navController)
+        }
+    }
+}
+
 @Composable
 fun MA3_3_MakeListCom(Date:String,UserID:String){
     val coroutineScope = rememberCoroutineScope()
@@ -208,19 +318,19 @@ fun MA3_3_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
         if(responseString!="Error"){
             var gson = Gson();
             var TestWorkList:ReportList_Response = gson.fromJson(responseString,ReportList_Response::class.java)
-            var workListDatas = listOf(
-                Lists(
-                    "", "", ""
+            var ReportListDatas = listOf(
+                ReportLists(
+                    "", "", "",""
                 )
             )
-            workListDatas = workListDatas - workListDatas[workListDatas.size -1]
+            ReportListDatas = ReportListDatas - ReportListDatas[ReportListDatas.size -1]
             if(TestWorkList.ReportList != null){
                 TestWorkList.ReportList!!.forEach {
-                    var worklistd = Lists(it.State.toString(),it.ReportCode.toString(),it.ReportTime.toString())
-                    workListDatas += worklistd
+                    var ReportListd = ReportLists(it.ReportCode.toString(),it.State.toString(),it.ReportTime.toString(),it.ReportTitle.toString())
+                    ReportListDatas += ReportListd
                 }
             }
-            MA3_3_msggg = workListDatas
+            MA3_3_msggg = ReportListDatas
         }
     }
 }

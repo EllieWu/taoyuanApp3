@@ -89,7 +89,7 @@ fun MA3_2(
             //var enabled by remember { mutableStateOf(true)}
 
         }
-        Column(modifier = Modifier.padding(top = 20.dp, start = 40.dp, end = 40.dp)) {
+        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -100,6 +100,7 @@ fun MA3_2(
                 Text(
                     text = "選擇日期",
                     fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
                     color = Color(105, 105, 105)
                 )
                 Button(
@@ -111,10 +112,12 @@ fun MA3_2(
                         )
                     ),
                     border = BorderStroke(1.dp, Color(202, 140, 62)),
+                    contentPadding = PaddingValues(0.dp),
                     shape = RoundedCornerShape(50),
-                    modifier = Modifier.size(width = 70.dp, height = 40.dp),
+                    modifier = Modifier.size(width = 60.dp, height = 30.dp),
                     onClick = {
-                        navController.navigate(Screen.MA3_3.route)
+                       // navController.navigate(Screen.MA3_3.route)
+                        MA3_2_date = SimpleDateFormat("yyyy-MM-dd").format(Date())
                     },
                 )
                 {
@@ -128,8 +131,9 @@ fun MA3_2(
                         text = AnnotatedString("今日"),
                         style = TextStyle(
                             color = Color(202, 140, 62),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
                         ),
                         onClick = {
                             //當天日期
@@ -175,7 +179,8 @@ fun MA3_2(
                     onClick = { datePickerDialog.show() }) {
                     Text(
                         text = MA3_2_date,
-                        color = Color(200, 71, 52)
+                        fontSize = 18.sp,
+                        color = Color(163,76,60)
                     )
                     MA3_2_MakeListCom(MA3_2_date,Login_UserId);
                 }
@@ -189,10 +194,15 @@ fun MA3_2(
                     .fillMaxHeight()
                     .background(Color(238, 239, 241))
             ) {
-                Text(modifier = Modifier.padding(top = 180.dp), text = "暫無維修工單")
+                Text(
+                    modifier = Modifier.padding(top = 180.dp),
+                    text = "暫無維修工單",
+                    color = Color(131,132,134),
+                    fontWeight = FontWeight.Bold,
+                )
             }
         } else {
-            RepairList(MA3_2_msggg);
+            RepairList(MA3_2_msggg,navController);
         }
     }
     BottomSpace(navController)
@@ -202,15 +212,15 @@ fun MA3_2(
 fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavController()) {
     Button(
         modifier = Modifier
-            .padding(start = 25.dp, end = 25.dp, bottom = 5.dp)
+            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
             .fillMaxSize(),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
-            Log.d("ButtonEvent", Screen.MA3_1_1.route)
-            //val screen = Screen.MA3_1_1.route
-            navController.navigate(Screen.MA3_1_1.withArgs(list.RepairCode))
+            Log.d("ButtonEvent", Screen.MA3_2_1.route)
+                var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${list.RepairCode}&State=${list.State}"
+                navController.navigate(fullMA3_2_1_path)
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {
@@ -229,7 +239,7 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
                 }
                 Box(
                     contentAlignment = Alignment.Center, modifier = Modifier
-                        .size(width = 80.dp, height = 30.dp)
+                        .size(width = 70.dp, height = 30.dp)
                         .background(stateColor)
                 ) {
                     Text(
@@ -249,25 +259,19 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
                     .fillMaxWidth()
                     .padding(top = 20.dp, bottom = 20.dp,start = 20.dp)
             ) {
-                Row(){
+                Row(verticalAlignment = Alignment.CenterVertically){
                     Text(
                         modifier = Modifier.padding(bottom = 10.dp),
-                        text = "維修單號:",
-                        fontSize = 18.sp,
+                        text = "維修單號: ${list.RepairCode.toString()}",
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(105, 105, 105)
-                    )
-                    Text(
-                        modifier = Modifier.padding(bottom = 10.dp),
-                        text = list.RepairCode,
-                        fontSize = 18.sp,
                         color = Color(105, 105, 105)
                     )
                 }
                 Text(
                     text = list.RepairTitle,
                     fontSize = 18.sp,
-                    color = Color(200, 71, 52),
+                    color = Color(163,76,60),
                     fontWeight = FontWeight.Bold
                 )
 

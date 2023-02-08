@@ -111,33 +111,35 @@ fun changePassword_newPassword(
                     .fillMaxWidth()
                     .size(width = 50.dp, height = 60.dp),
                 onClick = {
-                    //TODO :跳到新密碼輸入頁面
-//                    coroutineScope.launch {
-//                        var loginJsonObject = JSONObject();
-//                        loginJsonObject.put("Function", "Login")
-//                        //TODO : 正式上線請把預設值改掉換下面那個
-//                        //loginJsonObject.put("UserID", account)
-//                        //loginJsonObject.put("UserPW", password)
-//                        loginJsonObject.put("UserID", "F123332212")
-//                        loginJsonObject.put("UserPW", "Abc1234")
-//                        val responseString = HttpRequestTest(loginJsonObject)
-//                        Log.d("Login Response",responseString)
-//                        if(responseString == "Error")
-//                        {
-//                            //TODO :網路連線異常的通知
-//                        }
-//                        val jResponse = JSONObject(responseString);
-//                        val succeed:String? = jResponse.getString("Feedback").toString();
-//                        if(succeed == "TRUE")
-//                        {
-//                            //navController.navigate(Screen.MA3_1.route)
-//                            //TODO:成功後跳轉得頁面，下一頁才會正式修改密碼
-//                        }
-//                        else
-//                        {
-//                            //TODO:登入失敗跳的東西
-//                        }
-//                    }
+                    //TODO :修改成功後跳回首頁
+                    coroutineScope.launch {
+                        var loginJsonObject = JSONObject();
+                        loginJsonObject.put("Function", "ChangePassword")
+                        //TODO : 正式上線請把預設值改掉換下面那個
+                        //loginJsonObject.put("UserID", account)
+                        //loginJsonObject.put("UserNewPW", password)
+                        loginJsonObject.put("UserID", "F123332212")
+                        loginJsonObject.put("UserNewPW", "Abc1234")
+                        val responseString = HttpRequestTest(loginJsonObject)
+                        Log.d("ChangePassword",responseString)
+                        if(responseString == "Error")
+                        {
+                            //TODO :網路連線異常的通知
+                        }
+                        else{
+                            val jResponse = JSONObject(responseString);
+                            val succeed:String? = jResponse.getString("Feedback").toString();
+                            if(succeed == "TRUE")
+                            {
+                                navController.navigate(Screen.login.route)
+                                //TODO:成功後跳轉得頁面，下一頁才會正式修改密碼
+                            }
+                            else
+                            {
+                                //TODO:登入失敗跳的東西
+                            }
+                        }
+                    }
                 },) {
                 Text(text = "儲存更改", fontSize = 24.sp, fontWeight = FontWeight.Bold,
                     color = Color(255,255,255),

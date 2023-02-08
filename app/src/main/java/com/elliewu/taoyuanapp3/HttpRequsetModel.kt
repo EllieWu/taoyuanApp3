@@ -154,7 +154,7 @@ class ReportContent_Request(
     @SerializedName("ReportType")var ReportType : String?
 )
 class ReportContent_Response(
-    @SerializedName("OutsideRepair")var OutsideRepair : OutsideRepair
+    @SerializedName("OutsideRepair")var OutsideRepair : OutsideRepair?
 )
 class ReportUploadAgain_Request(
     @SerializedName("Function")var Function : String?,

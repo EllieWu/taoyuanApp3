@@ -28,20 +28,10 @@ fun Navigation() {
         composable(route = Screen.login.route) {
             login(navController = navController)
         }
+
+        //外巡工單
         composable(route = Screen.MA3_1.route) { entry ->
             MA3_1(navController = navController)
-        }
-        composable(route = Screen.MA3_2.route) { entry ->
-            MA3_2(navController = navController)
-        }
-        composable(route = Screen.MA3_3.route) { entry ->
-            MA3_3(navController = navController)
-        }
-        composable(route = Screen.changePassword.route) { entry ->
-            changePassword(navController = navController)
-        }
-        composable(route = Screen.changePassword_newPassword.route) { entry ->
-            changePassword_newPassword(navController = navController)
         }
         composable(
             route = Screen.MA3_1_1.route + "/{WorkCode}",
@@ -71,9 +61,65 @@ fun Navigation() {
                 navController = navController,
                 WorkCode = entry.arguments?.getString("WorkCode"))
         }
+
+        //維修工單
+        composable(route = Screen.MA3_2.route) { entry ->
+            MA3_2(navController = navController)
+        }
+//        composable(route = Screen.MA3_2_1.route) { entry ->
+//            MA3_2_1(navController = navController)
+//        }
+        composable(
+            route = Screen.MA3_2_1.route + "?RepairCode={RepairCode}&State={State}",
+            arguments = listOf(
+                navArgument("RepairCode"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("State"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )
+        ) { entry ->
+            MA3_2_1(
+                navController = navController,
+                RepairCode = entry.arguments?.getString("RepairCode"),
+                State = entry.arguments?.getString("State")
+            )
+        }
+
+
+        //報修
+        composable(route = Screen.MA3_3.route) { entry ->
+            MA3_3(navController = navController)
+        }
+        composable(route = Screen.changePassword.route) { entry ->
+            changePassword(navController = navController)
+        }
+        composable(route = Screen.changePassword_newPassword.route) { entry ->
+            changePassword_newPassword(navController = navController)
+        }
         composable(route = Screen.CameraTest.route) { entry ->
             CameraTest(navController = navController)
         }
+//        composable(
+//            route = Screen.MA3_2_1.route + "/{RepairCode}",
+//            arguments = listOf(
+//                navArgument("RepairCode"){
+//                    type = NavType.StringType
+//                    defaultValue = ""
+//                    nullable = true
+//                }
+//            )
+//        ) { entry ->
+//            MA3_2_1(
+//                navController = navController,
+//                RepairCode = entry.arguments?.getString(("RepairCode"))
+//                )
+//        }
     }
 
 
