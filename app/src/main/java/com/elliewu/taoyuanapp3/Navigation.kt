@@ -99,7 +99,20 @@ fun Navigation() {
         composable(route = Screen.MA3_3_1.route) { entry ->
             MA3_3_1(navController = navController)
         }
-
+//        composable(
+//            route = Screen.MA3_3_1.route + "/{ReportCode}",
+//            arguments = listOf(
+//                navArgument("ReportCode"){
+//                    type = NavType.StringType
+//                    defaultValue = ""
+//                    nullable = true
+//                }
+//            )
+//        ) { entry ->
+//            MA3_3_1(
+//                navController = navController,
+//                ReportCode = entry.arguments?.getString("ReportCode"))
+//        }
 
 
 

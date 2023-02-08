@@ -53,7 +53,7 @@ object ReportFakeData {
         )
     )
 }
-
+var MA3_3_1_ReportCode by mutableStateOf("")
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
@@ -236,6 +236,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_3_1.route)
             //val screen = Screen.MA3_1_1.route
+            MA3_3_1_ReportCode = list.ReportCode
             navController.navigate(Screen.MA3_3_1.route)
         })
     {

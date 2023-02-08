@@ -1,5 +1,7 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,6 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,6 +70,9 @@ var MA3_3_1_msggg by mutableStateOf(ReportListData)
 @Preview(showBackground = true)
 @Composable
 fun MA3_3_1(navController: NavHostController = rememberNavController()) {
+    var ReportCode: String? = ""
+    ReportCode = MA3_3_1_ReportCode;
+    MA3_3_1_MakeListCom(ReportCode.toString());
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -232,18 +242,21 @@ fun ReportInfo(list: ReportInfoList) {
                     }
                 }
         }
-        MyUI(ReportListData);
+        MyUI(MA3_3_1_msggg);
     }
 }
 
 @Composable
 private fun MyUI(list: ReportInfoList) {
     var titleValue by remember {
-        mutableStateOf("${list.ReportTitle}")
+        mutableStateOf("")
     }
+
     var contentValue by remember {
-        mutableStateOf("${list.ReportContent}")
+        mutableStateOf("")
     }
+    titleValue = list.ReportTitle
+    contentValue = list.ReportContent
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -392,4 +405,43 @@ private fun MyUI(list: ReportInfoList) {
         }
     }
 
+}
+//TODO:Jeremy增加
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun MA3_3_1_MakeListCom(ReportCode:String){
+    MA3_3_1_MakeList(ReportCode)
+}
+fun MA3_3_1_MakeList( ReportCode:String){
+    GlobalScope.launch(Dispatchers.IO) {
+        var RequestJsonObject = JSONObject();
+        RequestJsonObject.put("Function", "ReportContent")
+        RequestJsonObject.put("ReportCode", ReportCode)
+        RequestJsonObject.put("ReportType", "外巡報修")
+        val responseString = HttpRequestTest(RequestJsonObject)
+        Log.d("MA3_3_1",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var WorkInfoResponse:ReportContent_Response = gson.fromJson(responseString,ReportContent_Response::class.java)
+            var workListDatas = MA3_3_1_msggg
+            if(WorkInfoResponse.OutsideRepair != null){
+                var outsiderepair = WorkInfoResponse.OutsideRepair
+                if (outsiderepair != null) {
+                    workListDatas = ReportInfoList(
+                        outsiderepair.ReportCode.toString(),
+                        outsiderepair.Longitude.toString(),
+                        outsiderepair.Latitude.toString(),
+                        outsiderepair.ReportTitle.toString(),
+                        outsiderepair.ReportContent.toString(),
+                        outsiderepair.ReportPhoto.toString(),
+                        outsiderepair.Edit.toString()
+                    )
+                    Log.d("ReportTitle",outsiderepair.ReportTitle.toString())
+                    Log.d("ReportContent",outsiderepair.ReportContent.toString())
+                    Log.d("ReportPhoto",outsiderepair.ReportPhoto.toString())
+                }
+            }
+            MA3_3_1_msggg = workListDatas
+        }
+    }
 }
