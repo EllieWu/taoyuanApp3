@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.util.Log
 import android.widget.DatePicker
@@ -32,6 +33,8 @@ import androidx.navigation.compose.rememberNavController
 import com.elliewu.taoyuanapp3.RepairFakeData.RepairListData
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -291,13 +294,13 @@ fun RepairList(messages: List<RepairLists>,navController :NavHostController = re
 }
 
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_2_MakeListCom(Date:String,UserID:String){
-    val coroutineScope = rememberCoroutineScope()
-    MA3_2_MakeList(coroutineScope,Date,UserID)
+    MA3_2_MakeList(Date,UserID)
 }
-fun MA3_2_MakeList(coroutineScope: CoroutineScope, Date:String, UserID:String){
-    coroutineScope.launch {
+fun MA3_2_MakeList(Date:String, UserID:String){
+    GlobalScope.launch(Dispatchers.IO){
         var MA3_RequestJsonObject = JSONObject();
         MA3_RequestJsonObject.put("Function", "RepairList")
         MA3_RequestJsonObject.put("Date", Date)

@@ -96,12 +96,25 @@ fun Navigation() {
         composable(route = Screen.MA3_3.route) { entry ->
             MA3_3(navController = navController)
         }
+        composable(route = Screen.MA3_3_1.route) { entry ->
+            MA3_3_1(navController = navController)
+        }
+
+
+
+
+
+        //變更密碼
         composable(route = Screen.changePassword.route) { entry ->
             changePassword(navController = navController)
         }
         composable(route = Screen.changePassword_newPassword.route) { entry ->
             changePassword_newPassword(navController = navController)
         }
+
+
+
+        //相機
         composable(route = Screen.CameraTest.route) { entry ->
             CameraTest(navController = navController)
         }

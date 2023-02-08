@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.util.Log
 import android.widget.DatePicker
@@ -39,6 +40,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
@@ -230,14 +233,16 @@ fun MA3_1(
     }
     BottomSpace(navController)
 }
+
+
 //TODO:Jeremy增加
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_1_MakeListCom(Date:String,UserID:String){
-    val coroutineScope = rememberCoroutineScope()
-    MA3_1_MakeList(coroutineScope,Date,UserID)
+    MA3_1_MakeList(Date,UserID)
 }
-fun MA3_1_MakeList(coroutineScope:CoroutineScope,Date:String,UserID:String){
-    coroutineScope.launch {
+fun MA3_1_MakeList(Date:String,UserID:String){
+    GlobalScope.launch(Dispatchers.IO){
         var MA3_RequestJsonObject = JSONObject();
         MA3_RequestJsonObject.put("Function", "SelectWorkList")
         MA3_RequestJsonObject.put("Date", Date)

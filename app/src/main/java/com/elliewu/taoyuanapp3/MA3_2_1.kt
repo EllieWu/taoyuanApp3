@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,6 +23,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -367,13 +370,13 @@ fun RepairInfoTable(list: RepairInfoList){
     }
 }
 //TODO:Jeremy增加
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_2_1_MakeListCom(RepairCode:String?,State: String?){
-    val coroutineScope = rememberCoroutineScope()
-    MA3_2_1_MakeList(coroutineScope,RepairCode,State)
+    MA3_2_1_MakeList(RepairCode,State)
 }
-fun MA3_2_1_MakeList(coroutineScope: CoroutineScope, RepairCode:String?,State: String?){
-    coroutineScope.launch {
+fun MA3_2_1_MakeList(RepairCode:String?,State: String?){
+    GlobalScope.launch(Dispatchers.IO) {
         Log.d("RepairCode",RepairCode.toString())
         Log.d("State",State.toString())
         var RequestJsonObject = JSONObject();
