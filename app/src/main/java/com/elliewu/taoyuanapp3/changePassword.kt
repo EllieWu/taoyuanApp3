@@ -105,7 +105,7 @@ fun changePassword(
                     .fillMaxWidth()
                     .size(width = 50.dp, height = 60.dp),
                 onClick = {
-                    navController.navigate(Screen.changePassword_newPassword.route)
+                    //navController.navigate(Screen.changePassword_newPassword.route)
                   //TODO :跳到新密碼輸入頁面
                     coroutineScope.launch {
                         var loginJsonObject = JSONObject();
@@ -117,20 +117,22 @@ fun changePassword(
                         loginJsonObject.put("UserPW", "Abc1234")
                         val responseString = HttpRequestTest(loginJsonObject)
                         Log.d("Login Response",responseString)
-                        if(responseString == "Error")
-                        {
+                        if(responseString == "Error") {
                             //TODO :網路連線異常的通知
                         }
-                        val jResponse = JSONObject(responseString);
-                        val succeed:String? = jResponse.getString("Feedback").toString();
-                        if(succeed == "TRUE")
-                        {
-                            //navController.navigate(Screen.MA3_1.route)
-                            //TODO:成功後跳轉得頁面，下一頁才會正式修改密碼
-                        }
-                        else
-                        {
-                            //TODO:登入失敗跳的東西
+                        else{
+                            val jResponse = JSONObject(responseString);
+                            val succeed:String? = jResponse.getString("Feedback").toString();
+                            if(succeed == "TRUE")
+                            {
+                                navController.navigate(Screen.changePassword_newPassword.route)
+                                //navController.navigate(Screen.MA3_1.route)
+                                //TODO:成功後跳轉得頁面，下一頁才會正式修改密碼
+                            }
+                            else
+                            {
+                                //TODO:登入失敗跳的東西
+                            }
                         }
                     }
                 },) {
