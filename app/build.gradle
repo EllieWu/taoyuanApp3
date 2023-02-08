@@ -76,10 +76,4 @@ dependencies {
 
     // Gson (To convert raw JSON to pretty JSON)
     implementation 'com.google.code.gson:gson:2.8.9'
-
-    // Icons顯示拍照按鈕
-    //implementation "androidx.compose.material:material-icons-extended:$compose_version"
-
-    // Coil
-    //implementation "io.coil-kt:coil-compose:1.4.0"
 }
