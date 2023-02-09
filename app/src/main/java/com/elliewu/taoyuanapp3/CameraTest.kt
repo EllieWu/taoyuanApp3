@@ -3,11 +3,8 @@ package com.elliewu.taoyuanapp3
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,13 +12,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -29,13 +24,12 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import java.io.File
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
+import coil.compose.rememberImagePainter
+import java.util.*
 
 @Preview
 @Composable
@@ -81,33 +75,53 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
             )
         }
 
+        val context = LocalContext.current
+        val file = context.createImageFile()
+        val uri = FileProvider.getUriForFile(
+            Objects.requireNonNull(context),
+            BuildConfig.APPLICATION_ID + ".provider", file
+        )
 
-        //Maps_start
-        val locationPermissionRequest = rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            when {
-                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                    // Precise location access granted.
-                }
-                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                    // Only approximate location access granted.
-                } else -> {
-                // No location access granted.
-            }
-            }
-        }
-        SideEffect {
-            locationPermissionRequest.launch(arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION))
+        var capturedImageUri by remember {
+            mutableStateOf<Uri>(Uri.EMPTY)
         }
 
+        val cameraLauncher =
+            rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+                capturedImageUri = uri
+            }
 
-    }
-    Button(onClick = {
+        val permissionLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
+            if (it) {
+                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+                cameraLauncher.launch(uri)
+            } else {
+                Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
 
-    }) {
-        Text(text = "相機")
+        Button(onClick = {
+            val permissionCheckResult =
+                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                cameraLauncher.launch(uri)
+            } else {
+                // Request a permission
+                permissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }) {
+            Text(text = "拍照")
+        }
+        if (capturedImageUri.path?.isNotEmpty() == true) {
+            Image(
+                modifier = Modifier
+                    .padding(16.dp, 8.dp),
+                painter = rememberImagePainter(capturedImageUri),
+                contentDescription = null
+            )
+        }
     }
 }
+

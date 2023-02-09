@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace 'com.elliewu.taoyuanapp3'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.elliewu.taoyuanapp3"
@@ -71,17 +71,20 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
+
+    implementation 'androidx.camera:camera-lifecycle:1.2.1'
+    implementation 'androidx.camera:camera-view:1.2.1'
+
     // Okhttp3 for the POST requests
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
     // Gson (To convert raw JSON to pretty JSON)
     implementation 'com.google.code.gson:gson:2.8.9'
-
     // Icons顯示拍照按鈕
     //implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
     // Coil
-    //implementation "io.coil-kt:coil-compose:1.4.0"
+    implementation "io.coil-kt:coil-compose:1.4.0"
 
     implementation "com.google.accompanist:accompanist-permissions:0.21.1-beta"
 }
