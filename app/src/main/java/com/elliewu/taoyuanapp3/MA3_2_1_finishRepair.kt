@@ -1,5 +1,7 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -31,6 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 
 @Preview(device = Devices.PIXEL_C)
@@ -68,7 +75,9 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    navController.navigate(Screen.MA3_2_1.route)
+                    //navController.navigate(Screen.MA3_2_1.route)
+                    var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_msggg.RepairCode}&State=${MA3_2_1_msggg.State}"
+                    navController.navigate(fullMA3_2_1_path)
                 },
             )
             Text(
@@ -115,7 +124,7 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     .padding(start = 65.dp), horizontalArrangement = Arrangement.Start)
                 {
                     Text(
-                        text = "115552144",
+                        text = MA3_2_1_msggg.RepairCode,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
 
@@ -148,7 +157,7 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     .padding(start = 65.dp), horizontalArrangement = Arrangement.Start)
                 {
                     Text(
-                        text = "階梯有破損",
+                        text = MA3_2_1_msggg.RepairTitle,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
 
@@ -183,7 +192,7 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     var value = "123"
                     BasicTextField(
                         modifier = Modifier.fillMaxWidth(),
-                        value = "測試中",
+                        value = MA3_2_1_msggg.State,
                         onValueChange = { newText ->
                             value = newText
                         },
