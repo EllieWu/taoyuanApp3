@@ -85,9 +85,9 @@ class RequestRepairLocate_Response(
     @SerializedName("RepairLocate")var RepairLocate : List<RepairLocate>?
 )
 class RepairLocate(
-    @SerializedName("ReportCode")var ReportCode : String?,
-    @SerializedName("Longitude")var Longitude : String?,
-    @SerializedName("Latitude")var Latitude : String?
+    @SerializedName("ReportCode")var ReportCode : String,
+    @SerializedName("Longitude")var Longitude : String,
+    @SerializedName("Latitude")var Latitude : String
 )
 class WorkInfo_Request(
     @SerializedName("Function")var Function : String?,
