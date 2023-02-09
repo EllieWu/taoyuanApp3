@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,7 +48,8 @@ data class RepairInfoList(
     var RepairPhoto:String,
 
     )
-var RepairListData = RepairInfoList(
+var RepairListData =
+    RepairInfoList(
     "111032504",
     "測試中",
     "陳慶明",
@@ -81,7 +84,9 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                modifier = Modifier.padding(start = 5.dp).size(30.dp),
+                modifier = Modifier
+                    .padding(start = 5.dp)
+                    .size(30.dp),
                 imageVector = Icons.Default.KeyboardArrowLeft,
                 contentDescription = "BackIcon",
                 tint = Color.White
@@ -115,6 +120,7 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
                 .fillMaxWidth()
                 .background(Color(255, 255, 255))) {
                 RepairInfoTable(MA3_2_1_msggg)
+
             }
         }
 //        Text(text = "yoyo: ${RepairCode.toString()}")
@@ -309,7 +315,7 @@ fun RepairInfoTable(list: RepairInfoList){
             Text(
                 text = list.RepairTitle,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Bold,
                 color = Color.Black,
                 modifier = Modifier.padding(vertical = 10.dp),
                 textAlign = TextAlign.Center,
@@ -369,22 +375,36 @@ fun RepairInfoTable(list: RepairInfoList){
                 modifier = Modifier.padding( vertical = 10.dp),
                 textAlign = TextAlign.Start,
             )
-//            Text(
-//                text = list.RepairPhoto,
-//                fontSize = 16.sp,
-//                fontWeight = FontWeight.Bold,
-//                color = Color.Black,
-//                modifier = Modifier.padding(vertical = 10.dp),
-//                textAlign = TextAlign.Center,
-//            )
             val imageBytes = Base64.decode(list.RepairPhoto, 0)
             val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             Image(
+                modifier = Modifier.size(150.dp),
+                contentScale = ContentScale.FillWidth,
                 bitmap = image.asImageBitmap(),
                 contentDescription = "contentDescription")
+
         }
+
     }
 }
+
+
+
+
+//@Composable
+//fun LazyColumn(content: List<RepairInfoList>){
+//    LazyColumn(modifier = Modifier
+//        .background(MaterialTheme.colors.background)
+//        .fillMaxWidth()
+//        .height(710.dp)){
+//        items(content) { listContent ->
+//            RepairInfoTable(listContent)
+//        }
+//    }
+//}
+
+
+
 //TODO:Jeremy增加
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable

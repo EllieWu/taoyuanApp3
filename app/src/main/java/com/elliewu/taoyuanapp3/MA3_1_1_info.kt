@@ -70,7 +70,8 @@ var MA3_1_1_info_msggg by mutableStateOf(listInfo(
 @Composable
 fun MA3_1_1_info(
    navController: NavHostController = rememberNavController(),
-   WorkCode: String? = ""
+   WorkCode: String? = "",
+   WorkTime: String?=""
 ) {
     Log.d("Workcode","$WorkCode")
     MA3_1_1_Info_MakeListCom(WorkCode.toString());
@@ -104,7 +105,10 @@ fun MA3_1_1_info(
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    navController.navigate(Screen.MA3_1_1.withArgs(WorkCode.toString()))
+                    val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                    navController.navigate(MA3_1_1_fullRoutePath)
+//                    navController.navigate(Screen.MA3_1_1.withArgs(WorkCode.toString()))
+                    //navController.navigate(Screen.MA3_1_1.route)
                 },
             )
             Text(

@@ -136,7 +136,7 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                 Row(verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.zIndex(3f)) {
-                    infoLayout(navController, WorkCode.toString())
+                    infoLayout(navController, WorkCode.toString(),WorkTime.toString())
                 }
 
                 //Maps_start
