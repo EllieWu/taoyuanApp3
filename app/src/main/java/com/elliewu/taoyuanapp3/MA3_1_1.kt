@@ -38,6 +38,7 @@ import android.app.Activity.RESULT_OK
 import android.app.Application
 import android.content.Context
 import android.content.IntentSender
+import android.os.Looper
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -62,6 +63,8 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
+data class LocationDetails(val longitude : String, val latitude : String)
+
 val fakedata = listOf<LatLng>(
     LatLng(25.046296,121.506857),
     LatLng(25.056437,121.550903),
@@ -82,12 +85,27 @@ var redDotIsVis by mutableStateOf(true)
 var blueDotIsVis by mutableStateOf(true)
 
 
+var fusedLocationClient:FusedLocationProviderClient? = null;
+var currentLocation:LocationDetails = LocationDetails("","")
+var locationCallback = object : LocationCallback() {
+    override fun onLocationResult(p0: LocationResult) {
+        for (lo in p0.locations) {
+            // Update UI with location data
+            currentLocation = LocationDetails(lo.latitude.toString(), lo.longitude.toString())
+        }
+    }
+}
+
+var locationRequired:Boolean = false
+
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
 fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostController = rememberNavController()){
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
     MA3_1_1_BluePoint_MakeListCom(MA3_1_date, Login_UserId);
+    fusedLocationClient = LocationServices.getFusedLocationProviderClient(
+        LocalContext.current)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -172,8 +190,7 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                 }
 
                 //實驗區
-                val fusedLocationClient = LocationServices.getFusedLocationProviderClient(
-                    LocalContext.current)
+
 
 
                 //實驗區-end
@@ -232,6 +249,27 @@ private class MyLocationSource : LocationSource {
         listener?.onLocationChanged(location)
     }
 }
+
+
+
+@SuppressLint("MissingPermission")
+ private fun startLocationUpdates() {
+    locationCallback?.let {
+        val locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+        fusedLocationClient?.requestLocationUpdates(
+            locationRequest,
+            it,
+            Looper.getMainLooper()
+        )
+    }
+}
+
+
+
 //TODO:Jeremy增加
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
