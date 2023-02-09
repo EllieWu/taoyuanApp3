@@ -280,7 +280,9 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_1_1.route)
             //val screen = Screen.MA3_1_1.route
-                navController.navigate(Screen.MA3_1_1.withArgs(list.workID))
+                //navController.navigate(Screen.MA3_1_1.withArgs(list.workID))
+            val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${list.workID}&WorkTime=${list.time}"
+            navController.navigate(MA3_1_1_fullRoutePath)
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {

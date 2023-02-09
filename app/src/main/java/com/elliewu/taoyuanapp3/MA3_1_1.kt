@@ -1,6 +1,7 @@
 package com.elliewu.taoyuanapp3
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.compose.foundation.background
@@ -54,7 +55,12 @@ import kotlinx.coroutines.flow.shareIn
 import kotlin.random.Random
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 val fakedata = listOf<LatLng>(
     LatLng(25.046296,121.506857),
@@ -62,6 +68,7 @@ val fakedata = listOf<LatLng>(
     LatLng(24.726862,121.744826),
     LatLng(24.245541,120.718384)
 )
+var redDotList by mutableStateOf(fakedata)
 val repairDotFakedata = listOf<LatLng>(
     LatLng(23.588299,121.083543),
     LatLng(22.899511,120.395490),
@@ -75,8 +82,8 @@ var blueDotIsVis by mutableStateOf(true)
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
-fun MA3_1_1(WorkCode: String? = "",navController: NavHostController = rememberNavController()){
-
+fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostController = rememberNavController()){
+    MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -181,7 +188,7 @@ fun MA3_1_1(WorkCode: String? = "",navController: NavHostController = rememberNa
                     cameraPositionState = cameraPositionState,
                     locationSource = locationSource,
                 ) {
-                    fakedata.forEach{ item ->
+                    redDotList.forEach{ item ->
                         Marker(
                             state = MarkerState(position = item),
                             visible = redDotIsVis
@@ -219,5 +226,34 @@ private class MyLocationSource : LocationSource {
 
     fun onLocationChanged(location: Location) {
         listener?.onLocationChanged(location)
+    }
+}
+//TODO:Jeremy增加
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun MA3_1_1_RedPoint_MakeListCom(WorkCode:String,WorkTime:String){
+    MA3_1_1_RedPoint_MakeList(WorkCode,WorkTime)
+}
+fun MA3_1_1_RedPoint_MakeList(WorkCode:String,WorkTime:String){
+    GlobalScope.launch(Dispatchers.IO) {
+        var RequestJsonObject = JSONObject();
+        RequestJsonObject.put("Function", "RequestLocate")
+        RequestJsonObject.put("WorkCode", WorkCode)
+        RequestJsonObject.put("WorkTime", WorkTime)
+        val responseString = HttpRequestTest(RequestJsonObject)
+        Log.d("MA3_1_1_CheckPoint",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var WorkInfoResponse:RequestLocate_Response = gson.fromJson(responseString,RequestLocate_Response::class.java)
+            var workListDatas = listOf<LatLng>(
+                LatLng(25.046296,121.506857))
+            workListDatas = workListDatas - workListDatas[workListDatas.size - 1]
+            if(WorkInfoResponse.Locate != null && WorkInfoResponse.Locate!!.isNotEmpty()){
+                WorkInfoResponse.Locate!!.forEach {
+                    workListDatas = workListDatas + LatLng(it.Latitude.toDouble(),it.Longitude.toDouble())
+                }
+            }
+            redDotList = workListDatas
+        }
     }
 }
