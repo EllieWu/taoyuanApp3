@@ -42,26 +42,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-data class ReportInfoList(
-    val ReportCode: String,
-    val Longitude: String,
-    val Latitude: String,
-    val ReportTitle: String,
-    val ReportContent: String,
-    val ReportPhoto: String,
-    val Edit: String,
 
-    )
-
-var ReportListData = ReportInfoList(
-    "777777777",
-    "45.259898412",
-    "33.444444",
-    "測試中測試中",
-    "此內容為測試資料測試用",
-    "",
-    "TRUE",
-)
 
 var MA3_3_1_msggg by mutableStateOf(ReportListData)
 
@@ -132,119 +113,7 @@ fun MA3_3_1(navController: NavHostController = rememberNavController()) {
 
 }
 
-@Composable
-fun ReportInfo(list: ReportInfoList) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            //horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
-        ) {
-            Text(
-                text = "報修單號:",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color(128, 127, 129)
-            )
-            Text(
-                modifier = Modifier.padding(start = 45.dp),
-                text = list.ReportCode,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color(83, 84, 88),
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .bottomBorder(2.dp, Color(197, 202, 208))
-                .background(Color(229, 236, 246)),
-        ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    //horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
-                ) {
-                    Text(
-                        text = "GIS X座標:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = Color(128, 127, 129)
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 37.dp),
-                        text = list.Longitude,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = Color(50, 53, 60),
-                    )
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    //horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
-                ) {
-                    Text(
-                        text = "GIS Y座標:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = Color(128, 127, 129)
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 38.dp),
-                        text = list.Latitude,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = Color(50, 53, 60),
-                    )
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    //horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 0.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
-                ) {
-                    Text(
-                        text = "地圖:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = Color(128, 127, 129)
-                    )
-                    Button(
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent
-                        ),
-                        elevation = null,
-                        modifier = Modifier.padding(start = 82.dp),
-                        contentPadding = PaddingValues(0.dp),
-                        onClick = {}
-                    ){
-                        Icon(
-                            //modifier = Modifier.padding(start = 82.dp),
-                            imageVector = Icons.Default.LocationOn,
-                            contentDescription = "Favorite icon",
-                            tint = Color(64,111,158)
-                        )
-                        Text(
-                            text = "GIS定位",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = Color(64,111,158),
-                            textDecoration = TextDecoration.Underline,
-                        )
-                    }
-                }
-        }
-        MyUI(MA3_3_1_msggg);
-    }
-}
+
 
 @Composable
 private fun MyUI(list: ReportInfoList) {
