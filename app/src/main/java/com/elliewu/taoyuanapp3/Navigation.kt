@@ -106,6 +106,9 @@ fun Navigation() {
             )
         }
 
+        composable(route = Screen.MA3_2_1_finishRepair.route) { entry ->
+            MA3_2_1_finishRepair(navController = navController)
+        }
 
         //報修
         composable(route = Screen.MA3_3.route) { entry ->

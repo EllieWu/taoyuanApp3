@@ -8,10 +8,14 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -115,11 +119,11 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
                 color = Color(255, 255, 255),
             )
         }
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(255, 255, 255))) {
-                RepairInfoTable(MA3_2_1_msggg)
+                RepairInfoTable(MA3_2_1_msggg,navController)
 
             }
         }
@@ -128,7 +132,7 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
 }
 
 @Composable
-fun RepairInfoTable(list: RepairInfoList){
+fun RepairInfoTable(list: RepairInfoList,navController : NavHostController = rememberNavController()){
     Row(
         verticalAlignment = Alignment.CenterVertically,
         //horizontalArrangement = Arrangement.SpaceBetween,
@@ -360,7 +364,6 @@ fun RepairInfoTable(list: RepairInfoList){
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
-            .bottomBorder(1.dp, Color(232, 232, 232)),
     )
     {
         Row(modifier = Modifier
@@ -375,10 +378,25 @@ fun RepairInfoTable(list: RepairInfoList){
                 modifier = Modifier.padding( vertical = 10.dp),
                 textAlign = TextAlign.Start,
             )
+        }
+
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        //horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp, end = 10.dp, bottom = 15.dp)
+    )
+    {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.Center)
+        {
             val imageBytes = Base64.decode(list.RepairPhoto, 0)
             val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             Image(
-                modifier = Modifier.size(150.dp),
+                modifier = Modifier.size(350.dp),
                 contentScale = ContentScale.FillWidth,
                 bitmap = image.asImageBitmap(),
                 contentDescription = "contentDescription")
@@ -386,9 +404,73 @@ fun RepairInfoTable(list: RepairInfoList){
         }
 
     }
+    RepairBottomBtn(navController);
 }
 
-
+@Composable
+fun RepairBottomBtn(navController : NavHostController = rememberNavController()){
+    Row(
+        modifier = Modifier.fillMaxSize()
+                           .padding(start = 20.dp,end = 20.dp,bottom = 20.dp)
+                           .background(Color.Transparent),
+        horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.Bottom
+    ){
+        Button(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(86,107,183)),
+            elevation = null,
+            onClick =
+            {
+                Log.d("ButtonClick","1111111");
+                navController.navigate(Screen.MA3_2_1_finishRepair.route)
+            },
+        )
+        {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 3.dp),
+            ){
+                Icon(
+                    modifier = Modifier
+                        .size(25.dp),
+                    imageVector = Icons.Default.Done,
+                    contentDescription = "BackIcon",
+                    tint = Color.White
+                )
+                Text(
+                    text = "完工填報",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                )
+            }
+        }
+        Button(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(86,107,183)),
+            elevation = null,
+            onClick = {},
+        )
+        {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 3.dp),
+            ){
+                Icon(
+                    modifier = Modifier
+                        .size(25.dp),
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = "BackIcon",
+                    tint = Color.White
+                )
+                Text(
+                    text = "地圖定位",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                )
+            }
+        }
+    }
+}
 
 
 //@Composable
