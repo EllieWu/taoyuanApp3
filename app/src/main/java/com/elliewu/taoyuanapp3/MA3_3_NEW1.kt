@@ -45,8 +45,8 @@ data class ReportInfoList(
     val ReportCode: String,
     val Longitude: String,
     val Latitude: String,
-    val ReportTitle: String,
-    val ReportContent: String,
+    var ReportTitle: String,
+    var ReportContent: String,
     val ReportPhoto: String,
     val Edit: String,
 
@@ -56,13 +56,14 @@ var ReportListData = ReportInfoList(
     "777777777",
     "45.259898412",
     "33.444444",
-    "測試中測試中",
-    "此內容為測試資料測試用",
+    "",
+    "",
     "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAZABoDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDyz9in9j9f2idS1PxD4mu59I8AaEc3l1FhXunA3NEjEHaAoyzYOARjk5H3l4W8L/ss3GiWVvoPg3QdW0m4XbHfHTjIrjOCWklG49OvP1qh/wAE92sp/wBiXy7IK1wG1JblU5bzctjOO+0p+GK+S9U8YanpPi7TtOhe7SwwFupEYqkTSZEQPuxXt0465r3spyP+1KMqkaqg4uK1V97+a2/I+YznH4nB8kcNa7u3dX0XTdbne/tv/wDBP7RPCHhC9+I/wvhkt9Ns18/U9DDmREizzNATyAucshJwMkYxivzy4/u/pX7Nfs+eIJ/E37Gvie78SXLXdukOt20rTnOIY3mQD8FAFfjMygsSDxnivnsZRWHrSpp3s2vuPoKVT2tONS1rq59K/sW/tiXn7L/iW7tNStptW8F6s6G+soSPNgkHAniDEDdg4K5G4AcjAr9AP+Gmv2W/F2k6zc3XiTSY4dbkjm1C3vLeeOWR0VFQ425UqI0xt7jPXJr8aV/oab/e/wA96541ZQ2NWk9z7w/a2/be8Kaj4Dv/AIX/AAZtXtPDupTTTavqzRtGJzLKZZUhDHdh3LbmYDIJAGDmvhHIpn8P/AadUSk5O7Ef/9k=",
     "TRUE",
 )
 
 var MA3_3_NEW1_msggg by mutableStateOf(ReportListData)
+
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
@@ -127,7 +128,6 @@ fun MA3_3_NEW1(navController: NavHostController = rememberNavController()) {
             ReportInfo(MA3_3_NEW1_msggg)
         }
     }
-
 }
 
 @Composable
@@ -242,23 +242,27 @@ fun ReportInfo(list: ReportInfoList) {
                 }
             }
         }
-        MyUI(MA3_3_NEW1_msggg);
+        MA3_3_NEW1_UI(list);
     }
 }
 
 
 @Composable
-private fun MyUI(list: ReportInfoList) {
+fun MA3_3_NEW1_UI(list: ReportInfoList) {
     Log.d("ReportInfoList","$list")
     var titleValue by remember {
         mutableStateOf(list.ReportTitle)
     }
 
     var contentValue by remember {
-        mutableStateOf("")
+        mutableStateOf(list.ReportContent)
     }
     titleValue = list.ReportTitle
     contentValue = list.ReportContent
+    Log.d("titleValue",titleValue);
+    Log.d("contentValue",contentValue);
+//    var titleValue = list.ReportTitle
+//    var contentValue = list.ReportContent
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -276,6 +280,7 @@ private fun MyUI(list: ReportInfoList) {
             value = titleValue,
             onValueChange = {
                 titleValue = it
+                MA3_3_NEW1_msggg.ReportTitle = it
             },
             textStyle = TextStyle(
                 fontSize = 16.sp,
@@ -342,6 +347,7 @@ private fun MyUI(list: ReportInfoList) {
         ),
         onValueChange = {
             contentValue = it
+            MA3_3_NEW1_msggg.ReportContent = it
         },
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.None,
