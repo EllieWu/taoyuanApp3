@@ -132,6 +132,8 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                                 val succeed:String? = jResponse.getString("Feedback").toString();
                                 if(succeed == "TRUE")
                                 {
+                                    //Login_UserId = account;
+                                    Login_UserId = "F123332212";
                                     navController.navigate(Screen.MA3_1.route)
                                 }
                                 else
