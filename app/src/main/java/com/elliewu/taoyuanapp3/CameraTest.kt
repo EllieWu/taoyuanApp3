@@ -37,10 +37,39 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import java.util.*
 
 @Preview
 @Composable
 fun CameraTest(navController: NavHostController = rememberNavController()){
+    val context = LocalContext.current
+    val file = context.createImageFile()
+    val uri = FileProvider.getUriForFile(
+        Objects.requireNonNull(context),
+        BuildConfig.APPLICATION_ID + ".provider", file
+    )
+
+    var capturedImageUri by remember {
+        mutableStateOf<Uri>(Uri.EMPTY)
+    }
+
+    val cameraLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+            capturedImageUri = uri
+        }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        if (it) {
+            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+            cameraLauncher.launch(uri)
+        } else {
+            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,36 +110,50 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
                 color = Color(255, 255, 255),
             )
         }
-
-
         //Maps_start
-        val locationPermissionRequest = rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            when {
-                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                    // Precise location access granted.
-                }
-                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                    // Only approximate location access granted.
-                } else -> {
-                // No location access granted.
-            }
-            }
-        }
-        SideEffect {
-            locationPermissionRequest.launch(arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION))
-        }
-
+//        val locationPermissionRequest = rememberLauncherForActivityResult(
+//            ActivityResultContracts.RequestMultiplePermissions()
+//        ) { permissions ->
+//            when {
+//                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+//                    // Precise location access granted.
+//                }
+//                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+//                    // Only approximate location access granted.
+//                } else -> {
+//                // No location access granted.
+//            }
+//            }
+//        }
+//        SideEffect {
+//            locationPermissionRequest.launch(arrayOf(
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.ACCESS_COARSE_LOCATION))
+//        }
 
     }
     Button(onClick = {
-
+        val permissionCheckResult =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+        if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+            cameraLauncher.launch(uri)
+        } else {
+            // Request a permission
+            permissionLauncher.launch(Manifest.permission.CAMERA)
+        }
     }) {
-        Text(text = "相機")
+        Text(text = "Capture Image From Camera")
+    }
+    if (capturedImageUri.path?.isNotEmpty() == true) {
+        Image(
+            modifier = Modifier
+                .padding(16.dp, 8.dp),
+            painter = rememberImagePainter(capturedImageUri),
+            contentDescription = null
+        )
     }
 }
+
+
 
 
