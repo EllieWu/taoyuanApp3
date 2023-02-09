@@ -31,7 +31,6 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import java.util.*
 
-
 @Preview
 @Composable
 fun CameraTest(navController: NavHostController = rememberNavController()){
@@ -144,8 +143,10 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
             )
         }
     }
+    Button(onClick = {
+
+    }) {
+        Text(text = "相機")
+    }
 }
-
-
-
 
