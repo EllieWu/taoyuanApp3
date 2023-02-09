@@ -17,7 +17,7 @@ sealed class Screen(val route: String){
     object MA3_3 : Screen("MA3_3")
     object MA3_3_1 : Screen("MA3_3_1")
 
-
+    object MA3_3_test :Screen("MA3_3_test")
     //變更密碼
     object changePassword : Screen("changePassword")
     object changePassword_newPassword : Screen("changePassword_newPassword")
