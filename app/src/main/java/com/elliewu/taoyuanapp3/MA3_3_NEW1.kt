@@ -130,180 +130,6 @@ fun MA3_3_NEW1(navController: NavHostController = rememberNavController()) {
 
 }
 
-
-
-@Composable
-private fun MyUI(list: ReportInfoList) {
-    var titleValue by remember {
-        mutableStateOf("")
-    }
-
-    var contentValue by remember {
-        mutableStateOf("")
-    }
-    titleValue = list.ReportTitle
-    contentValue = list.ReportContent
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
-    ) {
-        Text(
-            text = "報修主旨:",
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            color = Color(85,86,90)
-        )
-        BasicTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = titleValue,
-            onValueChange = { newText ->
-                titleValue = newText
-            },
-            textStyle = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(50, 53, 60),
-            ),
-            decorationBox = { innerTextField ->
-                Row(
-                    modifier = Modifier
-                        .padding(start = 36.dp) // margin left and right
-                        .fillMaxWidth()
-                        .background(color = Color.White, shape = RoundedCornerShape(size = 8.dp))
-                        .border(
-                            width = 2.dp,
-                            color = Color.White,
-                            shape = RoundedCornerShape(size = 8.dp)
-                        )
-                        .padding(
-                            start = 8.dp,
-                            end = 16.dp,
-                            top = 8.dp,
-                            bottom = 8.dp
-                        ), // inner padding
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    Spacer(modifier = Modifier.width(width = 8.dp))
-                    innerTextField()
-                }
-            }
-        )
-    }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
-    )
-    {
-        Text(
-            text = "報修內容",
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            color = Color(85,86,90)
-        )
-    }
-    TextField(
-        modifier = Modifier
-
-            .size(2000.dp, 180.dp)
-            .fillMaxSize()
-            .padding(start = 20.dp, 0.dp, 20.dp, 0.dp),
-        value = contentValue,
-        textStyle = TextStyle(
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(50, 53, 60),
-        ),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.White,
-            cursorColor = Color.Black,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        ),
-        onValueChange = {
-
-        },
-        keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.None,
-            autoCorrect = true, keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
-        ),
-    )
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp))
-    {
-        Button(
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(170,170,170)),
-            shape = RoundedCornerShape(50),
-            elevation = null,
-            onClick = {},
-        )
-        {
-            Row(verticalAlignment = Alignment.CenterVertically,
-            ){
-                Icon(
-                    modifier = Modifier
-                        .size(25.dp),
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "BackIcon",
-                    tint = Color.White
-                )
-                Text(
-                    text = "更換照片",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    textDecoration = TextDecoration.Underline
-                )
-            }
-        }
-    }
-    //照片位置
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp))
-    {
-        val imageBytes = Base64.decode(list.ReportPhoto, 0)
-        val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        Image(
-            modifier = Modifier.size(350.dp),
-            contentScale = ContentScale.FillWidth,
-            bitmap = image.asImageBitmap(),
-            contentDescription = "contentDescription")
-    }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp, bottom = 10.dp, start = 80.dp, end = 80.dp)){
-        Button(
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(84,117,162)),
-            elevation = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp),
-            onClick = {}
-        ){
-            Text(
-                text = "送出",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = Color.White
-            )
-        }
-    }
-
-}
-
 @Composable
 fun ReportInfo(list: ReportInfoList) {
     Column(modifier = Modifier
@@ -420,6 +246,180 @@ fun ReportInfo(list: ReportInfoList) {
     }
 }
 
+
+@Composable
+private fun MyUI(list: ReportInfoList) {
+    Log.d("ReportInfoList","$list")
+    var titleValue by remember {
+        mutableStateOf(list.ReportTitle)
+    }
+
+    var contentValue by remember {
+        mutableStateOf("")
+    }
+    titleValue = list.ReportTitle
+    contentValue = list.ReportContent
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+    ) {
+        Text(
+            text = "報修主旨:",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            color = Color(85,86,90)
+        )
+        BasicTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = titleValue,
+            onValueChange = {
+                titleValue = it
+            },
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(50, 53, 60),
+            ),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = Modifier
+                        .padding(start = 36.dp) // margin left and right
+                        .fillMaxWidth()
+                        .background(color = Color.White, shape = RoundedCornerShape(size = 8.dp))
+                        .border(
+                            width = 2.dp,
+                            color = Color.White,
+                            shape = RoundedCornerShape(size = 8.dp)
+                        )
+                        .padding(
+                            start = 8.dp,
+                            end = 16.dp,
+                            top = 8.dp,
+                            bottom = 8.dp
+                        ), // inner padding
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Spacer(modifier = Modifier.width(width = 8.dp))
+                    innerTextField()
+                }
+            }
+        )
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+    )
+    {
+        Text(
+            text = "報修內容",
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            color = Color(85,86,90)
+        )
+    }
+    TextField(
+        modifier = Modifier
+
+            .size(2000.dp, 180.dp)
+            .fillMaxSize()
+            .padding(start = 20.dp, 0.dp, 20.dp, 0.dp),
+        value = contentValue,
+        textStyle = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(50, 53, 60),
+        ),
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.White,
+            cursorColor = Color.Black,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        onValueChange = {
+            contentValue = it
+        },
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.None,
+            autoCorrect = true, keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+        ),
+    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp))
+    {
+        Button(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(170,170,170)),
+            shape = RoundedCornerShape(50),
+            elevation = null,
+            onClick = {},
+        )
+        {
+            Row(verticalAlignment = Alignment.CenterVertically,
+            ){
+                Icon(
+                    modifier = Modifier
+                        .size(25.dp),
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "BackIcon",
+                    tint = Color.White
+                )
+                Text(
+                    text = "更換照片",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    textDecoration = TextDecoration.Underline
+                )
+            }
+        }
+    }
+    //照片位置
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp))
+    {
+        val imageBytes = Base64.decode(list.ReportPhoto, 0)
+        val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        Image(
+            modifier = Modifier.size(350.dp),
+            contentScale = ContentScale.FillWidth,
+            bitmap = image.asImageBitmap(),
+            contentDescription = "contentDescription")
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, bottom = 10.dp, start = 80.dp, end = 80.dp))
+    {
+        Button(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(84,117,162)),
+            elevation = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp),
+            onClick = {}
+        ){
+            Text(
+                text = "送出",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.White
+            )
+        }
+    }
+
+}
 
 //TODO:Jeremy增加
 @SuppressLint("CoroutineCreationDuringComposition")

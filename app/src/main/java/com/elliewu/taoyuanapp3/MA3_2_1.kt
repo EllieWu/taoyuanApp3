@@ -123,7 +123,7 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(255, 255, 255))) {
-                RepairInfoTable(MA3_2_1_msggg)
+                RepairInfoTable(MA3_2_1_msggg,navController)
 
             }
         }
@@ -132,7 +132,7 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
 }
 
 @Composable
-fun RepairInfoTable(list: RepairInfoList){
+fun RepairInfoTable(list: RepairInfoList,navController : NavHostController = rememberNavController()){
     Row(
         verticalAlignment = Alignment.CenterVertically,
         //horizontalArrangement = Arrangement.SpaceBetween,
@@ -404,11 +404,11 @@ fun RepairInfoTable(list: RepairInfoList){
         }
 
     }
-    RepairBottomBtn()
+    RepairBottomBtn(navController);
 }
 
 @Composable
-fun RepairBottomBtn(){
+fun RepairBottomBtn(navController : NavHostController = rememberNavController()){
     Row(
         modifier = Modifier.fillMaxSize()
                            .padding(start = 20.dp,end = 20.dp,bottom = 20.dp)
@@ -418,7 +418,11 @@ fun RepairBottomBtn(){
         Button(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(86,107,183)),
             elevation = null,
-            onClick = {},
+            onClick =
+            {
+                Log.d("ButtonClick","1111111");
+                navController.navigate(Screen.MA3_2_1_finishRepair.route)
+            },
         )
         {
             Row(
