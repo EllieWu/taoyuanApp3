@@ -75,26 +75,6 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
             )
         }
 
-        //Maps_start
-//        val locationPermissionRequest = rememberLauncherForActivityResult(
-//            ActivityResultContracts.RequestMultiplePermissions()
-//        ) { permissions ->
-//            when {
-//                permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-//                    // Precise location access granted.
-//                }
-//                permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-//                    // Only approximate location access granted.
-//                } else -> {
-//                // No location access granted.
-//            }
-//            }
-//        }
-//        SideEffect {
-//            locationPermissionRequest.launch(arrayOf(
-//                Manifest.permission.ACCESS_FINE_LOCATION,
-//                Manifest.permission.ACCESS_COARSE_LOCATION))
-//        }
         val context = LocalContext.current
         val file = context.createImageFile()
         val uri = FileProvider.getUriForFile(
