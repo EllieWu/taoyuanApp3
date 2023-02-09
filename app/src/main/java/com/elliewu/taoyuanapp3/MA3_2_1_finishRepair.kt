@@ -2,15 +2,12 @@ package com.elliewu.taoyuanapp3
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -97,11 +94,9 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
             .fillMaxSize()
             .padding(top = 20.dp, bottom = 0.dp, start = 20.dp, end = 20.dp)
             .verticalScroll(rememberScrollState())) {
-//            Column(modifier = Modifier
-//                .fillMaxWidth()
-//                .background(Color(255, 255, 255))) {
-//
-//            }
+
+            //DropdownDemo()
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -190,47 +185,48 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     .padding(start = 30.dp), horizontalArrangement = Arrangement.Start)
                 {
                     var value = "123"
-                    BasicTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = MA3_2_1_msggg.State,
-                        onValueChange = { newText ->
-                            value = newText
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(103,103,103),
-                            textAlign = TextAlign.Center,
-                        ),
-                        decorationBox = { innerTextField ->
-                            Row(
-                                modifier = Modifier
-                                    .padding(start = 36.dp) // margin left and right
-                                    .fillMaxWidth()
-                                    .background(
-                                        color = Color.White,
-                                        shape = RoundedCornerShape(size = 8.dp)
-                                    )
-                                    .border(
-                                        width = 2.dp,
-                                        color = Color.White,
-                                        shape = RoundedCornerShape(size = 8.dp)
-                                    )
-                                    .padding(
-                                        start = 8.dp,
-                                        end = 16.dp,
-                                        top = 8.dp,
-                                        bottom = 8.dp
-                                    ), // inner padding
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-
-                                Spacer(modifier = Modifier.width(width = 8.dp))
-                                innerTextField()
-                            }
-                        }
-                    )
+//                    BasicTextField(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        value = MA3_2_1_msggg.State,
+//                        onValueChange = { newText ->
+//                            value = newText
+//                        },
+//                        textStyle = TextStyle(
+//                            fontSize = 16.sp,
+//                            fontWeight = FontWeight.Bold,
+//                            color = Color(103,103,103),
+//                            textAlign = TextAlign.Center,
+//                        ),
+//                        decorationBox = { innerTextField ->
+//                            Row(
+//                                modifier = Modifier
+//                                    .padding(start = 36.dp) // margin left and right
+//                                    .fillMaxWidth()
+//                                    .background(
+//                                        color = Color.White,
+//                                        shape = RoundedCornerShape(size = 8.dp)
+//                                    )
+//                                    .border(
+//                                        width = 2.dp,
+//                                        color = Color.White,
+//                                        shape = RoundedCornerShape(size = 8.dp)
+//                                    )
+//                                    .padding(
+//                                        start = 8.dp,
+//                                        end = 16.dp,
+//                                        top = 8.dp,
+//                                        bottom = 8.dp
+//                                    ), // inner padding
+//                                verticalAlignment = Alignment.CenterVertically,
+//                                horizontalArrangement = Arrangement.Center
+//                            ) {
+//
+//                                Spacer(modifier = Modifier.width(width = 8.dp))
+//                                innerTextField()
+//                            }
+//                        }
+//                    )
+                    DropdownDemo()
                 }
             }
             Row(
@@ -328,4 +324,32 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
         }
     //}
 
+}
+
+
+
+@Composable
+fun DropdownDemo() {
+    var expanded by remember { mutableStateOf(false) }
+    val items = listOf("執行中","已完工")
+    var selectedIndex by remember { mutableStateOf(0) }
+    Box(modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.TopStart)) {
+        Text(items[selectedIndex],modifier = Modifier.padding(start = 36.dp).fillMaxWidth().clickable(onClick = { expanded = true }).background(
+            Color.White), textAlign = TextAlign.Center)
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.size(250.dp,100.dp).fillMaxWidth().background(
+                Color.White)
+        ) {
+            items.forEachIndexed { index, s ->
+                DropdownMenuItem(onClick = {
+                    selectedIndex = index
+                    expanded = false
+                }) {
+                    Text(text = s )
+                }
+            }
+        }
+    }
 }
