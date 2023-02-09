@@ -237,7 +237,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
             Log.d("ButtonEvent", Screen.MA3_3_1.route)
             //val screen = Screen.MA3_1_1.route
             MA3_3_1_ReportCode = list.ReportCode
-            navController.navigate(Screen.MA3_3_1.route)
+            navController.navigate(Screen.MA3_3_NEW1.route)
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {

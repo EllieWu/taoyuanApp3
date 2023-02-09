@@ -69,12 +69,15 @@ val fakedata = listOf<LatLng>(
     LatLng(24.245541,120.718384)
 )
 var redDotList by mutableStateOf(fakedata)
+
 val repairDotFakedata = listOf<LatLng>(
     LatLng(23.588299,121.083543),
     LatLng(22.899511,120.395490),
     LatLng(22.874993,121.067168),
     LatLng(23.696732,121.459551)
 )
+var blueDotList by mutableStateOf(repairDotFakedata)
+
 var redDotIsVis by mutableStateOf(true)
 var blueDotIsVis by mutableStateOf(true)
 
@@ -84,6 +87,7 @@ var blueDotIsVis by mutableStateOf(true)
 @Composable
 fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostController = rememberNavController()){
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
+    MA3_1_1_BluePoint_MakeListCom(MA3_1_date, Login_UserId);
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,7 +136,7 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                 Row(verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.zIndex(3f)) {
-                    infoLayout(navController, WorkCode.toString())
+                    infoLayout(navController, WorkCode.toString(),WorkTime.toString())
                 }
 
                 //Maps_start
@@ -195,7 +199,7 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                         )
                     }
 
-                    repairDotFakedata.forEach{ item ->
+                    blueDotList.forEach{ item ->
                         Marker(
                             icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
                             state = MarkerState(position = item),
@@ -254,6 +258,35 @@ fun MA3_1_1_RedPoint_MakeList(WorkCode:String,WorkTime:String){
                 }
             }
             redDotList = workListDatas
+        }
+    }
+}
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun MA3_1_1_BluePoint_MakeListCom(Date:String,UserID:String){
+    MA3_1_1_BluePoint_MakeList(Date,UserID)
+}
+fun MA3_1_1_BluePoint_MakeList(Date:String,UserID:String){
+    GlobalScope.launch(Dispatchers.IO) {
+        var RequestJsonObject = JSONObject();
+        RequestJsonObject.put("Function", "RequestRepairLocate")
+        RequestJsonObject.put("Date", Date)
+        RequestJsonObject.put("UserID", UserID)
+        RequestJsonObject.put("ReportType", "外巡報修")
+        val responseString = HttpRequestTest(RequestJsonObject)
+        Log.d("MA3_1_1_Bluepoint",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var WorkInfoResponse:RequestRepairLocate_Response = gson.fromJson(responseString,RequestRepairLocate_Response::class.java)
+            var workListDatas = listOf<LatLng>(
+                LatLng(25.046296,121.506857))
+            workListDatas = workListDatas - workListDatas[workListDatas.size - 1]
+            if(WorkInfoResponse.RepairLocate != null && WorkInfoResponse.RepairLocate!!.isNotEmpty()){
+                WorkInfoResponse.RepairLocate!!.forEach {
+                    workListDatas = workListDatas + LatLng(it.Latitude.toDouble(),it.Longitude.toDouble())
+                }
+            }
+            blueDotList = workListDatas
         }
     }
 }

@@ -33,7 +33,7 @@ var blueString by mutableStateOf("隱藏\n報修點")
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
 @Composable
-fun infoLayout(navController: NavHostController = rememberNavController(),WorkCode:String = ""){
+fun infoLayout(navController: NavHostController = rememberNavController(),WorkCode:String = "",WorkTime:String=""){
 
     Row(
         modifier = Modifier
@@ -51,7 +51,11 @@ fun infoLayout(navController: NavHostController = rememberNavController(),WorkCo
                 backgroundColor = Color(147,146,146)
             ),
             modifier = Modifier.size(width = 130.dp, height = 50.dp),
-            onClick = {navController.navigate(Screen.MA3_1_1_info.withArgs(WorkCode))}
+            onClick = {
+                val MA3_1_1_info_fullRoutePath = Screen.MA3_1_1_info.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                navController.navigate(MA3_1_1_info_fullRoutePath)
+                //navController.navigate(Screen.MA3_1_1_info.withArgs(WorkCode))
+            }
         ){
             Row(
                 modifier = Modifier
