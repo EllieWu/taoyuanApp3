@@ -2,7 +2,6 @@ package com.elliewu.taoyuanapp3
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -13,12 +12,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,22 +35,38 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import java.text.SimpleDateFormat
 import java.util.*
 
+data class ReportInfoList(
+    val ReportCode: String,
+    val Longitude: String,
+    val Latitude: String,
+    val ReportTitle: String,
+    val ReportContent: String,
+    val ReportPhoto: String,
+    val Edit: String,
 
+    )
 
+var ReportListData = ReportInfoList(
+    "777777777",
+    "45.259898412",
+    "33.444444",
+    "測試中測試中",
+    "此內容為測試資料測試用",
+    "",
+    "TRUE",
+)
 
-var MA3_3_1_msggg by mutableStateOf(ReportListData)
-
+var MA3_3_NEW1_msggg by mutableStateOf(ReportListData)
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
 @Composable
-fun MA3_3_1(navController: NavHostController = rememberNavController()) {
+fun MA3_3_NEW1(navController: NavHostController = rememberNavController()) {
     var ReportCode: String? = ""
     ReportCode = MA3_3_1_ReportCode;
-    MA3_3_1_MakeListCom(ReportCode.toString());
+    MA3_3_NEW1_MakeListCom(ReportCode.toString());
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -107,7 +120,7 @@ fun MA3_3_1(navController: NavHostController = rememberNavController()) {
                 .bottomBorder(2.dp, Color(197, 202, 208))
                 .background(Color(236, 243, 253)),
         ) {
-            ReportInfo(MA3_3_1_msggg)
+            ReportInfo(MA3_3_NEW1_msggg)
         }
     }
 
@@ -275,24 +288,140 @@ private fun MyUI(list: ReportInfoList) {
     }
 
 }
+
+@Composable
+fun ReportInfo(list: ReportInfoList) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            //horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+        ) {
+            Text(
+                text = "報修單號:",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color(128, 127, 129)
+            )
+            Text(
+                modifier = Modifier.padding(start = 45.dp),
+                text = list.ReportCode,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = Color(83, 84, 88),
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .bottomBorder(2.dp, Color(197, 202, 208))
+                .background(Color(229, 236, 246)),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                //horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+            ) {
+                Text(
+                    text = "GIS X座標:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color(128, 127, 129)
+                )
+                Text(
+                    modifier = Modifier.padding(start = 37.dp),
+                    text = list.Longitude,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color(50, 53, 60),
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                //horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+            ) {
+                Text(
+                    text = "GIS Y座標:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color(128, 127, 129)
+                )
+                Text(
+                    modifier = Modifier.padding(start = 38.dp),
+                    text = list.Latitude,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color(50, 53, 60),
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                //horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 0.dp, bottom = 10.dp, start = 20.dp, end = 20.dp)
+            ) {
+                Text(
+                    text = "地圖:",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color(128, 127, 129)
+                )
+                Button(
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Transparent
+                    ),
+                    elevation = null,
+                    modifier = Modifier.padding(start = 82.dp),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = {}
+                ){
+                    Icon(
+                        //modifier = Modifier.padding(start = 82.dp),
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = "Favorite icon",
+                        tint = Color(64,111,158)
+                    )
+                    Text(
+                        text = "GIS定位",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color(64,111,158),
+                        textDecoration = TextDecoration.Underline,
+                    )
+                }
+            }
+        }
+        MyUI(MA3_3_NEW1_msggg);
+    }
+}
+
+
 //TODO:Jeremy增加
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun MA3_3_1_MakeListCom(ReportCode:String){
-    MA3_3_1_MakeList(ReportCode)
+fun MA3_3_NEW1_MakeListCom(ReportCode:String){
+    MA3_3_NEW1_MakeList(ReportCode)
 }
-fun MA3_3_1_MakeList( ReportCode:String){
+fun MA3_3_NEW1_MakeList( ReportCode:String){
     GlobalScope.launch(Dispatchers.IO) {
         var RequestJsonObject = JSONObject();
         RequestJsonObject.put("Function", "ReportContent")
         RequestJsonObject.put("ReportCode", ReportCode)
         RequestJsonObject.put("ReportType", "外巡報修")
         val responseString = HttpRequestTest(RequestJsonObject)
-        Log.d("MA3_3_1",responseString)
+        Log.d("MA3_3_NEW1",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:ReportContent_Response = gson.fromJson(responseString,ReportContent_Response::class.java)
-            var workListDatas = MA3_3_1_msggg
+            var workListDatas = MA3_3_NEW1_msggg
             if(WorkInfoResponse.OutsideRepair != null){
                 var outsiderepair = WorkInfoResponse.OutsideRepair
                 if (outsiderepair != null) {
@@ -310,7 +439,7 @@ fun MA3_3_1_MakeList( ReportCode:String){
                     Log.d("ReportPhoto",outsiderepair.ReportPhoto.toString())
                 }
             }
-            MA3_3_1_msggg = workListDatas
+            MA3_3_NEW1_msggg = workListDatas
         }
     }
 }

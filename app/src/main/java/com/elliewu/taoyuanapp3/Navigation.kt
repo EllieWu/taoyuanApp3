@@ -111,11 +111,11 @@ fun Navigation() {
         composable(route = Screen.MA3_3.route) { entry ->
             MA3_3(navController = navController)
         }
-        composable(route = Screen.MA3_3_1.route) { entry ->
-            MA3_3_1(navController = navController)
-        }
-        composable(route = Screen.MA3_3_test.route) { entry ->
-            MA3_3_test(navController = navController)
+//        composable(route = Screen.MA3_3_test.route) { entry ->
+//            MA3_3_1(navController = navController)
+//        }
+        composable(route = Screen.MA3_3_NEW1.route) { entry ->
+            MA3_3_NEW1(navController = navController)
         }
 //        composable(
 //            route = Screen.MA3_3_1.route + "/{ReportCode}",
