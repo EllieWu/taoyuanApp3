@@ -34,9 +34,14 @@ fun Navigation() {
             MA3_1(navController = navController)
         }
         composable(
-            route = Screen.MA3_1_1.route + "/{WorkCode}",
+            route = Screen.MA3_1_1.route + "?WorkCode={WorkCode}&WorkTime={WorkTime}",
             arguments = listOf(
                 navArgument("WorkCode"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("WorkTime"){
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = true
@@ -45,7 +50,9 @@ fun Navigation() {
         ) { entry ->
             MA3_1_1(
                 navController = navController,
-                WorkCode = entry.arguments?.getString("WorkCode"))
+                WorkCode = entry.arguments?.getString("WorkCode"),
+                WorkTime = entry.arguments?.getString("WorkTime")
+            )
         }
         composable(
             route = Screen.MA3_1_1_info.route + "/{WorkCode}",
@@ -99,7 +106,20 @@ fun Navigation() {
         composable(route = Screen.MA3_3_1.route) { entry ->
             MA3_3_1(navController = navController)
         }
-
+//        composable(
+//            route = Screen.MA3_3_1.route + "/{ReportCode}",
+//            arguments = listOf(
+//                navArgument("ReportCode"){
+//                    type = NavType.StringType
+//                    defaultValue = ""
+//                    nullable = true
+//                }
+//            )
+//        ) { entry ->
+//            MA3_3_1(
+//                navController = navController,
+//                ReportCode = entry.arguments?.getString("ReportCode"))
+//        }
 
 
 

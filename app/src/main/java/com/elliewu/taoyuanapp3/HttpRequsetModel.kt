@@ -30,10 +30,10 @@ class RequestLocate_Request(
     @SerializedName("WorkTime")var WorkTime : String?
 )
 class RequestLocate_Response(
-    @SerializedName("Locate")var Locate : List<Locate>
+    @SerializedName("Locate")var Locate : List<Locate>?
 )
 class Locate(
-    @SerializedName("Longitude")var Longitude : String?,
+    @SerializedName("Longitude")var Longitude : String,
     @SerializedName("Latitude")var Latitude : String,
     @SerializedName("LocateNumber")var LocateNumber : String?
 )
