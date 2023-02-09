@@ -2,12 +2,20 @@ package com.elliewu.taoyuanapp3
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,50 +28,29 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.google.android.gms.common.internal.service.Common
+import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.LocationSource
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.*
-import com.google.android.gms.tasks.Task
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material.Button
-import android.app.Activity.RESULT_OK
-import android.app.Application
-import android.content.Context
-import android.content.IntentSender
-import android.os.Looper
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.runtime.*
-import androidx.compose.ui.node.modifierElementOf
-import androidx.compose.ui.zIndex
-import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.gson.Gson
 import com.google.maps.android.compose.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.shareIn
-import kotlin.random.Random
-import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
 import org.json.JSONObject
+import kotlin.random.Random
+import kotlinx.coroutines.*
 
-data class LocationDetails(val longitude : String, val latitude : String)
+
+//data class LocationDetails(val longitude : String, val latitude : String)
 
 val fakedata = listOf<LatLng>(
     LatLng(25.046296,121.506857),
@@ -85,18 +72,25 @@ var redDotIsVis by mutableStateOf(true)
 var blueDotIsVis by mutableStateOf(true)
 
 
-var fusedLocationClient:FusedLocationProviderClient? = null;
-var currentLocation:LocationDetails = LocationDetails("","")
-var locationCallback = object : LocationCallback() {
-    override fun onLocationResult(p0: LocationResult) {
-        for (lo in p0.locations) {
-            // Update UI with location data
-            currentLocation = LocationDetails(lo.latitude.toString(), lo.longitude.toString())
-        }
-    }
-}
+//var fusedLocationClient:FusedLocationProviderClient? = null;
+//var currentLocation:LocationDetails = LocationDetails("","")
+//var locationCallback = object : LocationCallback() {
+//    override fun onLocationResult(p0: LocationResult) {
+//        for (lo in p0.locations) {
+//            // Update UI with location data
+//            currentLocation = LocationDetails(lo.latitude.toString(), lo.longitude.toString())
+//        }
+//    }
+//}
+//
+//var locationRequired:Boolean = false
+//fusedLocationClient = LocationServices.getFusedLocationProviderClient(
+//        LocalContext.current)
+//
 
-var locationRequired:Boolean = false
+//var mFusedLocationClient: FusedLocationProviderClient? = null
+
+
 
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
@@ -104,8 +98,7 @@ var locationRequired:Boolean = false
 fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostController = rememberNavController()){
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
     MA3_1_1_BluePoint_MakeListCom(MA3_1_date, Login_UserId);
-    fusedLocationClient = LocationServices.getFusedLocationProviderClient(
-        LocalContext.current)
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -190,9 +183,19 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                 }
 
                 //實驗區
-
-
-
+//                var locationListener =  LocationListener(){
+//                    fun onLocationChange(location: Location){
+//                        if (location != null){
+//
+//                        }
+//                    }
+//                }
+//            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(LocalContext.current);
+//                mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+//                Context.getLocationManager() = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//               val locationProvider = LocationManager.NETWORK_PROVIDER
+///               var mLocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//                mLocationManager.requestLocationUpdates(locationProvider, 1000, 10, locationListener);
                 //實驗區-end
                 val locationSource = MyLocationSource()
 
@@ -200,7 +203,22 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                 val cameraPositionState = rememberCameraPositionState {
                     position = CameraPosition.fromLatLngZoom(taiwan, 8f) //zoom 放大參數 數字越則越放大
                 }
-                //val taiwanMarker = rememberMarkerState(position = taiwan)
+                con = LocalContext.current
+                // To show blue dot on map
+                val mapProperties by remember { mutableStateOf(MapProperties(isMyLocationEnabled = true)) }
+                // Collect location updates
+
+                val locationState = locationFlow.collectAsState(initial = newLocation())
+
+                // Update blue dot and camera when the location changes
+                LaunchedEffect(locationState.value) {
+                    //Log.d(TAG, "Updating blue dot on map...")
+                    locationSource.onLocationChanged(locationState.value)
+
+                    //Log.d(TAG, "Updating camera position...")
+                    //val cameraPosition = CameraPosition.fromLatLngZoom(LatLng(locationState.value.latitude, locationState.value.longitude), 8f)
+                    //cameraPositionState.animate(CameraUpdateFactory.newCameraPosition(cameraPosition), 1_000)
+                }
                 GoogleMap(
                     modifier = Modifier
                         .height(650.dp)
@@ -208,6 +226,7 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                         .zIndex(0f),
                     cameraPositionState = cameraPositionState,
                     locationSource = locationSource,
+                    properties = mapProperties
                 ) {
                     redDotList.forEach{ item ->
                         Marker(
@@ -232,7 +251,6 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
 }
 
 
-
 private class MyLocationSource : LocationSource {
 
     private var listener: LocationSource.OnLocationChangedListener? = null
@@ -250,23 +268,68 @@ private class MyLocationSource : LocationSource {
     }
 }
 
+private val locationFlow = callbackFlow {
+    while (true) {
+        //++counter
 
+        val location = newLocation()
+        //Log.d(TAG, "Location $counter: $location")
+        trySend(location)
 
-@SuppressLint("MissingPermission")
- private fun startLocationUpdates() {
-    locationCallback?.let {
-        val locationRequest = LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 5000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-        fusedLocationClient?.requestLocationUpdates(
-            locationRequest,
-            it,
-            Looper.getMainLooper()
-        )
+        delay(2_000)
     }
 }
+
+private fun newLocation(): Location {
+    val location = Location("MyLocationProvider")
+    val taiwan = LatLng(25.17403, 121.40338)
+    lateinit var fusedLocationClient: FusedLocationProviderClient
+    fusedLocationClient = LocationServices.getFusedLocationProviderClient(con!!)
+    if (ActivityCompat.checkSelfPermission(
+            con!!,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            con!!,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        // TODO: Consider calling
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the documentation
+        // for ActivityCompat#requestPermissions for more details.
+
+    }
+    fusedLocationClient.lastLocation
+        .addOnSuccessListener { location : Location? ->
+            // Got last known location. In some rare situations this can be null.
+            location?.apply {
+                latitude = location.latitude
+                longitude = location.longitude
+            }
+
+    }
+    return location
+}
+
+
+//@SuppressLint("MissingPermission")
+// private fun startLocationUpdates() {
+//    locationCallback?.let {
+//        val locationRequest = LocationRequest.create().apply {
+//            interval = 10000
+//            fastestInterval = 5000
+//            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+//        }
+//        fusedLocationClient?.requestLocationUpdates(
+//            locationRequest,
+//            it,
+//            Looper.getMainLooper()
+//        )
+//    }
+//}
 
 
 
