@@ -10,7 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -154,12 +154,12 @@ fun MA3_1_1_Buttonbtn1(Longitude:String?="",Latitude:String?="",navController: N
                     textAlign = TextAlign.Start,
                 )
             }
-            var value = ""
+            var reportContentValue by remember { mutableStateOf("") }
             TextField(
                 modifier = Modifier
                     .size(2000.dp, 180.dp)
                     .fillMaxSize(),
-                value = value,
+                value = reportContentValue,
                 textStyle = TextStyle(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
@@ -172,7 +172,7 @@ fun MA3_1_1_Buttonbtn1(Longitude:String?="",Latitude:String?="",navController: N
                     unfocusedIndicatorColor = Color.Transparent
                 ),
                 onValueChange = {
-                    value = it
+                    reportContentValue = it
                 },
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
