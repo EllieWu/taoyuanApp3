@@ -3,6 +3,7 @@ package com.elliewu.taoyuanapp3
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.widget.Gallery
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -74,35 +75,44 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
                 color = Color(255, 255, 255),
             )
         }
+        Camera()
+//        ImagePicker()
+    }
+}
+@Composable
+fun Camera() {
+    //相機功能
+    val context = LocalContext.current
+    val file = context.createImageFile()
+    val uri = FileProvider.getUriForFile(
+        Objects.requireNonNull(context),
+        BuildConfig.APPLICATION_ID + ".provider", file
+    )
 
-        val context = LocalContext.current
-        val file = context.createImageFile()
-        val uri = FileProvider.getUriForFile(
-            Objects.requireNonNull(context),
-            BuildConfig.APPLICATION_ID + ".provider", file
-        )
+    var capturedImageUri by remember {
+        mutableStateOf<Uri>(Uri.EMPTY)
+    }
 
-        var capturedImageUri by remember {
-            mutableStateOf<Uri>(Uri.EMPTY)
+    val cameraLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+            capturedImageUri = uri
         }
 
-        val cameraLauncher =
-            rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
-                capturedImageUri = uri
-            }
-
-        val permissionLauncher = rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) {
-            if (it) {
-                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
-                cameraLauncher.launch(uri)
-            } else {
-                Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
-            }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        if (it) {
+            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+            cameraLauncher.launch(uri)
+        } else {
+            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
         }
-
-        Button(onClick = {
+    }
+    Row(
+    ) {
+        Button(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            onClick = {
             val permissionCheckResult =
                 ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
             if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
@@ -114,14 +124,28 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
         }) {
             Text(text = "拍照")
         }
-        if (capturedImageUri.path?.isNotEmpty() == true) {
-            Image(
-                modifier = Modifier
-                    .padding(16.dp, 8.dp),
-                painter = rememberImagePainter(capturedImageUri),
-                contentDescription = null
-            )
+        //相簿功能
+        Button(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            onClick = {
+            
+        }) {
+            Text(text = "相簿")
         }
     }
+
+    if (capturedImageUri.path?.isNotEmpty() == true) {
+        Image(
+            modifier = Modifier
+                .padding(16.dp, 8.dp),
+            painter = rememberImagePainter(capturedImageUri),
+            contentDescription = null
+        )
+    }
+}
+@Composable
+fun ImagePicker(){
+    val context = LocalContext.current
+
 }
 
