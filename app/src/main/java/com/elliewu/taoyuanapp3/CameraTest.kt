@@ -100,6 +100,14 @@ fun Camera() {
             capturedImageUri = uri
         }
 
+    val galleryLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+                uri ->
+            if (uri != null) {
+                capturedImageUri = uri
+            }
+        }
+
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) {
@@ -110,6 +118,19 @@ fun Camera() {
             Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
         }
     }
+
+    val imagepersissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ){
+        if(it) {
+            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+            galleryLauncher.launch("image/*")
+        }else {
+            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
     Row(
     ) {
         Button(
@@ -132,6 +153,11 @@ fun Camera() {
             onClick = {
                 val permissionCheckResult =
                     ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES)
+                if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                    galleryLauncher.launch("image/*")
+                }else {
+                    imagepersissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+                }
         }) {
             Text(text = "相簿")
         }
