@@ -1,5 +1,7 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -30,14 +32,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-
-
+import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
-fun MA3_1_1_Buttonbtn1(Longitude:String?="",Latitude:String?="",navController: NavHostController = rememberNavController()){
+fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
+                       WorkCode:String?="",
+                       Longitude:String?="",
+                       Latitude:String?="",
+                       navController: NavHostController = rememberNavController()){
+    var reportContentValue by remember { mutableStateOf("") }
+    Log.d("WorkTime",WorkTime.toString())
+    Log.d("WorkCode",WorkTime.toString())
+    Log.d("Longitude",WorkTime.toString())
+    Log.d("Latitude",WorkTime.toString())
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -161,7 +176,7 @@ fun MA3_1_1_Buttonbtn1(Longitude:String?="",Latitude:String?="",navController: N
                     textAlign = TextAlign.Start,
                 )
             }
-            var reportContentValue by remember { mutableStateOf("") }
+
             TextField(
                 modifier = Modifier
                     .size(2000.dp, 180.dp)
@@ -197,7 +212,9 @@ fun MA3_1_1_Buttonbtn1(Longitude:String?="",Latitude:String?="",navController: N
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
                     shape = RoundedCornerShape(50),
                     elevation = null,
-                    onClick = {},
+                    onClick = {
+
+                    },
                 )
                 {
                     Row(
@@ -237,7 +254,15 @@ fun MA3_1_1_Buttonbtn1(Longitude:String?="",Latitude:String?="",navController: N
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 5.dp),
-            onClick = {}
+            onClick = {
+                MA3_1_1_Buttombtn1_Upload(Login_UserId,
+                    WorkTime.toString(),
+                    WorkCode.toString(),
+                    Longitude.toString(),
+                    Latitude.toString(),
+                    reportContentValue,
+                    "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAZABoDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDyz9in9j9f2idS1PxD4mu59I8AaEc3l1FhXunA3NEjEHaAoyzYOARjk5H3l4W8L/ss3GiWVvoPg3QdW0m4XbHfHTjIrjOCWklG49OvP1qh/wAE92sp/wBiXy7IK1wG1JblU5bzctjOO+0p+GK+S9U8YanpPi7TtOhe7SwwFupEYqkTSZEQPuxXt0465r3spyP+1KMqkaqg4uK1V97+a2/I+YznH4nB8kcNa7u3dX0XTdbne/tv/wDBP7RPCHhC9+I/wvhkt9Ns18/U9DDmREizzNATyAucshJwMkYxivzy4/u/pX7Nfs+eIJ/E37Gvie78SXLXdukOt20rTnOIY3mQD8FAFfjMygsSDxnivnsZRWHrSpp3s2vuPoKVT2tONS1rq59K/sW/tiXn7L/iW7tNStptW8F6s6G+soSPNgkHAniDEDdg4K5G4AcjAr9AP+Gmv2W/F2k6zc3XiTSY4dbkjm1C3vLeeOWR0VFQ425UqI0xt7jPXJr8aV/oab/e/wA96541ZQ2NWk9z7w/a2/be8Kaj4Dv/AIX/AAZtXtPDupTTTavqzRtGJzLKZZUhDHdh3LbmYDIJAGDmvhHIpn8P/AadUSk5O7Ef/9k=");
+            }
         ) {
             Text(
                 text = "送出",
@@ -245,6 +270,29 @@ fun MA3_1_1_Buttonbtn1(Longitude:String?="",Latitude:String?="",navController: N
                 fontSize = 20.sp,
                 color = Color.White
             )
+        }
+    }
+}
+
+fun MA3_1_1_Buttombtn1_Upload(UserID:String,WorkTime:String,WorkCode:String,Longitude:String,Latitude:String,InputContent:String,ImagePhoto:String){
+    GlobalScope.launch(Dispatchers.IO) {
+        var RequestJsonObject = JSONObject();
+        RequestJsonObject.put("Function", "LocateFormUpload")
+        RequestJsonObject.put("UserID", UserID)
+        RequestJsonObject.put("WorkTime", WorkTime)
+        RequestJsonObject.put("WorkCode", WorkCode)
+        RequestJsonObject.put("Longitude", Longitude)
+        RequestJsonObject.put("Latitude", Latitude)
+        RequestJsonObject.put("InputContent", InputContent)
+        RequestJsonObject.put("ImagePhoto", ImagePhoto)
+        val responseString = HttpRequestTest(RequestJsonObject)
+        Log.d("MA3_1_1_Buttombtn1",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var Response:LocateFormUpload_Response = gson.fromJson(responseString,LocateFormUpload_Response::class.java)
+            if(Response.Feedback == "TRUE"){
+                //TODO:跳轉回上頁
+            }
         }
     }
 }
