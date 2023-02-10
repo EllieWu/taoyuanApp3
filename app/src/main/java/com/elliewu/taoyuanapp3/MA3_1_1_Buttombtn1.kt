@@ -7,9 +7,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -178,6 +178,65 @@ fun MA3_1_1_Buttonbtn1(Longitude:String?="",Latitude:String?="",navController: N
                     capitalization = KeyboardCapitalization.None,
                     autoCorrect = true, keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
                 ),
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+            {
+                Button(
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
+                    shape = RoundedCornerShape(50),
+                    elevation = null,
+                    onClick = {},
+                )
+                {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .size(20.dp),
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "BackIcon",
+                            tint = Color.White
+                        )
+                        Text(
+                            text = "拍照",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                        )
+                    }
+                }
+            }
+
+        }
+
+    }
+    Row(
+        verticalAlignment = Alignment.Bottom,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 10.dp, bottom = 10.dp, start = 50.dp, end = 50.dp)
+    )
+    {
+        Button(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
+            elevation = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp),
+            onClick = {}
+        ) {
+            Text(
+                text = "送出",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.White
             )
         }
     }
