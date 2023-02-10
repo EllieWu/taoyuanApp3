@@ -3,6 +3,10 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     //Google Maps
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    //
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+
 }
 
 android {
@@ -42,6 +46,7 @@ android {
         kotlinCompilerExtensionVersion '1.1.1'
     }
     packagingOptions {
+
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
@@ -53,6 +58,7 @@ android {
 }
 
 dependencies {
+
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
@@ -84,7 +90,19 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1' //new
 
+    // KTX for the Maps SDK for Android
+    implementation 'com.google.maps.android:maps-ktx:3.2.1'
+    // KTX for the Maps SDK for Android Utility Library
+    implementation 'com.google.maps.android:maps-utils-ktx:3.2.1'
+
     //location permission
     implementation 'com.google.accompanist:accompanist-permissions:0.24.13-rc'
+
+    //viewModel
+    implementation"androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.42"
+    kapt "com.google.dagger:hilt-compiler:2.42"
 
 }
