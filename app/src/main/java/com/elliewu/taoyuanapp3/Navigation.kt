@@ -109,7 +109,9 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
             )
         }
 
-
+        composable(route = Screen.MA3_1_1_Bottombtn2.route) { entry ->
+            MA3_1_1_Bottombtn2(navController = navController)
+        }
 
         //維修工單
         composable(route = Screen.MA3_2.route) { entry ->

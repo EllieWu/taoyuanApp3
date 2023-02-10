@@ -31,7 +31,7 @@ var buttonBtnData2 = listOf(
         R.drawable.btn1, "巡檢打卡",Screen.MA3_1_1_Buttonbtn1.route
     ),
     buttonBtn2(
-        R.drawable.btn2, "完工填報",Screen.MA3_2.route
+        R.drawable.btn2, "完工填報",Screen.MA3_1_1_Bottombtn2.route
     ),
     buttonBtn2(
         R.drawable.btn3, "報修",Screen.MA3_3.route

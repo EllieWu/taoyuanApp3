@@ -36,6 +36,9 @@ import androidx.compose.foundation.Image
 //import androidx.compose.foundation.layout.ColumnScopeInstance.weight
 //import androidx.compose.foundation.layout.RowScopeInstance.weight
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
 import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.res.painterResource
@@ -111,18 +114,24 @@ fun MA3_1_1(
                 .background(Color(62, 83, 140)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            Icon(
+                modifier = Modifier
+                    .padding(start = 5.dp)
+                    .size(30.dp),
+                imageVector = Icons.Default.KeyboardArrowLeft,
+                contentDescription = "BackIcon",
+                tint = Color.White
+            )
             ClickableText(
                 text = AnnotatedString("返回"),
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
-                    textDecoration = TextDecoration.Underline,
                 ),
                 onClick = {
                     navController.navigate(Screen.MA3_1.route)
                 },
-                modifier = Modifier.padding(start = 20.dp)
             )
             Text(
                 modifier = Modifier
