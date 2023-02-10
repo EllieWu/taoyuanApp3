@@ -23,17 +23,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
-data class buttonBtn2(val icon: Int, val text: String,val screen: Screen)
+data class buttonBtn2(val icon: Int, val text: String,val screen: String)
 
 var buttonBtnData2 = listOf(
     buttonBtn2(
-        R.drawable.btn1, "巡檢打卡",Screen.MA3_1_1_Buttonbtn1
+        R.drawable.btn1, "巡檢打卡",Screen.MA3_1_1_Buttonbtn1.route
     ),
     buttonBtn2(
-        R.drawable.btn2, "完工填報",Screen.MA3_2
+        R.drawable.btn2, "完工填報",Screen.MA3_2.route
     ),
     buttonBtn2(
-        R.drawable.btn3, "報修",Screen.MA3_3
+        R.drawable.btn3, "報修",Screen.MA3_3.route
     ),
 )
 
@@ -44,7 +44,7 @@ var buttonBtnData2 = listOf(
 
 
 @Composable
-fun BottomSpace2(navController : NavHostController = rememberNavController()) {
+fun BottomSpace2(navController : NavHostController = rememberNavController(),Longitude:String?="",Latitude:String?="") {
     Box(modifier = Modifier.fillMaxSize(), Alignment.BottomCenter) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -77,13 +77,13 @@ fun BottomSpace2(navController : NavHostController = rememberNavController()) {
 //            }else{
 //                Color(157,157,157)
 //            }
-            BottomBtn2(buttonBtnData2,navController);
+            BottomBtn2(buttonBtnData2,navController,Longitude,Latitude);
         }
     }
 }
 
 @Composable
-fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = rememberNavController()) {
+fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = rememberNavController(),Longitude:String?="",Latitude:String?="") {
     val bgColor =
         if (btnList.text == "巡檢打卡") {
             Color(235, 166, 59)
@@ -102,13 +102,17 @@ fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = remem
         ),
         modifier = Modifier.size(width = 100.dp, 80.dp),
         onClick = {
+            var fullpath = ""
+            if(btnList.text=="巡檢打卡")
+            {
+                fullpath = Screen.MA3_1_1_Buttonbtn1.route + "?Longitude=${Longitude}&Latitude=${Latitude}"
+            }
+            else
+            {
+                fullpath = btnList.screen
+            }
+                navController.navigate(fullpath)
 
-
-//                val screen = btnList.screen
-                navController.navigate(btnList.screen.route)
-
-//            println(value);
-//
 
         }
     ) {
@@ -137,10 +141,12 @@ fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = remem
 
 
 @Composable
-fun BottomBtn2(messages: List<buttonBtn2>,navController : NavHostController = rememberNavController()) {
-    LazyRow(modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 5.dp),horizontalArrangement = Arrangement.SpaceAround) {
+fun BottomBtn2(messages: List<buttonBtn2>,navController : NavHostController = rememberNavController(),Longitude:String?="",Latitude:String?="") {
+    LazyRow(modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 10.dp, vertical = 5.dp),horizontalArrangement = Arrangement.SpaceAround) {
         items(messages) { message ->
-            BottomBtnCard2(message,navController)
+                BottomBtnCard2(message,navController,Longitude,Latitude)
         }
     }
 }

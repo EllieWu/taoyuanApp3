@@ -36,7 +36,7 @@ import androidx.navigation.compose.rememberNavController
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
-fun MA3_1_1_Buttonbtn1(navController: NavHostController = rememberNavController()){
+fun MA3_1_1_Buttonbtn1(Longitude:String?="",Latitude:String?="",navController: NavHostController = rememberNavController()){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -114,7 +114,7 @@ fun MA3_1_1_Buttonbtn1(navController: NavHostController = rememberNavController(
                         )
                         Text(
                             modifier = Modifier.padding(start = 20.dp),
-                            text = "123.654985215648213",
+                            text = Longitude.toString(),
                             color = Color(163,76,60),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
@@ -131,7 +131,7 @@ fun MA3_1_1_Buttonbtn1(navController: NavHostController = rememberNavController(
                         )
                         Text(
                             modifier = Modifier.padding(start = 20.dp),
-                            text = "25.46542121359845",
+                            text = Latitude.toString(),
                             color = Color(163,76,60),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
