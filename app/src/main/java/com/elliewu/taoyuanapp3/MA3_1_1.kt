@@ -34,14 +34,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.location.*
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.Button
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
-//import androidx.compose.foundation.layout.ColumnScopeInstance.weight
-//import androidx.compose.foundation.layout.RowScopeInstance.weight
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.node.modifierElementOf
@@ -59,7 +53,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.elliewu.taoyuanapp3.clusters.ZoneClusterManager
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
+
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers

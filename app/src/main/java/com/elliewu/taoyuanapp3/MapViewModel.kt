@@ -3,6 +3,7 @@ package com.elliewu.taoyuanapp3
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
