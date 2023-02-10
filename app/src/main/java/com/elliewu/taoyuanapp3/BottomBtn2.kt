@@ -27,7 +27,7 @@ data class buttonBtn2(val icon: Int, val text: String,val screen: Screen)
 
 var buttonBtnData2 = listOf(
     buttonBtn2(
-        R.drawable.btn1, "巡檢打卡",Screen.CameraTest
+        R.drawable.btn1, "巡檢打卡",Screen.MA3_1_1_Buttonbtn1
     ),
     buttonBtn2(
         R.drawable.btn2, "完工填報",Screen.MA3_2

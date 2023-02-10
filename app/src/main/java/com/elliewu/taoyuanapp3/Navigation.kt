@@ -77,6 +77,12 @@ fun Navigation() {
             )
         }
 
+        composable(route = Screen.MA3_1_1_Buttonbtn1.route) { entry ->
+            MA3_1_1_Buttonbtn1(navController = navController)
+        }
+
+
+
         //維修工單
         composable(route = Screen.MA3_2.route) { entry ->
             MA3_2(navController = navController)
