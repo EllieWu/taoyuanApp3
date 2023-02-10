@@ -2,6 +2,8 @@ package com.elliewu.taoyuanapp3
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -29,6 +31,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.Button
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 //import androidx.compose.foundation.layout.ColumnScopeInstance.weight
 //import androidx.compose.foundation.layout.RowScopeInstance.weight
@@ -38,6 +41,7 @@ import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.zIndex
+import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.delay
@@ -46,7 +50,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlin.random.Random
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.elliewu.taoyuanapp3.clusters.ZoneClusterManager
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -75,12 +83,45 @@ var redDotIsVis by mutableStateOf(true)
 var blueDotIsVis by mutableStateOf(true)
 
 
-@Preview(device = Devices.PIXEL_C)
-@Preview(device = Devices.PIXEL_3A)
+//tsan updated for Map
+//private val requestPermissionLauncher =
+//    registerForActivityResult(
+//        ActivityResultContracts.RequestPermission()
+//    ) { isGranted: Boolean ->
+//        if (isGranted) {
+//            viewModel.getDeviceLocation(fusedLocationProviderClient)
+//        }
+//    }
+//
+//private fun askPermissions() = when {
+//    ContextCompat.checkSelfPermission(
+//        this,
+//        Manifest.permission.ACCESS_FINE_LOCATION
+//    ) == PackageManager.PERMISSION_GRANTED -> {
+//        viewModel.getDeviceLocation(fusedLocationProviderClient)
+//    }
+//    else -> {
+//        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+//    }
+//}
+
+
+
+//@Preview(device = Devices.PIXEL_C)
+//@Preview(device = Devices.PIXEL_3A)
+
 
 
 @Composable
-fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostController = rememberNavController()){
+fun MA3_1_1(
+    state: MapState,
+    setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
+    calculateZoneViewCenter: () -> LatLngBounds,
+    fusedLocationProviderClient :FusedLocationProviderClient,
+    viewModel: MapViewModel,
+    WorkCode: String? = "", WorkTime: String?="", navController: NavHostController = rememberNavController()
+
+){
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
     MA3_1_1_BluePoint_MakeListCom(MA3_1_date, Login_UserId);
     Column(
@@ -144,6 +185,7 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             false
                         ) -> {
+                            viewModel.getDeviceLocation(fusedLocationProviderClient)
                             // Precise location access granted.
                         }
                         permissions.getOrDefault(
@@ -151,6 +193,7 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                             false
                         ) -> {
                             // Only approximate location access granted.
+                            viewModel.getDeviceLocation(fusedLocationProviderClient)
                         }
                         else -> {
                             // No location access granted.
@@ -170,9 +213,21 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                 val fusedLocationClient = LocationServices.getFusedLocationProviderClient(
                     LocalContext.current)
 
+                //-1
+                // Set properties using MapProperties which you can use to recompose the map\
+
+                val mapProperties = MapProperties(
+                    // Only enable if user has accepted location permissions.
+                    isMyLocationEnabled = state.lastKnownLocation != null,
+                )
+                //val cameraPositionState = rememberCameraPositionState()
 
                 //實驗區-end
-                val locationSource = MyLocationSource()
+
+
+
+
+//                val locationSource = MyLocationSource()
 
                 val taiwan = LatLng(25.17403, 121.40338) //Param(緯度,經度) 南北緯 & 東西經 以正負號表示
                 val cameraPositionState = rememberCameraPositionState {
@@ -185,8 +240,10 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                         .fillMaxHeight()
                         .zIndex(0f),
                     cameraPositionState = cameraPositionState,
-                    locationSource = locationSource,
+//                    locationSource = locationSource,
+                    properties = mapProperties,
                 ) {
+                    val context = LocalContext.current
                     redDotList.forEach{ item ->
                         MarkerInfoWindow(
                             icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
@@ -198,13 +255,18 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                             // Implement the custom info window here
                             Row(
 
-                                modifier = Modifier.padding(10.dp).background(Color.White).width(200.dp)
+                                modifier = Modifier
+                                    .padding(10.dp)
+                                    .background(Color.White)
+                                    .width(200.dp)
 
                                 //.padding(10.dp,10.dp)
 
 
                                 , verticalAlignment = Alignment.CenterVertically) {
-                                Column(modifier = Modifier.padding(10.dp).weight(0.55f)
+                                Column(modifier = Modifier
+                                    .padding(10.dp)
+                                    .weight(0.55f)
 
                                 ) {
                                     Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
@@ -239,20 +301,25 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
                             icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
                             state = MarkerState(position = item),
                             visible = blueDotIsVis,
-<<<<<<< Updated upstream
+
                             title = "報修",
                             snippet = "報修點-1",
                         ) { marker ->
                             // Implement the custom info window here
                             Row(
 
-                                modifier = Modifier.padding(10.dp).background(Color.White).width(200.dp)
+                                modifier = Modifier
+                                    .padding(10.dp)
+                                    .background(Color.White)
+                                    .width(200.dp)
 
                                 //.padding(10.dp,10.dp)
 
 
                                 , verticalAlignment = Alignment.CenterVertically) {
-                                Column(modifier = Modifier.padding(10.dp).weight(0.55f)
+                                Column(modifier = Modifier
+                                    .padding(10.dp)
+                                    .weight(0.55f)
 
                                     ) {
                                     Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
@@ -288,14 +355,7 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
 //                            snippet = "Marker in Singapore",
 //                        )
 
-=======
-                            title = "marker1",
-                            snippet = "Marker in Singapore",
-                            onInfoWindowClick = { _ ->
 
-                            }
-                        )
->>>>>>> Stashed changes
                     }
                 }
             }
@@ -307,22 +367,22 @@ fun MA3_1_1(WorkCode: String? = "",WorkTime: String?="",navController: NavHostCo
 
 
 
-private class MyLocationSource : LocationSource {
-
-    private var listener: LocationSource.OnLocationChangedListener? = null
-
-    override fun activate(listener: LocationSource.OnLocationChangedListener) {
-        this.listener = listener
-    }
-
-    override fun deactivate() {
-        listener = null
-    }
-
-    fun onLocationChanged(location: Location) {
-        listener?.onLocationChanged(location)
-    }
-}
+//private class MyLocationSource : LocationSource {
+//
+//    private var listener: LocationSource.OnLocationChangedListener? = null
+//
+//    override fun activate(listener: LocationSource.OnLocationChangedListener) {
+//        this.listener = listener
+//    }
+//
+//    override fun deactivate() {
+//        listener = null
+//    }
+//
+//    fun onLocationChanged(location: Location) {
+//        listener?.onLocationChanged(location)
+//    }
+//}
 //TODO:Jeremy增加
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
@@ -384,3 +444,15 @@ fun MA3_1_1_BluePoint_MakeList(Date:String,UserID:String){
         }
     }
 }
+
+/**
+ * If you want to center on a specific location.
+ */
+private suspend fun CameraPositionState.centerOnLocation(
+    location: Location
+) = animate(
+    update = CameraUpdateFactory.newLatLngZoom(
+        LatLng(location.latitude, location.longitude),
+        15f
+    ),
+)

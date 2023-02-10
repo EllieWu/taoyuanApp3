@@ -78,15 +78,42 @@ import androidx.navigation.navArgument
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.concurrent.timer
 
+//new
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.pm.PackageManager
+import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
+
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.AndroidEntryPoint
+
 
 class MainActivity : ComponentActivity() {
+
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    val viewModel: MapViewModel by viewModels()
+    //tsan updated for Map
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+//        setContent {
+//            MA3_1_1(
+//                state = viewModel.state.value,
+//                setupClusterManager = viewModel::setupClusterManager,
+//                calculateZoneViewCenter = viewModel::calculateZoneLatLngBounds
+//            )
+//        }
         setContent {
             TaoyuanApp3Theme {
                 //DefaultPreview();
-                Navigation();
-            }
+                Navigation(viewModel,fusedLocationProviderClient)  }
         }
     }
 }
