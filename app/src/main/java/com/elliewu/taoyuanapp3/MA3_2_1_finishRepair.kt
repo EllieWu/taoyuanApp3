@@ -2,15 +2,12 @@ package com.elliewu.taoyuanapp3
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -43,7 +40,7 @@ import org.json.JSONObject
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
-fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavController()){
+fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavController()) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -76,7 +73,8 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                 ),
                 onClick = {
                     //navController.navigate(Screen.MA3_2_1.route)
-                    var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_msggg.RepairCode}&State=${MA3_2_1_msggg.State}"
+                    var fullMA3_2_1_path =
+                        Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_msggg.RepairCode}&State=${MA3_2_1_msggg.State}"
                     navController.navigate(fullMA3_2_1_path)
                 },
             )
@@ -93,15 +91,15 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                 color = Color(255, 255, 255),
             )
         }
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 20.dp, bottom = 0.dp, start = 20.dp, end = 20.dp)
-            .verticalScroll(rememberScrollState())) {
-//            Column(modifier = Modifier
-//                .fillMaxWidth()
-//                .background(Color(255, 255, 255))) {
-//
-//            }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 20.dp, bottom = 0.dp, start = 20.dp, end = 20.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+
+            //DropdownDemo()
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -114,21 +112,23 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
 
-                    color = Color(128,127,129),
+                    color = Color(128, 127, 129),
                     //modifier = Modifier.padding( bottom = 10.dp),
                     //.fillMaxWidth(),
                     textAlign = TextAlign.Start,
                 )
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 65.dp), horizontalArrangement = Arrangement.Start)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 65.dp), horizontalArrangement = Arrangement.Start
+                )
                 {
                     Text(
                         text = MA3_2_1_msggg.RepairCode,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
 
-                        color = Color(103,103,103),
+                        color = Color(103, 103, 103),
                         //modifier = Modifier.padding(bottom = 10.dp),
                         //.fillMaxWidth(),
                         textAlign = TextAlign.Center,
@@ -147,21 +147,23 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
 
-                    color = Color(128,127,129),
-                   // modifier = Modifier.padding( bottom = 10.dp),
+                    color = Color(128, 127, 129),
+                    // modifier = Modifier.padding( bottom = 10.dp),
                     //.fillMaxWidth(),
                     textAlign = TextAlign.Start,
                 )
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 65.dp), horizontalArrangement = Arrangement.Start)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 65.dp), horizontalArrangement = Arrangement.Start
+                )
                 {
                     Text(
                         text = MA3_2_1_msggg.RepairTitle,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
 
-                        color = Color(103,103,103),
+                        color = Color(103, 103, 103),
                         //modifier = Modifier.padding(bottom = 10.dp),
                         //.fillMaxWidth(),
                         textAlign = TextAlign.Center,
@@ -179,58 +181,18 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     text = "完成狀態",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-
-                    color = Color(128,127,129),
+                    color = Color(128, 127, 129),
                     // modifier = Modifier.padding( bottom = 10.dp),
                     //.fillMaxWidth(),
                     textAlign = TextAlign.Start,
                 )
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 30.dp), horizontalArrangement = Arrangement.Start)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 30.dp), horizontalArrangement = Arrangement.Start
+                )
                 {
-                    var value = "123"
-                    BasicTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        value = MA3_2_1_msggg.State,
-                        onValueChange = { newText ->
-                            value = newText
-                        },
-                        textStyle = TextStyle(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(103,103,103),
-                            textAlign = TextAlign.Center,
-                        ),
-                        decorationBox = { innerTextField ->
-                            Row(
-                                modifier = Modifier
-                                    .padding(start = 36.dp) // margin left and right
-                                    .fillMaxWidth()
-                                    .background(
-                                        color = Color.White,
-                                        shape = RoundedCornerShape(size = 8.dp)
-                                    )
-                                    .border(
-                                        width = 2.dp,
-                                        color = Color.White,
-                                        shape = RoundedCornerShape(size = 8.dp)
-                                    )
-                                    .padding(
-                                        start = 8.dp,
-                                        end = 16.dp,
-                                        top = 8.dp,
-                                        bottom = 8.dp
-                                    ), // inner padding
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-
-                                Spacer(modifier = Modifier.width(width = 8.dp))
-                                innerTextField()
-                            }
-                        }
-                    )
+                    DropdownDemo()
                 }
             }
             Row(
@@ -249,7 +211,7 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     textStyle = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(103,103,103),
+                        color = Color(103, 103, 103),
                     ),
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color.White,
@@ -262,7 +224,9 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
                     },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
-                        autoCorrect = true, keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
+                        autoCorrect = true,
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
                     ),
                 )
             }
@@ -274,16 +238,16 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
             )
             {
                 Button(
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(86,107,183)),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
                     shape = RoundedCornerShape(50),
                     elevation = null,
                     onClick = {},
                 )
                 {
                     Row(
-                        modifier= Modifier.padding(horizontal = 10.dp),
+                        modifier = Modifier.padding(horizontal = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
-                    ){
+                    ) {
                         Icon(
                             modifier = Modifier
                                 .size(20.dp),
@@ -303,29 +267,73 @@ fun MA3_2_1_finishRepair(navController : NavHostController = rememberNavControll
 
         }
     }
-   // Column() {
-        Row(
-            verticalAlignment = Alignment.Bottom,
+    Row(
+        verticalAlignment = Alignment.Bottom,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 10.dp, bottom = 10.dp, start = 80.dp, end = 80.dp)
+    )
+    {
+        Button(
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
+            elevation = null,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 10.dp, bottom = 10.dp, start = 80.dp, end = 80.dp))
-        {
-            Button(
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(86,107,183)),
-                elevation = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp),
-                onClick = {}
-            ){
-                Text(
-                    text = "送出",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = Color.White
+                .fillMaxWidth()
+                .padding(vertical = 5.dp),
+            onClick = {}
+        ) {
+            Text(
+                text = "送出",
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.White
+            )
+        }
+    }
+}
+
+
+@Composable
+fun DropdownDemo() {
+    var expanded by remember { mutableStateOf(false) }
+    val items = listOf("執行中", "已完工")
+    var selectedIndex by remember { mutableStateOf(0) }
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .wrapContentSize(Alignment.Center)) {
+        Text(
+            items[selectedIndex],
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 36.dp)
+                .background(Color.White)
+                .padding(vertical = 5.dp)
+                .clickable(
+                    onClick = { expanded = true }
+                ),
+            color = Color(103, 103, 103),
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .size(260.dp, 100.dp)
+                .fillMaxWidth()
+                .background(
+                    Color.White
                 )
+        ) {
+            items.forEachIndexed { index, s ->
+                DropdownMenuItem(onClick = {
+                    selectedIndex = index
+                    expanded = false
+                }) {
+                    Text(text = s)
+                }
             }
         }
-    //}
-
+    }
 }

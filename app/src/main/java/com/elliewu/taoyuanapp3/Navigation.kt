@@ -20,9 +20,10 @@ import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.location.FusedLocationProviderClient
 
 @Composable
-fun Navigation() {
+fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocationProviderClient) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.login.route) {
         composable(route = Screen.login.route) {
@@ -51,7 +52,12 @@ fun Navigation() {
             MA3_1_1(
                 navController = navController,
                 WorkCode = entry.arguments?.getString("WorkCode"),
-                WorkTime = entry.arguments?.getString("WorkTime")
+                WorkTime = entry.arguments?.getString("WorkTime"),
+                state = viewModel.state.value,
+                setupClusterManager = viewModel::setupClusterManager,
+                calculateZoneViewCenter = viewModel::calculateZoneLatLngBounds,
+                fusedLocationProviderClient = fusedLocationProviderClient,
+                viewModel = viewModel
             )
         }
         composable(
@@ -76,6 +82,12 @@ fun Navigation() {
                 WorkTime = entry.arguments?.getString("WorkTime"),
             )
         }
+
+        composable(route = Screen.MA3_1_1_Buttonbtn1.route) { entry ->
+            MA3_1_1_Buttonbtn1(navController = navController)
+        }
+
+
 
         //維修工單
         composable(route = Screen.MA3_2.route) { entry ->

@@ -1,0 +1,1 @@
+C:\Users\Tsan\Documents\GitHub\taoyuanApp3\appModule\build\classes\kotlin\main\com\example\appmodule\MyClass.class
