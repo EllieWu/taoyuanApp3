@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.ImagePainter.State.Empty.painter
 import coil.compose.rememberImagePainter
 import java.util.*
 
@@ -79,6 +80,7 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
 //        ImagePicker()
     }
 }
+
 @Composable
 fun Camera() {
     //相機功能
@@ -128,7 +130,8 @@ fun Camera() {
         Button(
             modifier = Modifier.padding(horizontal = 8.dp),
             onClick = {
-            
+                val permissionCheckResult =
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES)
         }) {
             Text(text = "相簿")
         }
@@ -137,7 +140,8 @@ fun Camera() {
     if (capturedImageUri.path?.isNotEmpty() == true) {
         Image(
             modifier = Modifier
-                .padding(16.dp, 8.dp),
+                .padding(16.dp, 8.dp)
+                .background(Color.Yellow),
             painter = rememberImagePainter(capturedImageUri),
             contentDescription = null
         )
