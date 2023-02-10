@@ -2,6 +2,8 @@ package com.elliewu.taoyuanapp3
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.icu.text.Normalizer.NO
 import android.net.Uri
 import android.util.Base64.NO_WRAP
 import android.util.Base64.encodeToString
@@ -32,9 +34,11 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.ImagePainter.State.Empty.painter
+import coil.compose.ImagePainter.State.Empty.toString
 import coil.compose.rememberImagePainter
 import java.io.File
 import java.util.*
+import java.util.Base64
 
 @Preview
 @Composable
@@ -80,8 +84,6 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
             )
         }
         Camera()
-        fileToBase64()
-//        ImagePicker()
     }
 }
 
@@ -90,11 +92,11 @@ fun Camera() {
     //相機功能
     val context = LocalContext.current
     val file = context.createImageFile()
+
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
         BuildConfig.APPLICATION_ID + ".provider", file
     )
-
     var capturedImageUri by remember {
         mutableStateOf<Uri>(Uri.EMPTY)
     }
@@ -177,8 +179,6 @@ fun Camera() {
         )
     }
 }
-@Composable
-fun fileToBase64(file: File): String {
-    return Base64.encodeToString(file.readBytes(), Base64.NO_WRAP)
-}
+
+
 
