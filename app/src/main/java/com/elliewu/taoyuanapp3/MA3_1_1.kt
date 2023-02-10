@@ -82,35 +82,8 @@ var blueDotList by mutableStateOf(repairDotFakedata)
 var redDotIsVis by mutableStateOf(true)
 var blueDotIsVis by mutableStateOf(true)
 
-
-//tsan updated for Map
-//private val requestPermissionLauncher =
-//    registerForActivityResult(
-//        ActivityResultContracts.RequestPermission()
-//    ) { isGranted: Boolean ->
-//        if (isGranted) {
-//            viewModel.getDeviceLocation(fusedLocationProviderClient)
-//        }
-//    }
-//
-//private fun askPermissions() = when {
-//    ContextCompat.checkSelfPermission(
-//        this,
-//        Manifest.permission.ACCESS_FINE_LOCATION
-//    ) == PackageManager.PERMISSION_GRANTED -> {
-//        viewModel.getDeviceLocation(fusedLocationProviderClient)
-//    }
-//    else -> {
-//        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-//    }
-//}
-
-
-
 //@Preview(device = Devices.PIXEL_C)
 //@Preview(device = Devices.PIXEL_3A)
-
-
 
 @Composable
 fun MA3_1_1(
@@ -176,7 +149,6 @@ fun MA3_1_1(
                 }
 
                 //Maps_start
-
                 val locationPermissionRequest = rememberLauncherForActivityResult(
                     ActivityResultContracts.RequestMultiplePermissions()
                 ) { permissions ->
@@ -208,39 +180,21 @@ fun MA3_1_1(
                         )
                     )
                 }
-
-                //實驗區
-                val fusedLocationClient = LocationServices.getFusedLocationProviderClient(
-                    LocalContext.current)
-
-                //-1
                 // Set properties using MapProperties which you can use to recompose the map\
-
                 val mapProperties = MapProperties(
                     // Only enable if user has accepted location permissions.
                     isMyLocationEnabled = state.lastKnownLocation != null,
                 )
-                //val cameraPositionState = rememberCameraPositionState()
-
-                //實驗區-end
-
-
-
-
-//                val locationSource = MyLocationSource()
-
                 val taiwan = LatLng(25.17403, 121.40338) //Param(緯度,經度) 南北緯 & 東西經 以正負號表示
                 val cameraPositionState = rememberCameraPositionState {
                     position = CameraPosition.fromLatLngZoom(taiwan, 8f) //zoom 放大參數 數字越則越放大
                 }
-                //val taiwanMarker = rememberMarkerState(position = taiwan)
                 GoogleMap(
                     modifier = Modifier
                         .height(650.dp)
                         .fillMaxHeight()
                         .zIndex(0f),
                     cameraPositionState = cameraPositionState,
-//                    locationSource = locationSource,
                     properties = mapProperties,
                 ) {
                     val context = LocalContext.current
@@ -254,31 +208,23 @@ fun MA3_1_1(
                         ) { marker ->
                             // Implement the custom info window here
                             Row(
-
                                 modifier = Modifier
                                     .padding(10.dp)
                                     .background(Color.White)
                                     .width(200.dp)
-
-                                //.padding(10.dp,10.dp)
-
-
                                 , verticalAlignment = Alignment.CenterVertically) {
                                 Column(modifier = Modifier
                                     .padding(10.dp)
                                     .weight(0.55f)
-
                                 ) {
                                     Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
                                     Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
-
                                 }
                                 Button(
                                     colors = ButtonDefaults.buttonColors(
                                         backgroundColor = Color.Transparent
                                     ),
                                     onClick = {
-
                                     },
                                     modifier = Modifier.weight(0.45f)
                                 )
@@ -287,8 +233,6 @@ fun MA3_1_1(
                                         painterResource(id = R.drawable.map_clockin2),
                                         contentDescription = "null",
                                         modifier = Modifier.weight(1f)
-
-
                                     )
                                 }
                             }
@@ -301,30 +245,22 @@ fun MA3_1_1(
                             icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
                             state = MarkerState(position = item),
                             visible = blueDotIsVis,
-
                             title = "報修",
                             snippet = "報修點-1",
                         ) { marker ->
                             // Implement the custom info window here
                             Row(
-
                                 modifier = Modifier
                                     .padding(10.dp)
                                     .background(Color.White)
                                     .width(200.dp)
-
-                                //.padding(10.dp,10.dp)
-
-
                                 , verticalAlignment = Alignment.CenterVertically) {
                                 Column(modifier = Modifier
                                     .padding(10.dp)
                                     .weight(0.55f)
-
                                     ) {
                                     Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
                                     Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
-
                                 }
                                 Button(
                                     colors = ButtonDefaults.buttonColors(
@@ -339,23 +275,10 @@ fun MA3_1_1(
                                         painterResource(id = R.drawable.map_repair2),
                                         contentDescription = "null",
                                         modifier = Modifier.weight(1f)
-
-
                                     )
                                 }
                             }
-
                         }
-
-//                        Marker(
-//                            icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
-//                            state = MarkerState(position = item),
-//                            visible = blueDotIsVis,
-//                            title = "Marker1",
-//                            snippet = "Marker in Singapore",
-//                        )
-
-
                     }
                 }
             }
@@ -366,23 +289,6 @@ fun MA3_1_1(
 }
 
 
-
-//private class MyLocationSource : LocationSource {
-//
-//    private var listener: LocationSource.OnLocationChangedListener? = null
-//
-//    override fun activate(listener: LocationSource.OnLocationChangedListener) {
-//        this.listener = listener
-//    }
-//
-//    override fun deactivate() {
-//        listener = null
-//    }
-//
-//    fun onLocationChanged(location: Location) {
-//        listener?.onLocationChanged(location)
-//    }
-//}
 //TODO:Jeremy增加
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
@@ -412,6 +318,7 @@ fun MA3_1_1_RedPoint_MakeList(WorkCode:String,WorkTime:String){
         }
     }
 }
+
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun MA3_1_1_BluePoint_MakeListCom(Date:String,UserID:String){
