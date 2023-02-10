@@ -288,7 +288,7 @@ fun MA3_1_1(
 //
 //            }
             //Maps_End
-            BottomSpace2(navController,state.lastKnownLocation?.longitude.toString(),state.lastKnownLocation?.latitude.toString());
+            BottomSpace2(navController,WorkTime,WorkCode,state.lastKnownLocation?.longitude.toString(),state.lastKnownLocation?.latitude.toString());
         }
     }
 }
