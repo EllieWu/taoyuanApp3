@@ -83,8 +83,30 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
             )
         }
 
-        composable(route = Screen.MA3_1_1_Buttonbtn1.route) { entry ->
-            MA3_1_1_Buttonbtn1(navController = navController)
+//        composable(route = Screen.MA3_1_1_Buttonbtn1.route) { entry ->
+//            MA3_1_1_Buttonbtn1(navController = navController)
+//        }
+        composable(
+            route = Screen.MA3_1_1_Buttonbtn1.route + "?Longitude={Longitude}&Latitude={Latitude}",
+            arguments = listOf(
+                navArgument("WorkCode"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("WorkTime"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+
+            )
+        ) { entry ->
+            MA3_1_1_Buttonbtn1(
+                navController = navController,
+                Longitude = entry.arguments?.getString("Longitude"),
+                Latitude = entry.arguments?.getString("Latitude"),
+            )
         }
 
 
