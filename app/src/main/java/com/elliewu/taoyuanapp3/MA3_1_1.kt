@@ -282,6 +282,11 @@ fun MA3_1_1(
                     }
                 }
             }
+            Button(onClick = {
+                Log.d("緯度", state.lastKnownLocation?.latitude.toString())
+                Log.d("經度", state.lastKnownLocation?.longitude.toString())}) {
+
+            }
             //Maps_End
             BottomSpace2(navController);
         }

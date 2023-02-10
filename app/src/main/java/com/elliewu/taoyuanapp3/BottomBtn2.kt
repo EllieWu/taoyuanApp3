@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -104,6 +105,7 @@ fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = remem
         onClick = {
 
 
+
 //                val screen = btnList.screen
                 navController.navigate(btnList.screen.route)
 
@@ -120,7 +122,9 @@ fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = remem
             Image(
                 painterResource(id = btnList.icon),
                 contentDescription = "",
-                modifier = Modifier.size(35.dp).padding(bottom = 5.dp),
+                modifier = Modifier
+                    .size(35.dp)
+                    .padding(bottom = 5.dp),
                 colorFilter = ColorFilter.tint(Color(255,255,255))
             )
             Text(
@@ -138,7 +142,9 @@ fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = remem
 
 @Composable
 fun BottomBtn2(messages: List<buttonBtn2>,navController : NavHostController = rememberNavController()) {
-    LazyRow(modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 5.dp),horizontalArrangement = Arrangement.SpaceAround) {
+    LazyRow(modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 10.dp, vertical = 5.dp),horizontalArrangement = Arrangement.SpaceAround) {
         items(messages) { message ->
             BottomBtnCard2(message,navController)
         }
