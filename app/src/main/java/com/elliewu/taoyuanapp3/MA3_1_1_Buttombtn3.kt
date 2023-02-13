@@ -248,12 +248,19 @@ fun MA3_1_1_Bottombtn3(
                     color = Color(85, 86, 90)
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        //modifier = Modifier.padding(start = 82.dp),
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = "Favorite icon",
-                        tint = Color(64, 111, 158)
-                    )
+                    Button(
+                        modifier = Modifier,
+                        onClick = {
+                            var fullpath = Screen.MA3_1_1_RepairDotPreview.route + "?longitude=${btn3_longitude}&latitude=${btn3_latitude}"
+                            navController.navigate(fullpath) })
+                    {
+                        Icon(
+                            //modifier = Modifier.padding(start = 82.dp),
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = "Favorite icon",
+                            tint = Color(64, 111, 158)
+                        )
+                    }
                     Button(
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color(84, 117, 162)
@@ -269,9 +276,6 @@ fun MA3_1_1_Bottombtn3(
                             Log.d("latitude",state.lastKnownLocation?.latitude.toString())
 //                            val fullpath = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
 //                            navController.navigate(fullpath)
-                            //fullpath = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
-                            var fullpath = Screen.MA3_1_1_RepairDotPreview.route + "?longitude={longitude}&latitude={latitude}"
-                            navController.navigate(fullpath)
                         }
                     ) {
                         Text(

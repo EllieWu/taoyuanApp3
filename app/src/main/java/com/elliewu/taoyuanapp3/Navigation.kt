@@ -197,7 +197,7 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
             )
         }
         //報修點預覽
-        composable(route =  Screen.MA3_1_1_RepairDotPreview.route + "?longitude={longitude}&latitude={latitude}",
+        composable(route =  Screen.MA3_1_1_RepairDotPreview.route + "?longitude={longitude}&latitude={latitude}&WorkCode={WorkCode}&WorkTime={WorkTime}",
             arguments = listOf(
                 navArgument("longitude"){
                     type = NavType.StringType
@@ -205,6 +205,16 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
                     nullable = true
                 },
                 navArgument("latitude"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("WorkCode"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("WorkTime"){
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = true
@@ -217,6 +227,8 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
                 navController = navController,
                 latitude = entry.arguments?.getString("latitude"),
                 longitude = entry.arguments?.getString("longitude"),
+                WorkCode = entry.arguments?.getString("WorkCode"),
+                WorkTime = entry.arguments?.getString("WorkTime"),
                 state = viewModel.state.value,
                 fusedLocationProviderClient = fusedLocationProviderClient,
                 viewModel = viewModel

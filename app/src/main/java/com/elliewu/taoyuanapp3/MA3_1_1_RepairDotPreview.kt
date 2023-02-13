@@ -44,7 +44,8 @@ fun MA3_1_1_RepairDotPreview(state: MapState,
             navController: NavHostController = rememberNavController(),
             longitude:String?,
             latitude:String?,
-//            repairTitle: String?
+            WorkCode:String?,
+            WorkTime:String?
 ) {
     Column(
         modifier = Modifier
@@ -76,12 +77,9 @@ fun MA3_1_1_RepairDotPreview(state: MapState,
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    //navController.navigate(Screen.MA3_2_1.route)
-                    var fullMA3_2_1_path =
-                        Screen.MA3_2_1.route
-                    Log.d("返回", "MA3_2_2: ")
-                    navController.navigate(fullMA3_2_1_path)
-                },
+                    var fullpath = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                    navController.navigate(fullpath)
+                }
             )
             Text(
                 modifier = Modifier
@@ -147,7 +145,7 @@ fun MA3_1_1_RepairDotPreview(state: MapState,
             if(latitude!=null&&longitude!=null){
                 Marker(
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
-                    state = MarkerState(position = LatLng(latitude!!.toDouble(),longitude!!.toDouble())),
+                    state = MarkerState(position = LatLng(latitude.toDouble(),longitude.toDouble())),
                     //title = repairTitle
                 ){
 

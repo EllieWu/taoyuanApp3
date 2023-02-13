@@ -45,7 +45,9 @@ fun MA3_2_2(state: MapState,
             navController: NavHostController = rememberNavController(),
             longitude:String?,
             latitude:String?,
-            repairTitle: String?
+            repairTitle: String?,
+            RepairCode: String?,
+            State: String?
 ) {
     Column(
         modifier = Modifier
@@ -77,9 +79,7 @@ fun MA3_2_2(state: MapState,
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    //navController.navigate(Screen.MA3_2_1.route)
-                    var fullMA3_2_1_path =
-                        Screen.MA3_2_1.route
+                    var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${RepairCode}&State=${State}"
                     Log.d("返回", "MA3_2_2: ")
                     navController.navigate(fullMA3_2_1_path)
                 },
@@ -148,7 +148,7 @@ fun MA3_2_2(state: MapState,
             if(latitude!=null&&longitude!=null){
                 Marker(
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
-                    state = MarkerState(position = LatLng(latitude!!.toDouble(),longitude!!.toDouble())),
+                    state = MarkerState(position = LatLng(latitude.toDouble(),longitude.toDouble())),
                     title = repairTitle
                 ){
 
