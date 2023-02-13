@@ -296,7 +296,7 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
 @Composable
 fun DropdownDemo() {
     var expanded by remember { mutableStateOf(false) }
-    val items = listOf("執行中", "已完工")
+    val items = listOf("待執行","執行中", "已完工")
     var selectedIndex by remember { mutableStateOf(0) }
     Box(modifier = Modifier
         .fillMaxSize()
@@ -309,7 +309,9 @@ fun DropdownDemo() {
                 .background(Color.White)
                 .padding(vertical = 5.dp)
                 .clickable(
-                    onClick = { expanded = true }
+                    onClick = { expanded = true
+                        //FinishState = items[selectedIndex]
+                    }
                 ),
             color = Color(103, 103, 103),
             textAlign = TextAlign.Center,
@@ -320,7 +322,7 @@ fun DropdownDemo() {
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .size(260.dp, 100.dp)
+                .size(260.dp, 160.dp)
                 .fillMaxWidth()
                 .background(
                     Color.White
@@ -334,6 +336,8 @@ fun DropdownDemo() {
                     Text(text = s)
                 }
             }
+            FinishState = items[selectedIndex]
+            Log.d("FinishState",FinishState)
         }
     }
 }
