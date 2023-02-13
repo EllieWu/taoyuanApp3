@@ -28,21 +28,20 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-
-data class buttonBtn(val icon: Int, val text: String, val screen: Screen)
-
+data class buttonBtn(val icon: Int, val text: String, val screen: Screen,val number: Int)
+var nowclickedpage by mutableStateOf(1)
 var buttonBtnData = listOf(
     buttonBtn(
-        R.drawable.list, "巡檢工單", Screen.MA3_1
+        R.drawable.list, "巡檢工單", Screen.MA3_1,1
     ),
     buttonBtn(
-        R.drawable.p2, "維修工單", Screen.MA3_2
+        R.drawable.p2, "維修工單", Screen.MA3_2,2
     ),
     buttonBtn(
-        R.drawable.p3, "報修", Screen.MA3_3
+        R.drawable.p3, "報修", Screen.MA3_3,3
     ),
     buttonBtn(
-        R.drawable.p4, "密碼變更", Screen.changePassword
+        R.drawable.p4, "密碼變更", Screen.changePassword,4
     ),
 )
 
@@ -89,56 +88,82 @@ fun BottomSpace(navController :NavHostController = rememberNavController()) {
 }
 
 @Composable
-fun BottomBtnCard(btnList: buttonBtn,navController :NavHostController = rememberNavController()) {
-    Button(
-        border = BorderStroke(0.dp, Color.Transparent),
-        elevation = null,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.Transparent
-        ),
-        modifier = Modifier.size(width = 100.dp, 80.dp),
-        onClick = {
-            Log.d("ButtonEvent", btnList.screen.route.toString())
+fun BottomBtnCard(btnList: buttonBtn,clicked:Color,navController :NavHostController = rememberNavController()) {
+    if(btnList.number == nowclickedpage)
+    {
+        Button(
+            border = BorderStroke(0.dp, Color.Transparent),
+            elevation = null,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent
+            ),
+            modifier = Modifier.size(width = 100.dp, 80.dp),
+            onClick = {
+                nowclickedpage = btnList.number;
+                Log.d("ButtonEvent", btnList.screen.route.toString())
+                navController.navigate(btnList.screen.route)
 
-//                val screen = btnList.screen
-            navController.navigate(btnList.screen.route)
-
-//
-//                if (value == 1) {
-//                    Color(235, 166, 59)
-//                    println("777777")
-//                } else if (value == 2) {
-//                    Color(235, 166, 59)
-//                    println("888888")
-//                } else if (value == 3) {
-//                    Color(235, 166, 59)
-//                } else if (value == 4) {
-//                    Color(235, 166, 59)
-//                } else {
-//                    Color(157, 157, 157)
-//                }
-        }
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            }
         ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
 
-            Image(
-                painterResource(id = btnList.icon),
-                contentDescription = "",
-                modifier = Modifier.size(30.dp),
-                colorFilter = ColorFilter.tint(Color(157, 157, 157))
-            )
-            Text(
-                text = btnList.text,
-                color = Color(157, 157, 157),
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp,
-            )
+                Image(
+                    painterResource(id = btnList.icon),
+                    contentDescription = "",
+                    modifier = Modifier.size(30.dp),
+                    colorFilter = ColorFilter.tint(clicked)
+                )
+                Text(
+                    text = btnList.text,
+                    color = clicked,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                )
+            }
+
         }
-
     }
+    else
+    {
+        Button(
+            border = BorderStroke(0.dp, Color.Transparent),
+            elevation = null,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent
+            ),
+            modifier = Modifier.size(width = 100.dp, 80.dp),
+            onClick = {
+                nowclickedpage = btnList.number;
+                Log.d("ButtonEvent", btnList.screen.route.toString())
+                navController.navigate(btnList.screen.route)
+
+            }
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+
+                Image(
+                    painterResource(id = btnList.icon),
+                    contentDescription = "",
+                    modifier = Modifier.size(30.dp),
+                    colorFilter = ColorFilter.tint(Color(157, 157, 157))
+                )
+                Text(
+                    text = btnList.text,
+                    color = Color(157, 157, 157),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
+                )
+            }
+
+        }
+    }
+
 }
 
 
@@ -146,16 +171,15 @@ fun BottomBtnCard(btnList: buttonBtn,navController :NavHostController = remember
 fun BottomBtn(messages: List<buttonBtn>,navController :NavHostController = rememberNavController()) {
     LazyRow(modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.SpaceAround) {
         items(messages) { message ->
-            BottomBtnCard(message,navController)
+            BottomBtnCard(message,Color(235, 166, 59),navController)
         }
     }
 }
 
-@Preview
-@Composable
-fun p(){
-    Column() {
-        BottomBtnCard(buttonBtnData[0])
-    }
-
-}
+//@Preview
+//@Composable
+//fun p(){
+//    Column() {
+//        BottomBtnCard(buttonBtnData[0],Color(235, 166, 59))
+//    }
+//}
