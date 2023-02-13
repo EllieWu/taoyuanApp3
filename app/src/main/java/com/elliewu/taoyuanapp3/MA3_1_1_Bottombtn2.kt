@@ -183,7 +183,7 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",navController: NavHostController = re
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 65.dp), horizontalArrangement = Arrangement.Start
+                        .padding(start = 82.dp), horizontalArrangement = Arrangement.Start
                 )
                 {
                     Text(

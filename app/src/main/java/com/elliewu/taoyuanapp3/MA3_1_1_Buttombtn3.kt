@@ -3,9 +3,11 @@ package com.elliewu.taoyuanapp3
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
@@ -82,10 +84,14 @@ fun MA3_1_1_Bottombtn3(navController: NavHostController = rememberNavController(
             )
         }
         Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .bottomBorder(2.dp, Color(197, 202, 208))
+//                .background(Color(236, 243, 253)),
             modifier = Modifier
-                .fillMaxWidth()
-                .bottomBorder(2.dp, Color(197, 202, 208))
-                .background(Color(236, 243, 253)),
+                .fillMaxSize()
+                .padding(top = 10.dp, bottom = 0.dp, start = 10.dp, end = 10.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             //ReportInfo(MA3_3_NEW1_msggg)
             Row(
