@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -92,7 +93,7 @@ fun MA3_2(
             //var enabled by remember { mutableStateOf(true)}
 
         }
-        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)) {
+        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 80.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -188,24 +189,24 @@ fun MA3_2(
                     MA3_2_MakeListCom(MA3_2_date,Login_UserId);
                 }
             }
-        }
-        if (MA3_2_msggg.size == 0) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(Color(238, 239, 241))
-            ) {
-                Text(
-                    modifier = Modifier.padding(top = 180.dp),
-                    text = "暫無維修工單",
-                    color = Color(131,132,134),
-                    fontWeight = FontWeight.Bold,
-                )
+            if (MA3_2_msggg.size == 0) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .background(Color(238, 239, 241))
+                ) {
+                    Text(
+                        modifier = Modifier.padding(top = 180.dp),
+                        text = "暫無維修工單",
+                        color = Color(131,132,134),
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            } else {
+                RepairList(MA3_2_msggg,navController);
             }
-        } else {
-            RepairList(MA3_2_msggg,navController);
         }
     }
     BottomSpace(navController)
@@ -215,10 +216,11 @@ fun MA3_2(
 fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavController()) {
     Button(
         modifier = Modifier
-            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
-            .fillMaxSize(),
+            //.padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
+            .fillMaxSize().padding(vertical = 10.dp),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
+        contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_2_1.route)
@@ -286,7 +288,7 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
 
 @Composable
 fun RepairList(messages: List<RepairLists>,navController :NavHostController = rememberNavController()) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(modifier = Modifier.fillMaxSize(), state = LazyListState()) {
         items(messages) { message ->
             RepairCard(message,navController)
         }

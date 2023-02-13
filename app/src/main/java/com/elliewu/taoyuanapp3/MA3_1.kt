@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -113,7 +114,7 @@ fun MA3_1(
             //var enabled by remember { mutableStateOf(true)}
 
         }
-        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)) {
+        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 80.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -208,28 +209,29 @@ fun MA3_1(
                 color = Color(105, 105, 105),
                 fontWeight = FontWeight.Bold
             )
-        }
-        if (msggg.size == 0) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(Color(238, 239, 241))
-            ) {
-                Text(
-                    modifier = Modifier.padding(top = 180.dp),
-                    text = "暫無巡檢工單",
-                    color = Color(131,132,134),
-                    fontWeight = FontWeight.Bold,
-                )
-            }
-        } else {
+            if (msggg.size == 0) {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .background(Color(238, 239, 241))
+                ) {
+                    Text(
+                        modifier = Modifier.padding(top = 180.dp),
+                        text = "暫無巡檢工單",
+                        color = Color(131,132,134),
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            } else {
 //            Button(onClick = { msggg = msggg - msggg[msggg.size -1] }) {
 //
 //            }
-            workList(msggg,navController);
+                workList(msggg,navController);
+            }
         }
+
     }
     BottomSpace(navController)
 }
@@ -272,10 +274,11 @@ fun MA3_1_MakeList(Date:String,UserID:String){
 fun listCard(list: Lists,navController :NavHostController = rememberNavController()) {
     Button(
         modifier = Modifier
-            .padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
-            .fillMaxSize(),
+            //.padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
+            .fillMaxSize().padding(vertical = 10.dp),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
+        contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
             Log.d("ButtonEvent", Screen.MA3_1_1.route)
@@ -341,7 +344,8 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
 
 @Composable
 fun workList(messages: List<Lists>,navController :NavHostController = rememberNavController()) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+
+    LazyColumn(modifier = Modifier.fillMaxSize(), state = LazyListState()) {
         items(messages) { message ->
             listCard(message,navController)
         }
