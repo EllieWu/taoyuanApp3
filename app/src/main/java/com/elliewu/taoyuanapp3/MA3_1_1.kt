@@ -66,20 +66,18 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
-val fakedata = listOf<LatLng>(
-    LatLng(25.046296,121.506857),
-    LatLng(25.056437,121.550903),
-    LatLng(24.726862,121.744826),
-    LatLng(24.245541,120.718384)
+
+data class redDot(val LocateNumber: String, val LatLng: LatLng)
+val fakedata = listOf<redDot>(
+    redDot("",LatLng(23.588299,121.083543))
 )
 var redDotList by mutableStateOf(fakedata)
-val repairDotFakedata = listOf<LatLng>(
-    LatLng(23.588299,121.083543),
-    LatLng(22.899511,120.395490),
-    LatLng(22.874993,121.067168),
-    LatLng(23.696732,121.459551)
+
+data class repairDot(val ReportCode: String, val LatLng: LatLng)
+val repairDotFakedatas = listOf<repairDot>(
+    repairDot("",LatLng(23.588299,121.083543))
 )
-var blueDotList by mutableStateOf(repairDotFakedata)
+var blueDotList by mutableStateOf(repairDotFakedatas)
 
 var redDotIsVis by mutableStateOf(true)
 var blueDotIsVis by mutableStateOf(true)
@@ -206,13 +204,13 @@ fun MA3_1_1(
                     properties = mapProperties,
                 ) {
                     val context = LocalContext.current
-                    redDotList.forEach{ item ->
+                    redDotList.forEachIndexed { Index, item ->
                         MarkerInfoWindow(
                             icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
-                            state = MarkerState(position = item),
+                            state = MarkerState(position = item.LatLng),
                             visible = redDotIsVis,
                             title = "打卡",
-                            snippet = "打卡點-1",
+                            snippet = "打卡點-${(Index+1)}",
                         ) { marker ->
                             // Implement the custom info window here
                             Row(
@@ -233,6 +231,7 @@ fun MA3_1_1(
                                         backgroundColor = Color.Transparent
                                     ),
                                     onClick = {
+                                          Log.d("reddot",item.LocateNumber)
                                     },
                                     modifier = Modifier.weight(0.45f)
                                 )
@@ -248,13 +247,13 @@ fun MA3_1_1(
                         }
                     }
 
-                    blueDotList.forEach{ item ->
+                    blueDotList.forEachIndexed { Index,item ->
                         MarkerInfoWindow(
                             icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
-                            state = MarkerState(position = item),
+                            state = MarkerState(position = item.LatLng),
                             visible = blueDotIsVis,
                             title = "報修",
-                            snippet = "報修點-1",
+                            snippet = "報修點-${(Index+1)}",
                         ) { marker ->
                             // Implement the custom info window here
                             Row(
@@ -275,6 +274,7 @@ fun MA3_1_1(
                                         backgroundColor = Color.Transparent
                                     ),
                                     onClick = {
+                                        Log.d("bluedot",item.ReportCode)
                                     },
                                     modifier = Modifier.weight(0.45f)
                                 )
@@ -320,12 +320,11 @@ fun MA3_1_1_RedPoint_MakeList(WorkCode:String,WorkTime:String){
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:RequestLocate_Response = gson.fromJson(responseString,RequestLocate_Response::class.java)
-            var workListDatas = listOf<LatLng>(
-                LatLng(25.046296,121.506857))
+            var workListDatas = redDotList
             workListDatas = workListDatas - workListDatas[workListDatas.size - 1]
             if(WorkInfoResponse.Locate != null && WorkInfoResponse.Locate!!.isNotEmpty()){
                 WorkInfoResponse.Locate!!.forEach {
-                    workListDatas = workListDatas + LatLng(it.Latitude.toDouble(),it.Longitude.toDouble())
+                    workListDatas = workListDatas + redDot(it.LocateNumber.toString(),LatLng(it.Latitude.toDouble(),it.Longitude.toDouble()))
                 }
             }
             redDotList = workListDatas
@@ -350,15 +349,15 @@ fun MA3_1_1_BluePoint_MakeList(Date:String,UserID:String){
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:RequestRepairLocate_Response = gson.fromJson(responseString,RequestRepairLocate_Response::class.java)
-            var workListDatas = listOf<LatLng>(
-                LatLng(25.046296,121.506857))
-
+//            var workListDatas = listOf<LatLng>(
+//                LatLng(25.046296,121.506857))
+            var workListDatas = repairDotFakedatas;
             workListDatas = workListDatas - workListDatas[workListDatas.size - 1]
 
             if(WorkInfoResponse.RepairLocate != null && WorkInfoResponse.RepairLocate!!.isNotEmpty()){
                 WorkInfoResponse.RepairLocate!!.forEach {
-                    workListDatas = workListDatas + LatLng(it.Latitude.toDouble(),it.Longitude.toDouble())
-
+//                    workListDatas = workListDatas + LatLng(it.Latitude.toDouble(),it.Longitude.toDouble())
+                    workListDatas = workListDatas + repairDot(it.ReportCode,LatLng(it.Latitude.toDouble(),it.Longitude.toDouble()))
                 }
             }
             blueDotList = workListDatas
