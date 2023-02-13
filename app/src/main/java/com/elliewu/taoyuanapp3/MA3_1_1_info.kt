@@ -334,7 +334,7 @@ fun infoTable(list: listInfo){
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
 
-                color = Color(200, 71, 52),
+                color = Color(163,76,60),
                 modifier = Modifier.padding(bottom = 10.dp),
                 //.fillMaxWidth(),
                 textAlign = TextAlign.Center,
