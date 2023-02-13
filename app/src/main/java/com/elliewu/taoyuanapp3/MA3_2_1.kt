@@ -404,11 +404,11 @@ fun RepairInfoTable(list: RepairInfoList,navController : NavHostController = rem
         }
 
     }
-    RepairBottomBtn(navController);
+    RepairBottomBtn(MA3_2_1_msggg,navController);
 }
 
 @Composable
-fun RepairBottomBtn(navController : NavHostController = rememberNavController()){
+fun RepairBottomBtn(list: RepairInfoList,navController : NavHostController = rememberNavController()){
     Row(
         modifier = Modifier.fillMaxSize()
                            .padding(start = 20.dp,end = 20.dp,bottom = 20.dp)
@@ -420,6 +420,7 @@ fun RepairBottomBtn(navController : NavHostController = rememberNavController())
             elevation = null,
             onClick =
             {
+
                 Log.d("ButtonClick","1111111");
                 navController.navigate(Screen.MA3_2_1_finishRepair.route)
             },
@@ -447,8 +448,14 @@ fun RepairBottomBtn(navController : NavHostController = rememberNavController())
         Button(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(86,107,183)),
             elevation = null,
-            onClick = {},
-        )
+            onClick =
+            {
+                val MA3_2_2_fullRoutePath = Screen.MA3_2_2.route + "?latitude=${list.Latitude}&longitude=${list.Longitude}&repairTitle=${list.RepairTitle}"
+                Log.d("ButtonClick","地圖");
+                navController.navigate(MA3_2_2_fullRoutePath);
+            }
+
+                )
         {
             Row(
                 verticalAlignment = Alignment.CenterVertically,

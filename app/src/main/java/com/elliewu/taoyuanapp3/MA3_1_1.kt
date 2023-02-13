@@ -53,7 +53,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.elliewu.taoyuanapp3.clusters.ZoneClusterManager
 import com.google.android.gms.maps.GoogleMap
-
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -93,7 +92,6 @@ fun MA3_1_1(
     fusedLocationProviderClient :FusedLocationProviderClient,
     viewModel: MapViewModel,
     WorkCode: String? = "", WorkTime: String?="", navController: NavHostController = rememberNavController()
-
 ){
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
     MA3_1_1_BluePoint_MakeListCom(MA3_1_date, Login_UserId);
