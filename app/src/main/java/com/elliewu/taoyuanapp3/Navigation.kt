@@ -121,10 +121,24 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
             )
         }
 
-        composable(route = Screen.MA3_1_1_Bottombtn2.route) { entry ->
-            MA3_1_1_Bottombtn2(navController = navController)
+//        composable(route = Screen.MA3_1_1_Bottombtn2.route) { entry ->
+//            MA3_1_1_Bottombtn2(navController = navController)
+//        }
+        composable(
+            route = Screen.MA3_1_1_Bottombtn2.route + "/{WorkCode}",
+            arguments = listOf(
+                navArgument("WorkCode"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )
+        ) { entry ->
+            MA3_1_1_Bottombtn2(
+                navController = navController,
+                WorkCode = entry.arguments?.getString(("WorkCode"))
+                )
         }
-
         //維修工單
         composable(route = Screen.MA3_2.route) { entry ->
             MA3_2(navController = navController)
