@@ -196,6 +196,33 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
                 viewModel = viewModel
             )
         }
+        //報修點預覽
+        composable(route =  Screen.MA3_1_1_RepairDotPreview.route + "?longitude={longitude}&latitude={latitude}",
+            arguments = listOf(
+                navArgument("longitude"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("latitude"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )
+        )
+        {
+            entry ->
+            MA3_1_1_RepairDotPreview(
+                navController = navController,
+                latitude = entry.arguments?.getString("latitude"),
+                longitude = entry.arguments?.getString("longitude"),
+                state = viewModel.state.value,
+                fusedLocationProviderClient = fusedLocationProviderClient,
+                viewModel = viewModel
+            )
+        }
+
         //維修工單
         composable(route = Screen.MA3_2.route) { entry ->
             MA3_2(navController = navController)
@@ -289,6 +316,17 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
 //                ReportCode = entry.arguments?.getString("ReportCode"))
 //        }
 
+        //維修點預覽
+        composable(route = Screen.MA3_3_1_RepairDotPreview.route) { entry ->
+            MA3_3_1_RepairDotPreview(
+                navController = navController,
+                latitude = entry.arguments?.getString("latitude"),
+                longitude = entry.arguments?.getString("longitude"),
+                state = viewModel.state.value,
+                fusedLocationProviderClient = fusedLocationProviderClient,
+                viewModel = viewModel
+            )
+        }
 
 
 

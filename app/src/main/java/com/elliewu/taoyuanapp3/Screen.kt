@@ -10,6 +10,7 @@ sealed class Screen(val route: String){
     object MA3_1_1_Buttonbtn1: Screen("MA3_1_1_Buttonbtn1")
     object MA3_1_1_Bottombtn2: Screen("MA3_1_1_Bottombtn2")
     object MA3_1_1_Bottombtn3: Screen("MA3_1_1_Bottombtn3")
+    object MA3_1_1_RepairDotPreview: Screen("MA3_1_1_RepairDotPreview")
 
     //維修工單
     object MA3_2 : Screen("MA3_2")
@@ -21,7 +22,7 @@ sealed class Screen(val route: String){
     //報修
     object MA3_3 : Screen("MA3_3")
     object MA3_3_1 : Screen("MA3_3_1")
-
+    object MA3_3_1_RepairDotPreview : Screen("MA3_3_1_RepairDotPreview")
     object MA3_3_NEW1 :Screen("MA3_3_NEW1")
     //變更密碼
     object changePassword : Screen("changePassword")

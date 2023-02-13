@@ -77,6 +77,7 @@ class MapViewModel @Inject constructor(): ViewModel() {
         }
     }
 
+
     fun setupClusterManager(
         context: Context,
         map: GoogleMap,

@@ -269,6 +269,9 @@ fun MA3_1_1_Bottombtn3(
                             Log.d("latitude",state.lastKnownLocation?.latitude.toString())
 //                            val fullpath = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
 //                            navController.navigate(fullpath)
+                            //fullpath = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                            var fullpath = Screen.MA3_1_1_RepairDotPreview.route + "?longitude={longitude}&latitude={latitude}"
+                            navController.navigate(fullpath)
                         }
                     ) {
                         Text(
