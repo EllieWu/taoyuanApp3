@@ -110,6 +110,10 @@ fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = remem
                 fullpath = Screen.MA3_1_1_Buttonbtn1.route + "?WorkTime=${WorkTime}&WorkCode=${WorkCode}&Longitude=${Longitude}&Latitude=${Latitude}"
                 Log.d("AAAA",fullpath)
             }
+            else if (btnList.text=="完工填報")
+            {
+                fullpath = Screen.MA3_1_1_Bottombtn2.withArgs(WorkCode.toString())
+            }
             else
             {
                 fullpath = btnList.screen
