@@ -49,9 +49,9 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                        navController: NavHostController = rememberNavController()){
     var reportContentValue by remember { mutableStateOf("") }
     Log.d("WorkTime",WorkTime.toString())
-    Log.d("WorkCode",WorkTime.toString())
-    Log.d("Longitude",WorkTime.toString())
-    Log.d("Latitude",WorkTime.toString())
+    Log.d("WorkCode",WorkCode.toString())
+    Log.d("Longitude",Longitude.toString())
+    Log.d("Latitude",Latitude.toString())
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,7 +82,9 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    navController.navigate(Screen.MA3_1_1.route)
+                    val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                    navController.navigate(MA3_1_1_fullRoutePath)
+//                    navController.navigate(Screen.MA3_1_1.route)
                 },
             )
             Text(
