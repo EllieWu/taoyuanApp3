@@ -96,7 +96,7 @@ fun MA3_3(
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    //navController.navigate(Screen.login.route)
+                    navController.navigate(Screen.MA3_1_1_Bottombtn3.route)
                 },
                 modifier = Modifier.padding(end = 20.dp)
             )

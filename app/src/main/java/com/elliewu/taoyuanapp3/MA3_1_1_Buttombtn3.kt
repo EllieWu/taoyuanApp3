@@ -59,6 +59,8 @@ fun MA3_1_1_Bottombtn3(
     viewModel: MapViewModel,
     WorkCode: String? = "", WorkTime: String?="", navController: NavHostController = rememberNavController()
 ){
+    Log.d("WorkCode",WorkCode.toString())
+    Log.d("WorkTime",WorkTime.toString())
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -122,8 +124,11 @@ fun MA3_1_1_Bottombtn3(
                 ),
                 onClick = {
                     //navController.navigate(Screen.MA3_1_1.route)
-                    val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
-                    navController.navigate(MA3_1_1_fullRoutePath)
+                    val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode.toString()}&WorkTime=${WorkTime.toString()}"
+                    if(WorkCode !="" && WorkCode != null && WorkTime!="" && WorkTime != null)
+                        navController.navigate(MA3_1_1_fullRoutePath)
+                    else
+                        navController.navigate(Screen.MA3_3.route)
                 }
             )
             Text(
@@ -261,7 +266,7 @@ fun MA3_1_1_Bottombtn3(
                         )
                         Text(
                             modifier = Modifier.padding(start = 25.dp),
-                            text = "Longitude.toString()",
+                            text = state.lastKnownLocation?.longitude.toString(),
                             color = Color(64,74,135),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
@@ -280,7 +285,7 @@ fun MA3_1_1_Bottombtn3(
                         )
                         Text(
                             modifier = Modifier.padding(start = 25.dp),
-                            text = "Latitude.toString()",
+                            text = state.lastKnownLocation?.latitude.toString(),
                             color = Color(64,74,135),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
