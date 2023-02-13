@@ -104,7 +104,7 @@ fun MA3_3(
             //var enabled by remember { mutableStateOf(true)}
 
         }
-        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 80.dp)) {
+        Column(modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -194,6 +194,9 @@ fun MA3_3(
                     MA3_3_MakeListCom(MA3_3_date,Login_UserId);
                 }
             }
+
+        }
+        Box(modifier = Modifier.fillMaxSize().background(Color(231,238,248))){
             if (MA3_3_msggg.size == 0) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
@@ -309,7 +312,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
 
 @Composable
 fun ReportList(messages: List<ReportLists>,navController :NavHostController = rememberNavController()) {
-    LazyColumn(modifier = Modifier.fillMaxSize(), state = LazyListState()) {
+    LazyColumn(modifier = Modifier.padding(start = 20.dp,end = 20.dp,bottom = 80.dp).fillMaxSize(), state = LazyListState()) {
         items(messages) { message ->
             ReportCard(message,navController)
         }
