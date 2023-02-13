@@ -31,10 +31,10 @@ var buttonBtnData2 = listOf(
         R.drawable.btn1, "巡檢打卡",Screen.MA3_1_1_Buttonbtn1.route
     ),
     buttonBtn2(
-        R.drawable.btn2, "完工填報",Screen.MA3_2.route
+        R.drawable.btn2, "完工填報",Screen.MA3_1_1_Bottombtn2.route
     ),
     buttonBtn2(
-        R.drawable.btn3, "報修",Screen.MA3_3.route
+        R.drawable.btn3, "報修",Screen.MA3_1_1_Bottombtn3.route
     ),
 )
 
@@ -45,7 +45,7 @@ var buttonBtnData2 = listOf(
 
 
 @Composable
-fun BottomSpace2(navController : NavHostController = rememberNavController(),Longitude:String?="",Latitude:String?="") {
+fun BottomSpace2(navController : NavHostController = rememberNavController(),WorkTime:String?="",WorkCode:String?="",Longitude:String?="",Latitude:String?="") {
     Box(modifier = Modifier.fillMaxSize(), Alignment.BottomCenter) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -78,13 +78,13 @@ fun BottomSpace2(navController : NavHostController = rememberNavController(),Lon
 //            }else{
 //                Color(157,157,157)
 //            }
-            BottomBtn2(buttonBtnData2,navController,Longitude,Latitude);
+            BottomBtn2(buttonBtnData2,navController,WorkTime,WorkCode,Longitude,Latitude);
         }
     }
 }
 
 @Composable
-fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = rememberNavController(),Longitude:String?="",Latitude:String?="") {
+fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = rememberNavController(),WorkTime:String?="",WorkCode:String?="",Longitude:String?="",Latitude:String?="") {
     val bgColor =
         if (btnList.text == "巡檢打卡") {
             Color(235, 166, 59)
@@ -106,11 +106,19 @@ fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = remem
             var fullpath = ""
             if(btnList.text=="巡檢打卡")
             {
-                fullpath = Screen.MA3_1_1_Buttonbtn1.route + "?Longitude=${Longitude}&Latitude=${Latitude}"
+                //fullpath = Screen.MA3_1_1_Buttonbtn1.route + "?Longitude=${Longitude}&Latitude=${Latitude}"
+                fullpath = Screen.MA3_1_1_Buttonbtn1.route + "?WorkTime=${WorkTime}&WorkCode=${WorkCode}&Longitude=${Longitude}&Latitude=${Latitude}"
+                Log.d("AAAA",fullpath)
             }
-            else
+            else if (btnList.text=="完工填報")
             {
-                fullpath = btnList.screen
+                fullpath = Screen.MA3_1_1_Bottombtn2.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                navController.navigate(MA3_1_1_fullRoutePath)
+//                fullpath = Screen.MA3_1_1_Bottombtn2.withArgs(WorkCode.toString())
+            }
+            else if (btnList.text=="報修")
+            {
+                fullpath = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
             }
                 navController.navigate(fullpath)
 
@@ -144,12 +152,12 @@ fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = remem
 
 
 @Composable
-fun BottomBtn2(messages: List<buttonBtn2>,navController : NavHostController = rememberNavController(),Longitude:String?="",Latitude:String?="") {
+fun BottomBtn2(messages: List<buttonBtn2>,navController : NavHostController = rememberNavController(),WorkTime:String?="",WorkCode:String?="",Longitude:String?="",Latitude:String?="") {
     LazyRow(modifier = Modifier
         .fillMaxSize()
         .padding(horizontal = 10.dp, vertical = 5.dp),horizontalArrangement = Arrangement.SpaceAround) {
         items(messages) { message ->
-                BottomBtnCard2(message,navController,Longitude,Latitude)
+                BottomBtnCard2(message,navController,WorkTime,WorkCode,Longitude,Latitude)
         }
     }
 }
