@@ -9,6 +9,7 @@ sealed class Screen(val route: String){
     object MA3_1_1_info : Screen("MA3_3_1_info")
     object MA3_1_1_Buttonbtn1: Screen("MA3_1_1_Buttonbtn1")
     object MA3_1_1_Bottombtn2: Screen("MA3_1_1_Bottombtn2")
+    object MA3_1_1_Bottombtn3: Screen("MA3_1_1_Bottombtn3")
 
     //維修工單
     object MA3_2 : Screen("MA3_2")
