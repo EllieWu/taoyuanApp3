@@ -5,10 +5,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,17 +30,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.maps.LocationSource
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.location.*
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.Button
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
-//import androidx.compose.foundation.layout.ColumnScopeInstance.weight
-//import androidx.compose.foundation.layout.RowScopeInstance.weight
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -47,7 +48,6 @@ import androidx.compose.ui.zIndex
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.maps.android.compose.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.shareIn
@@ -56,7 +56,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.elliewu.taoyuanapp3.clusters.ZoneClusterManager
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -96,10 +95,10 @@ fun MA3_1_1(
     fusedLocationProviderClient :FusedLocationProviderClient,
     viewModel: MapViewModel,
     WorkCode: String? = "", WorkTime: String?="", navController: NavHostController = rememberNavController()
-
 ){
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
     MA3_1_1_BluePoint_MakeListCom(MA3_1_date, Login_UserId);
+
     Column(
         modifier = Modifier
             .fillMaxWidth()

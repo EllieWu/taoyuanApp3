@@ -229,6 +229,41 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
             MA3_2_1_finishRepair(navController = navController)
         }
 
+        composable(
+            route = Screen.MA3_2_2.route + "?longitude={longitude}&latitude={latitude}&repairTitle={repairTitle}",
+            arguments = listOf(
+                navArgument("longitude"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("latitude"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },navArgument("repairTitle"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )
+        ) { entry ->
+            MA3_2_2(
+                navController = navController,
+                latitude = entry.arguments?.getString("latitude"),
+                longitude = entry.arguments?.getString("longitude"),
+                repairTitle = entry.arguments?.getString("repairTitle"),
+
+                state = viewModel.state.value,
+                fusedLocationProviderClient = fusedLocationProviderClient,
+                viewModel = viewModel,
+            )
+        }
+
+
+
+
+
         //報修
         composable(route = Screen.MA3_3.route) { entry ->
             MA3_3(navController = navController)
