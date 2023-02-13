@@ -292,7 +292,6 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
                 latitude = entry.arguments?.getString("latitude"),
                 longitude = entry.arguments?.getString("longitude"),
                 repairTitle = entry.arguments?.getString("repairTitle"),
-
                 state = viewModel.state.value,
                 fusedLocationProviderClient = fusedLocationProviderClient,
                 viewModel = viewModel,

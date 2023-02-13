@@ -456,7 +456,7 @@ fun RepairBottomBtn(list: RepairInfoList,navController : NavHostController = rem
             elevation = null,
             onClick =
             {
-                val MA3_2_2_fullRoutePath = Screen.MA3_2_2.route + "?latitude=${list.Latitude}&longitude=${list.Longitude}&repairTitle=${list.RepairTitle}&RepairCode=${RepairCode_rem}&State=${State_rem}"
+                val MA3_2_2_fullRoutePath = Screen.MA3_2_2.route + "?latitude=${list.Latitude}&longitude=${list.Longitude}&repairTitle=${list.RepairTitle}"
                 Log.d("ButtonClick","地圖");
                 navController.navigate(MA3_2_2_fullRoutePath);
             }

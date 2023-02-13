@@ -39,15 +39,12 @@ import com.google.maps.android.ktx.model.cameraPosition
 //@Preview
 @Composable
 fun MA3_2_2(state: MapState,
-
             fusedLocationProviderClient : FusedLocationProviderClient,
             viewModel: MapViewModel,
             navController: NavHostController = rememberNavController(),
             longitude:String?,
             latitude:String?,
-            repairTitle: String?,
-            RepairCode: String?,
-            State: String?
+            repairTitle: String?
 ) {
     Column(
         modifier = Modifier
@@ -79,7 +76,7 @@ fun MA3_2_2(state: MapState,
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${RepairCode}&State=${State}"
+                    var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode={RepairCode}&State={State}"
                     Log.d("返回", "MA3_2_2: ")
                     navController.navigate(fullMA3_2_1_path)
                 },
