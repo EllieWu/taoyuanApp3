@@ -150,6 +150,28 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
 //        composable(route = Screen.MA3_1_1_Bottombtn3.route) { entry ->
 //            MA3_1_1_Bottombtn3(navController = navController)
 //        }
+//        composable(
+//            route = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode={WorkCode}&WorkTime={WorkTime}",
+//            arguments = listOf(
+//                navArgument("WorkCode"){
+//                    type = NavType.StringType
+//                    defaultValue = ""
+//                    nullable = true
+//                },
+//                navArgument("WorkTime"){
+//                    type = NavType.StringType
+//                    defaultValue = ""
+//                    nullable = true
+//                }
+//            )
+//        ) { entry ->
+//            MA3_1_1_Bottombtn3(
+//                navController = navController,
+//                WorkCode = entry.arguments?.getString(("WorkCode")),
+//                WorkTime = entry.arguments?.getString(("WorkTime"))
+//
+//            )
+//        }
         composable(
             route = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode={WorkCode}&WorkTime={WorkTime}",
             arguments = listOf(
@@ -167,12 +189,13 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
         ) { entry ->
             MA3_1_1_Bottombtn3(
                 navController = navController,
-                WorkCode = entry.arguments?.getString(("WorkCode")),
-                WorkTime = entry.arguments?.getString(("WorkTime"))
-
+                WorkCode = entry.arguments?.getString("WorkCode"),
+                WorkTime = entry.arguments?.getString("WorkTime"),
+                state = viewModel.state.value,
+                fusedLocationProviderClient = fusedLocationProviderClient,
+                viewModel = viewModel
             )
         }
-
         //維修工單
         composable(route = Screen.MA3_2.route) { entry ->
             MA3_2(navController = navController)
