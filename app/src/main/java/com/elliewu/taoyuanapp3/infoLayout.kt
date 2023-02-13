@@ -84,7 +84,7 @@ fun infoLayout(navController: NavHostController = rememberNavController(),WorkCo
         }
         Row(modifier = Modifier
             .fillMaxHeight()
-            .padding(end = 55.dp)){
+            .padding(end = 63.dp)){
             Button(
                 contentPadding = PaddingValues(0.dp),
                 shape = RoundedCornerShape(0.dp),
