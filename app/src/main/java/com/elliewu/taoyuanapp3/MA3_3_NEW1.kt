@@ -396,11 +396,14 @@ fun MA3_3_NEW1_UI(list: ReportInfoList) {
     {
         val imageBytes = Base64.decode(list.ReportPhoto, 0)
         val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        Image(
-            modifier = Modifier.size(350.dp),
-            contentScale = ContentScale.FillWidth,
-            bitmap = image.asImageBitmap(),
-            contentDescription = "contentDescription")
+        if(image != null)
+        {
+            Image(
+                modifier = Modifier.size(350.dp),
+                contentScale = ContentScale.FillWidth,
+                bitmap = image.asImageBitmap(),
+                contentDescription = "contentDescription")
+        }
     }
     Row(
         verticalAlignment = Alignment.CenterVertically,

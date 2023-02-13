@@ -395,12 +395,14 @@ fun RepairInfoTable(list: RepairInfoList,navController : NavHostController = rem
         {
             val imageBytes = Base64.decode(list.RepairPhoto, 0)
             val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-            Image(
-                modifier = Modifier.size(350.dp),
-                contentScale = ContentScale.FillWidth,
-                bitmap = image.asImageBitmap(),
-                contentDescription = "contentDescription")
-
+            if(image != null)
+            {
+                Image(
+                    modifier = Modifier.size(350.dp),
+                    contentScale = ContentScale.FillWidth,
+                    bitmap = image.asImageBitmap(),
+                    contentDescription = "contentDescription")
+            }
         }
 
     }
