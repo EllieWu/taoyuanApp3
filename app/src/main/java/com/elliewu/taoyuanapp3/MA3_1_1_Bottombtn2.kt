@@ -32,7 +32,7 @@ import androidx.navigation.compose.rememberNavController
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
-fun MA3_1_1_Bottombtn2(WorkCode:String?="",navController: NavHostController = rememberNavController()) {
+fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: NavHostController = rememberNavController()) {
     MA3_1_1_Info_MakeListCom(WorkCode.toString());
     Column(
         modifier = Modifier
@@ -69,7 +69,9 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",navController: NavHostController = re
 //                    var fullMA3_2_1_path =
 //                        Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_msggg.RepairCode}&State=${MA3_2_1_msggg.State}"
 //                    navController.navigate(fullMA3_2_1_path)
-                    navController.navigate(Screen.MA3_1_1.route)
+                    val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                    navController.navigate(MA3_1_1_fullRoutePath)
+//                    navController.navigate(Screen.MA3_1_1.route)
                 },
             )
             Text(

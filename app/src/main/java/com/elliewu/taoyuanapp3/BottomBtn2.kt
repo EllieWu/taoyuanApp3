@@ -112,11 +112,13 @@ fun BottomBtnCard2(btnList: buttonBtn2,navController : NavHostController = remem
             }
             else if (btnList.text=="完工填報")
             {
-                fullpath = Screen.MA3_1_1_Bottombtn2.withArgs(WorkCode.toString())
+                fullpath = Screen.MA3_1_1_Bottombtn2.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                navController.navigate(MA3_1_1_fullRoutePath)
+//                fullpath = Screen.MA3_1_1_Bottombtn2.withArgs(WorkCode.toString())
             }
-            else
+            else if (btnList.text=="報修")
             {
-                fullpath = btnList.screen
+                fullpath = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
             }
                 navController.navigate(fullpath)
 

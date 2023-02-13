@@ -37,7 +37,9 @@ import androidx.navigation.compose.rememberNavController
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
-fun MA3_1_1_Bottombtn3(navController: NavHostController = rememberNavController()) {
+
+fun MA3_1_1_Bottombtn3(WorkCode:String?="",WorkTime:String?="",navController: NavHostController = rememberNavController()){
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -69,7 +71,9 @@ fun MA3_1_1_Bottombtn3(navController: NavHostController = rememberNavController(
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    navController.navigate(Screen.MA3_1_1.route)
+                    //navController.navigate(Screen.MA3_1_1.route)
+                    val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                    navController.navigate(MA3_1_1_fullRoutePath)
                 }
             )
             Text(

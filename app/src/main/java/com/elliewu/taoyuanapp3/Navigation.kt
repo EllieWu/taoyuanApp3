@@ -125,9 +125,14 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
 //            MA3_1_1_Bottombtn2(navController = navController)
 //        }
         composable(
-            route = Screen.MA3_1_1_Bottombtn2.route + "/{WorkCode}",
+            route = Screen.MA3_1_1_Bottombtn2.route + "?WorkCode={WorkCode}&WorkTime={WorkTime}",
             arguments = listOf(
                 navArgument("WorkCode"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("WorkTime"){
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = true
@@ -136,14 +141,37 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
         ) { entry ->
             MA3_1_1_Bottombtn2(
                 navController = navController,
-                WorkCode = entry.arguments?.getString(("WorkCode"))
-                )
+                WorkCode = entry.arguments?.getString(("WorkCode")),
+                WorkTime = entry.arguments?.getString(("WorkTime"))
+
+            )
         }
 
-        composable(route = Screen.MA3_1_1_Bottombtn3.route) { entry ->
-            MA3_1_1_Bottombtn3(navController = navController)
-        }
+//        composable(route = Screen.MA3_1_1_Bottombtn3.route) { entry ->
+//            MA3_1_1_Bottombtn3(navController = navController)
+//        }
+        composable(
+            route = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode={WorkCode}&WorkTime={WorkTime}",
+            arguments = listOf(
+                navArgument("WorkCode"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("WorkTime"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )
+        ) { entry ->
+            MA3_1_1_Bottombtn3(
+                navController = navController,
+                WorkCode = entry.arguments?.getString(("WorkCode")),
+                WorkTime = entry.arguments?.getString(("WorkTime"))
 
+            )
+        }
 
         //維修工單
         composable(route = Screen.MA3_2.route) { entry ->
