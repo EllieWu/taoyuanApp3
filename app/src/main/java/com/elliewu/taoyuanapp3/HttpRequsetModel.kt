@@ -108,7 +108,8 @@ class NewReportUpload_Request(
     @SerializedName("Latitude")var Latitude : String?,
     @SerializedName("ReportTitle")var ReportTitle : String?,
     @SerializedName("ReportContent")var ReportContent : String?,
-    @SerializedName("ReportPhoto")var ReportPhoto : String?
+    @SerializedName("ReportPhoto")var ReportPhoto : String?,
+    @SerializedName("ReportType")var ReportType : String?,
 )
 class NewReportUpload_Response(
     @SerializedName("Feedback")var Feedback : String?
