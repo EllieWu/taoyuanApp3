@@ -461,7 +461,7 @@ fun RepairBottomBtn(list: RepairInfoList,navController : NavHostController = rem
                 navController.navigate(MA3_2_2_fullRoutePath);
             }
 
-                )
+        )
         {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
