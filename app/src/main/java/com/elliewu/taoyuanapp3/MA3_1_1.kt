@@ -127,6 +127,8 @@ fun MA3_1_1(
                 ),
                 onClick = {
                     navController.navigate(Screen.MA3_1.route)
+                    MA3_3_NEW1_lastWorkCode=""
+                    MA3_3_NEW1_lastWorkTime=""
                 },
             )
             Text(
