@@ -76,7 +76,7 @@ fun MA3_2_2(state: MapState,
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode={RepairCode}&State={State}"
+                    var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_RepairCode}&State=${MA3_2_1_State}"
                     Log.d("返回", "MA3_2_2: ")
                     navController.navigate(fullMA3_2_1_path)
                 },
