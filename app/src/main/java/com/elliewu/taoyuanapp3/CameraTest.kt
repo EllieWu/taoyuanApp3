@@ -3,8 +3,6 @@ package com.elliewu.taoyuanapp3
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.FileUtils
-import android.util.Base64
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,7 +28,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.ImagePainter.State.Empty.painter
 import coil.compose.rememberImagePainter
+import java.io.File
 import java.util.*
 import java.util.Base64.getEncoder
 
@@ -87,11 +87,11 @@ fun Camera() {
     //相機功能
     val context = LocalContext.current
     val file = context.createImageFile()
-
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
         BuildConfig.APPLICATION_ID + ".provider", file
     )
+
     var capturedImageUri by remember {
         mutableStateOf<Uri>(Uri.EMPTY)
     }
@@ -137,15 +137,15 @@ fun Camera() {
         Button(
             modifier = Modifier.padding(horizontal = 8.dp),
             onClick = {
-            val permissionCheckResult =
-                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                cameraLauncher.launch(uri)
-            } else {
-                // Request a permission
-                permissionLauncher.launch(Manifest.permission.CAMERA)
-            }
-        }) {
+                val permissionCheckResult =
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                    cameraLauncher.launch(uri)
+                } else {
+                    // Request a permission
+                    permissionLauncher.launch(Manifest.permission.CAMERA)
+                }
+            }) {
             Text(text = "拍照")
         }
         //相簿功能
@@ -159,7 +159,7 @@ fun Camera() {
                 }else {
                     imagepersissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
                 }
-        }) {
+            }) {
             Text(text = "相簿")
         }
     }
@@ -174,7 +174,4 @@ fun Camera() {
         )
     }
 }
-
-
-
 
