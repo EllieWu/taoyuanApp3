@@ -394,7 +394,7 @@ fun RepairInfoTable(RepairCode: String? = "",State: String?="" ,list: RepairInfo
     {
         Row(modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.Center)
+            .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.End)
         {
             val imageBytes = Base64.decode(list.RepairPhoto, 0)
             val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)

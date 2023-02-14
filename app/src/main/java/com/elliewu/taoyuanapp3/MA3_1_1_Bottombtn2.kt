@@ -303,6 +303,23 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                 }
             }
 
+            //照片顯示位置
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.Start)
+            {
+//                    val imageBytes = Base64.decode(list.RepairPhoto, 0)
+//                    val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+//                    if(image != null)
+//                    {
+//                        Image(
+//                            modifier = Modifier.size(350.dp),
+//                            contentScale = ContentScale.FillWidth,
+//                            bitmap = image.asImageBitmap(),
+//                            contentDescription = "contentDescription"
+//                        )
+//                    }
+            }
         }
     }
     Row(
