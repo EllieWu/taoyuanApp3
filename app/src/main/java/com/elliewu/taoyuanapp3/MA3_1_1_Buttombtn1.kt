@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
@@ -14,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
@@ -45,6 +48,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
+
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
@@ -58,6 +62,7 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
     Log.d("WorkCode",WorkCode.toString())
     Log.d("Longitude",Longitude.toString())
     Log.d("Latitude",Latitude.toString())
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -126,7 +131,8 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                     textAlign = TextAlign.Start,
                 )
             }
-            Row(modifier = Modifier.fillMaxSize()
+            Row(modifier = Modifier
+                .fillMaxSize()
                 .clip(shape = RoundedCornerShape(7.dp))
                 .background(Color.White, shape = RoundedCornerShape(7.dp))
                 .padding(vertical = 10.dp, horizontal = 10.dp)){
@@ -220,7 +226,6 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                     shape = RoundedCornerShape(50),
                     elevation = null,
                     onClick = {
-
                     },
                 )
                 {
@@ -231,7 +236,8 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
 
                         Icon(
                             modifier = Modifier
-                                .size(25.dp).padding(end = 5.dp),
+                                .size(25.dp)
+                                .padding(end = 5.dp),
                             painter = painterResource(id = R.drawable.camera),
                             contentDescription = "BackIcon",
                             tint = Color.White
@@ -315,3 +321,4 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
         }
     }
 }
+
