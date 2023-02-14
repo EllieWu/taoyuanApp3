@@ -6,8 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
-import android.util.Base64.NO_WRAP
-import android.util.Base64.encodeToString
+import android.util.Base64.*
 import android.util.Log
 import android.widget.Gallery
 import android.widget.Toast
@@ -37,11 +36,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.ImagePainter.State.Empty.painter
 import coil.compose.rememberImagePainter
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Base64.getEncoder
+import android.util.Base64
 
 
 @Preview
@@ -206,8 +207,12 @@ fun Camera() {
         fos.close()
 
 
+        val byteArray = byteArrayOf(0x00, 0x01, 0x02, 0x03)
+        val base64Strina = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
+        val base64String = bitmapToBase64(MinWenBitmap)
 
+        Log.i("MyTag", "This is an informational message.")
 //        val filePathA = file.absolutePath
 //
 //        val sourceUri: Uri = capturedImageUri // The Uri of the image file to be moved
@@ -224,3 +229,10 @@ fun Camera() {
     }
 }
 
+@Composable
+fun bitmapToBase64(bitmap: Bitmap): String {
+    val outputStream = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+    val byteArray = outputStream.toByteArray()
+    return Base64.encodeToString(byteArray, Base64.DEFAULT)
+}
