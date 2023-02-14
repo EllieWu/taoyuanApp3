@@ -250,13 +250,16 @@ fun MA3_1_1_Bottombtn3(
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Button(
-                        modifier = Modifier,
+                        elevation = null,
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Transparent
+                        ),
                         onClick = {
                             var fullpath = Screen.MA3_1_1_RepairDotPreview.route + "?longitude=${btn3_longitude}&latitude=${btn3_latitude}&WorkCode=${WorkCode.toString()}&WorkTime=${WorkTime.toString()}"
                             navController.navigate(fullpath) })
                     {
                         Icon(
-                            //modifier = Modifier.padding(start = 82.dp),
                             imageVector = Icons.Default.LocationOn,
                             contentDescription = "Favorite icon",
                             tint = Color(64, 111, 158)
