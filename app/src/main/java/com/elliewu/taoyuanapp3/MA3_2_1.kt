@@ -65,17 +65,14 @@ var RepairListData =
 )
 var MA3_2_1_msggg by mutableStateOf(RepairListData)
 
-var RepairCode_rem: String? = null
-var State_rem: String? = null
-
+var MA3_2_1_RepairCode by mutableStateOf("")
+var MA3_2_1_State by mutableStateOf("")
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
 @Composable
 fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostController = rememberNavController()){
     MA3_2_1_MakeListCom(RepairCode,State)
-    RepairCode_rem = RepairCode
-    State_rem = State
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -108,6 +105,8 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
                 ),
                 onClick = {
                     navController.navigate(Screen.MA3_2.route)
+                    MA3_2_1_RepairCode = ""
+                    MA3_2_1_State = ""
                 },
             )
             Text(
@@ -127,7 +126,7 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(255, 255, 255))) {
-                RepairInfoTable(MA3_2_1_msggg,navController)
+                RepairInfoTable(RepairCode,State,MA3_2_1_msggg,navController)
 
             }
         }
@@ -136,7 +135,7 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
 }
 
 @Composable
-fun RepairInfoTable(list: RepairInfoList,navController : NavHostController = rememberNavController()){
+fun RepairInfoTable(RepairCode: String? = "",State: String?="" ,list: RepairInfoList,navController : NavHostController = rememberNavController()){
     Row(
         verticalAlignment = Alignment.CenterVertically,
         //horizontalArrangement = Arrangement.SpaceBetween,
@@ -410,11 +409,11 @@ fun RepairInfoTable(list: RepairInfoList,navController : NavHostController = rem
         }
 
     }
-    RepairBottomBtn(MA3_2_1_msggg,navController);
+    RepairBottomBtn(RepairCode,State,MA3_2_1_msggg,navController);
 }
 
 @Composable
-fun RepairBottomBtn(list: RepairInfoList,navController : NavHostController = rememberNavController()){
+fun RepairBottomBtn(RepairCode: String? = "",State: String?="" ,list: RepairInfoList,navController : NavHostController = rememberNavController()){
     Row(
         modifier = Modifier.fillMaxSize()
                            .padding(start = 20.dp,end = 20.dp,bottom = 20.dp)
@@ -456,6 +455,8 @@ fun RepairBottomBtn(list: RepairInfoList,navController : NavHostController = rem
             elevation = null,
             onClick =
             {
+                MA3_2_1_RepairCode = RepairCode.toString()
+                MA3_2_1_State = State.toString();
                 val MA3_2_2_fullRoutePath = Screen.MA3_2_2.route + "?latitude=${list.Latitude}&longitude=${list.Longitude}&repairTitle=${list.RepairTitle}"
                 Log.d("ButtonClick","地圖");
                 navController.navigate(MA3_2_2_fullRoutePath);
