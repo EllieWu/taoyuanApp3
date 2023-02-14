@@ -218,7 +218,7 @@ fun MA3_1_1(
 //                                navController.navigate(fullpath)
 //                                Log.d("reddot",item.LocateNumber)
                                 GlobalScope.launch(Dispatchers.Main) {
-                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}&LocateNumber=${item.LocateNumber}"
                                 navController.navigate(fullpath)
                                 }
 
