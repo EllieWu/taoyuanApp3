@@ -96,7 +96,6 @@ fun MA3_1_1(
 ){
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
     MA3_1_1_BluePoint_MakeListCom(MA3_1_date, Login_UserId);
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -211,6 +210,16 @@ fun MA3_1_1(
                             visible = redDotIsVis,
                             title = "打卡",
                             snippet = "打卡點-${(Index+1)}",
+                            onInfoWindowClick = {
+                                Log.d("reddot",item.LocateNumber)
+//                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                                navController.navigate(fullpath)
+//                                Log.d("reddot",item.LocateNumber)
+                                GlobalScope.launch(Dispatchers.Main) {
+                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                                navController.navigate(fullpath)
+                                }
+                            }
                         ) { marker ->
                             // Implement the custom info window here
                             Row(
@@ -254,6 +263,13 @@ fun MA3_1_1(
                             visible = blueDotIsVis,
                             title = "報修",
                             snippet = "報修點-${(Index+1)}",
+                            onInfoWindowClick = {
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                                    navController.navigate(fullpath)
+                                }
+                                Log.d("bluedot",item.ReportCode)
+                            }
                         ) { marker ->
                             // Implement the custom info window here
                             Row(
@@ -320,7 +336,7 @@ fun MA3_1_1_RedPoint_MakeList(WorkCode:String,WorkTime:String){
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:RequestLocate_Response = gson.fromJson(responseString,RequestLocate_Response::class.java)
-            var workListDatas = redDotList
+            var workListDatas = fakedata
             workListDatas = workListDatas - workListDatas[workListDatas.size - 1]
             if(WorkInfoResponse.Locate != null && WorkInfoResponse.Locate!!.isNotEmpty()){
                 WorkInfoResponse.Locate!!.forEach {

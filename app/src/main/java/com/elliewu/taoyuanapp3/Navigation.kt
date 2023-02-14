@@ -197,14 +197,14 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
             )
         }
         //報修點預覽
-        composable(route =  Screen.MA3_1_1_RepairDotPreview.route + "?longitude={longitude}&latitude={latitude}&WorkCode={WorkCode}&WorkTime={WorkTime}",
+        composable(route =  Screen.MA3_1_1_RepairDotPreview.route + "?Longitude={Longitude}&Latitude={Latitude}&WorkCode={WorkCode}&WorkTime={WorkTime}",
             arguments = listOf(
-                navArgument("longitude"){
+                navArgument("Longitude"){
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = true
                 },
-                navArgument("latitude"){
+                navArgument("Latitude"){
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = true
@@ -225,8 +225,8 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
             entry ->
             MA3_1_1_RepairDotPreview(
                 navController = navController,
-                latitude = entry.arguments?.getString("latitude"),
-                longitude = entry.arguments?.getString("longitude"),
+                Latitude = entry.arguments?.getString("Latitude"),
+                Longitude = entry.arguments?.getString("Longitude"),
                 WorkCode = entry.arguments?.getString("WorkCode"),
                 WorkTime = entry.arguments?.getString("WorkTime"),
                 state = viewModel.state.value,
@@ -234,7 +234,46 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
                 viewModel = viewModel
             )
         }
-
+        composable(route =  Screen.MA3_1_1_WorkPoint.route + "?Longitude={Longitude}&Latitude={Latitude}&WorkCode={WorkCode}&WorkTime={WorkTime}&LocateNumber={LocateNumber}",
+            arguments = listOf(
+                navArgument("Longitude"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("Latitude"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("WorkCode"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("WorkTime"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("LocateNumber"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )
+        )
+        {
+                entry ->
+            MA3_1_1_WorkPoint(
+                navController = navController,
+                Latitude = entry.arguments?.getString("Latitude"),
+                Longitude = entry.arguments?.getString("Longitude"),
+                WorkCode = entry.arguments?.getString("WorkCode"),
+                WorkTime = entry.arguments?.getString("WorkTime"),
+                LocateNumber = entry.arguments?.getString("LocateNumber"),
+            )
+        }
         //維修工單
         composable(route = Screen.MA3_2.route) { entry ->
             MA3_2(navController = navController)

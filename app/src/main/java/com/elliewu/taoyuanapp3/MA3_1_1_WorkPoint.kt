@@ -43,6 +43,7 @@ fun MA3_1_1_WorkPoint(WorkTime:String?="",
                       WorkCode:String?="",
                       Longitude:String?="",
                       Latitude:String?="",
+                      LocateNumber:String?="",
                       navController: NavHostController = rememberNavController()){
     var workContentValue by remember { mutableStateOf("") }
     Column(

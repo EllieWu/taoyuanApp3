@@ -256,7 +256,7 @@ fun MA3_1_1_Bottombtn3(
                             backgroundColor = Color.Transparent
                         ),
                         onClick = {
-                            var fullpath = Screen.MA3_1_1_RepairDotPreview.route + "?longitude=${btn3_longitude}&latitude=${btn3_latitude}&WorkCode=${WorkCode.toString()}&WorkTime=${WorkTime.toString()}"
+                            var fullpath = Screen.MA3_1_1_RepairDotPreview.route + "?Longitude=${btn3_longitude}&Latitude=${btn3_latitude}&WorkCode=${WorkCode.toString()}&WorkTime=${WorkTime.toString()}"
                             navController.navigate(fullpath) })
                     {
                         Icon(

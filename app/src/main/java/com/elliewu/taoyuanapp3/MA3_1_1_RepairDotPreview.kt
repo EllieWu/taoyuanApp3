@@ -42,8 +42,8 @@ fun MA3_1_1_RepairDotPreview(state: MapState,
             fusedLocationProviderClient : FusedLocationProviderClient,
             viewModel: MapViewModel,
             navController: NavHostController = rememberNavController(),
-            longitude:String?,
-            latitude:String?,
+            Longitude:String?,
+            Latitude:String?,
             WorkCode:String?,
             WorkTime:String?
 ) {
@@ -129,8 +129,8 @@ fun MA3_1_1_RepairDotPreview(state: MapState,
             isMyLocationEnabled = state.lastKnownLocation != null,
         )
         var repairLocation = LatLng(25.17403, 121.40338);
-        if(latitude!=null&&longitude!=null){
-            repairLocation = LatLng(latitude.toDouble(),longitude.toDouble()) //Param(緯度,經度) 南北緯 & 東西經 以正負號表示
+        if(Latitude!=null&&Longitude!=null){
+            repairLocation = LatLng(Latitude.toDouble(),Longitude.toDouble()) //Param(緯度,經度) 南北緯 & 東西經 以正負號表示
         }
 
         val cameraPositionState = rememberCameraPositionState {
@@ -142,10 +142,10 @@ fun MA3_1_1_RepairDotPreview(state: MapState,
             properties = mapProperties
         )
         {
-            if(latitude!=null&&longitude!=null){
+            if(Latitude!=null&&Longitude!=null){
                 Marker(
                     icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
-                    state = MarkerState(position = LatLng(latitude.toDouble(),longitude.toDouble())),
+                    state = MarkerState(position = LatLng(Latitude.toDouble(),Longitude.toDouble())),
                     //title = repairTitle
                 ){
 
