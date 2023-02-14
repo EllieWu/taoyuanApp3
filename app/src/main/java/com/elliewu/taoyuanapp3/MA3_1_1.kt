@@ -265,8 +265,12 @@ fun MA3_1_1(
                             snippet = "報修點-${(Index+1)}",
                             onInfoWindowClick = {
                                 GlobalScope.launch(Dispatchers.Main) {
-                                    val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
-                                    navController.navigate(fullpath)
+//                                    val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                                    navController.navigate(fullpath)
+                                    MA3_3_1_ReportCode = item.ReportCode
+                                    MA3_3_NEW1_lastWorkCode = WorkCode.toString()
+                                    MA3_3_NEW1_lastWorkTime = WorkTime.toString()
+                                    navController.navigate(Screen.MA3_3_NEW1.route)
                                 }
                                 Log.d("bluedot",item.ReportCode)
                             }

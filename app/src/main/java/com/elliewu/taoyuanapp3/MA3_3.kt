@@ -98,6 +98,8 @@ fun MA3_3(
                 ),
                 onClick = {
                     navController.navigate(Screen.MA3_1_1_Bottombtn3.route)
+                    MA3_3_NEW1_lastWorkCode=""
+                    MA3_3_NEW1_lastWorkTime=""
                 },
                 modifier = Modifier.padding(end = 20.dp)
             )

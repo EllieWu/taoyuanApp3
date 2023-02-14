@@ -64,7 +64,8 @@ var ReportListData = ReportInfoList(
 )
 
 var MA3_3_NEW1_msggg by mutableStateOf(ReportListData)
-
+var MA3_3_NEW1_lastWorkCode by mutableStateOf("")
+var MA3_3_NEW1_lastWorkTime by mutableStateOf("")
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Preview(showBackground = true)
@@ -104,7 +105,12 @@ fun MA3_3_NEW1(navController: NavHostController = rememberNavController()) {
                     textAlign = TextAlign.End,
                 ),
                 onClick = {
-                    navController.navigate(Screen.MA3_3.route)
+                    if(MA3_3_NEW1_lastWorkCode !="" && MA3_3_NEW1_lastWorkTime != ""){
+                        val fullpath = Screen.MA3_1_1.route + "?WorkCode=${MA3_3_NEW1_lastWorkCode}&WorkTime=${MA3_3_NEW1_lastWorkTime}"
+                        navController.navigate(fullpath)
+                    }
+                    else
+                        navController.navigate(Screen.MA3_3.route)
                 }
             )
             Text(
