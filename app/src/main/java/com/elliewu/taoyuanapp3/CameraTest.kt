@@ -3,13 +3,10 @@ package com.elliewu.taoyuanapp3
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
-<<<<<<< HEAD
-=======
 import android.util.Base64.NO_WRAP
 import android.util.Base64.encodeToString
 import android.util.Log
 import android.widget.Gallery
->>>>>>> Mike-Camera
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
