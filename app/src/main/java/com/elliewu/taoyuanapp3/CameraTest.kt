@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Base64.NO_WRAP
 import android.util.Base64.encodeToString
+import android.util.Log
 import android.widget.Gallery
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -89,10 +90,15 @@ fun Camera() {
     //相機功能
     val context = LocalContext.current
     val file = context.createImageFile()
+    val filePath = file.absolutePath
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
         BuildConfig.APPLICATION_ID + ".provider", file
     )
+
+    if (filePath.contains("storage")) {
+        Log.d("TAG_storage", "This is a storage")
+    }
 
     var capturedImageUri by remember {
         mutableStateOf<Uri>(Uri.EMPTY)
@@ -174,6 +180,20 @@ fun Camera() {
             painter = rememberImagePainter(capturedImageUri),
             contentDescription = null
         )
+
+        val filePathA = file.absolutePath
+
+        val sourceUri: Uri = capturedImageUri // The Uri of the image file to be moved
+        val destinationFolder: String = "/storage/emulated/0/DCIM" // The destination folder where the image file will be moved to
+
+        val sourceFile = File(sourceUri.path)
+        val destinationFile = File(destinationFolder, sourceFile.name)
+
+        sourceFile.copyTo(destinationFile)
+        sourceFile.delete()
+
+
+
     }
 }
 
