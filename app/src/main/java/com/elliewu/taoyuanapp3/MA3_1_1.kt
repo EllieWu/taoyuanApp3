@@ -197,7 +197,7 @@ fun MA3_1_1(
                 }
                 GoogleMap(
                     modifier = Modifier
-                        .height(650.dp)
+                        .height(670.dp)
                         .fillMaxHeight()
                         .zIndex(0f),
                     cameraPositionState = cameraPositionState,

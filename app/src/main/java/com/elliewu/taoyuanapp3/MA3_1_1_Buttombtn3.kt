@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -400,8 +401,8 @@ fun MA3_1_1_Bottombtn3(
                     ) {
                         Icon(
                             modifier = Modifier
-                                .size(20.dp),
-                            imageVector = Icons.Default.Refresh,
+                                .size(25.dp).padding(end = 5.dp),
+                            painter = painterResource(id = R.drawable.camera),
                             contentDescription = "BackIcon",
                             tint = Color.White
                         )
