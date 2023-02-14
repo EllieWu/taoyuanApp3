@@ -367,7 +367,21 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
 //        }
 
         //維修點預覽
-        composable(route = Screen.MA3_3_1_RepairDotPreview.route) { entry ->
+        composable(route = Screen.MA3_3_1_RepairDotPreview.route + "?longitude={longitude}&latitude={latitude}",
+            arguments = listOf(
+                navArgument("longitude"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                },
+                navArgument("latitude"){
+                    type = NavType.StringType
+                    defaultValue = ""
+                    nullable = true
+                }
+            )
+        )
+        { entry ->
             MA3_3_1_RepairDotPreview(
                 navController = navController,
                 latitude = entry.arguments?.getString("latitude"),

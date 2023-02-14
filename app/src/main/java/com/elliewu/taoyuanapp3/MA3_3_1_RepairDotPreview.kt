@@ -77,10 +77,7 @@ fun MA3_3_1_RepairDotPreview(state: MapState,
                 ),
                 onClick = {
                     //navController.navigate(Screen.MA3_2_1.route)
-                    var fullMA3_2_1_path =
-                        Screen.MA3_2_1.route
-                    Log.d("返回", "MA3_2_2: ")
-                    navController.navigate(fullMA3_2_1_path)
+                    navController.navigate(Screen.MA3_3_NEW1.route)
                 },
             )
             Text(

@@ -50,7 +50,6 @@ data class ReportInfoList(
     var ReportContent: String,
     val ReportPhoto: String,
     val Edit: String,
-
     )
 
 var ReportListData = ReportInfoList(
@@ -132,13 +131,13 @@ fun MA3_3_NEW1(navController: NavHostController = rememberNavController()) {
                 .bottomBorder(2.dp, Color(197, 202, 208))
                 .background(Color(236, 243, 253)),
         ) {
-            ReportInfo(MA3_3_NEW1_msggg)
+            ReportInfo(MA3_3_NEW1_msggg,navController)
         }
     }
 }
 
 @Composable
-fun ReportInfo(list: ReportInfoList) {
+fun ReportInfo(list: ReportInfoList,navController:NavHostController = rememberNavController()) {
     Column(modifier = Modifier
         .fillMaxSize()
         .verticalScroll(rememberScrollState())) {
@@ -231,7 +230,10 @@ fun ReportInfo(list: ReportInfoList) {
                     elevation = null,
                     modifier = Modifier.padding(start = 82.dp),
                     contentPadding = PaddingValues(0.dp),
-                    onClick = {}
+                    onClick = {
+                        val fullpath = Screen.MA3_3_1_RepairDotPreview.route + "?longitude=${list.Longitude}&latitude=${list.Latitude}"
+                        navController.navigate(fullpath)
+                    }
                 ){
                     Icon(
                         //modifier = Modifier.padding(start = 82.dp),
@@ -249,13 +251,13 @@ fun ReportInfo(list: ReportInfoList) {
                 }
             }
         }
-        MA3_3_NEW1_UI(list);
+        MA3_3_NEW1_UI(list,navController);
     }
 }
 
 
 @Composable
-fun MA3_3_NEW1_UI(list: ReportInfoList) {
+fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememberNavController()) {
     Log.d("ReportInfoList","$list")
     var titleValue by remember {
         mutableStateOf(list.ReportTitle)
@@ -424,7 +426,32 @@ fun MA3_3_NEW1_UI(list: ReportInfoList) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 5.dp),
-            onClick = {}
+            onClick = {
+                GlobalScope.launch(Dispatchers.Main) {
+                    var RequestJsonObject = JSONObject();
+                    RequestJsonObject.put("Function", "ReportUploadAgain")
+                    RequestJsonObject.put("UserID", Login_UserId)
+                    RequestJsonObject.put("ReportCode", MA3_3_NEW1_msggg.ReportCode)
+                    RequestJsonObject.put("ReportTitle", MA3_3_NEW1_msggg.ReportTitle)
+                    RequestJsonObject.put("ReportContent", MA3_3_NEW1_msggg.ReportContent)
+                    RequestJsonObject.put("ReportPhoto", MA3_3_NEW1_msggg.ReportPhoto)
+                    RequestJsonObject.put("ReportType", "外巡報修")
+                    val responseString = HttpRequestTest(RequestJsonObject)
+                    Log.d("MA3_3_NEW1_Submit",responseString)
+                    if(responseString!="Error"){
+                        var gson = Gson();
+                        var WorkInfoResponse:ReportUploadAgain_Response = gson.fromJson(responseString,ReportUploadAgain_Response::class.java)
+                        if(WorkInfoResponse.Feedback == "TRUE"){
+                            if(MA3_3_NEW1_lastWorkCode !="" && MA3_3_NEW1_lastWorkTime != ""){
+                                val fullpath = Screen.MA3_1_1.route + "?WorkCode=${MA3_3_NEW1_lastWorkCode}&WorkTime=${MA3_3_NEW1_lastWorkTime}"
+                                navController.navigate(fullpath)
+                            }
+                            else
+                                navController.navigate(Screen.MA3_3.route)
+                        }
+                    }
+                }
+            }
         ){
             Text(
                 text = "送出",

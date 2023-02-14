@@ -221,6 +221,7 @@ fun MA3_1_1(
                                 val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
                                 navController.navigate(fullpath)
                                 }
+
                             }
                         ) { marker ->
                             // Implement the custom info window here
