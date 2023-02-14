@@ -2,7 +2,10 @@ package com.elliewu.taoyuanapp3
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.util.Base64.NO_WRAP
 import android.util.Base64.encodeToString
 import android.util.Log
@@ -35,6 +38,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.ImagePainter.State.Empty.painter
 import coil.compose.rememberImagePainter
 import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Base64.getEncoder
 
@@ -182,16 +187,37 @@ fun Camera() {
             contentDescription = null
         )
 
-        val filePathA = file.absolutePath
 
-        val sourceUri: Uri = capturedImageUri // The Uri of the image file to be moved
-        val destinationFolder: String = "/storage/emulated/0/DCIM" // The destination folder where the image file will be moved to
+        val inputStream = LocalContext.current.contentResolver.openInputStream(capturedImageUri)
+        val MinWenBitmap = BitmapFactory.decodeStream(inputStream)
 
-        val sourceFile = File(sourceUri.path)
-        val destinationFile = File(destinationFolder, sourceFile.name)
 
-        sourceFile.copyTo(destinationFile)
-        sourceFile.delete()
+        val bitmap: Bitmap = MinWenBitmap //BitmapFactory.decodeStream(inputStream)
+        val filename = "myImage.jpg"
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "JPEG_" + timeStamp + "_myImage.jpg"
+
+        val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val file = File(dir, imageFileName)
+
+        val fos = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+        fos.flush()
+        fos.close()
+
+
+
+
+//        val filePathA = file.absolutePath
+//
+//        val sourceUri: Uri = capturedImageUri // The Uri of the image file to be moved
+//        val destinationFolder: String = "/storage/emulated/0/DCIM" // The destination folder where the image file will be moved to
+//
+//        val sourceFile = File(sourceUri.path)
+//        val destinationFile = File(destinationFolder, sourceFile.name)
+//
+//        sourceFile.copyTo(destinationFile)
+//        sourceFile.delete()
 
 
 
