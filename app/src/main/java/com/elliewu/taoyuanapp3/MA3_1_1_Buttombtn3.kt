@@ -138,30 +138,54 @@ fun MA3_1_1_Bottombtn3(
                 .background(Color(65, 96, 176)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                modifier = Modifier
-                    .padding(start = 5.dp)
-                    .size(30.dp),
-                imageVector = Icons.Default.KeyboardArrowLeft,
-                contentDescription = "BackIcon",
-                tint = Color.White
-            )
-            ClickableText(
-                text = AnnotatedString("返回"),
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.End,
+
+//            ClickableText(
+//                text = AnnotatedString("返回"),
+//                style = TextStyle(
+//                    color = Color.White,
+//                    fontSize = 20.sp,
+//                    textAlign = TextAlign.End,
+//                ),
+//                onClick = {
+//                    //navController.navigate(Screen.MA3_1_1.route)
+//                    val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode.toString()}&WorkTime=${WorkTime.toString()}"
+//                    if(WorkCode !="" && WorkCode != null && WorkTime!="" && WorkTime != null)
+//                        navController.navigate(MA3_1_1_fullRoutePath)
+//                    else
+//                        navController.navigate(Screen.MA3_3.route)
+//                }
+//            )
+            Button(
+                elevation = null,
+                contentPadding = PaddingValues(0.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Transparent
                 ),
                 onClick = {
-                    //navController.navigate(Screen.MA3_1_1.route)
                     val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode.toString()}&WorkTime=${WorkTime.toString()}"
                     if(WorkCode !="" && WorkCode != null && WorkTime!="" && WorkTime != null)
                         navController.navigate(MA3_1_1_fullRoutePath)
                     else
                         navController.navigate(Screen.MA3_3.route)
                 }
-            )
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .size(30.dp),
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "BackIcon",
+                    tint = Color.White
+                )
+                Text(
+                    text = "返回",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.End,
+                    )
+                )
+            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
