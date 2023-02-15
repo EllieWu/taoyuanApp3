@@ -46,7 +46,7 @@ import android.util.Base64
 
 @Preview
 @Composable
-fun CameraTest(navController: NavHostController = rememberNavController()){
+fun CameraTest(navController: NavHostController = rememberNavController()) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,17 +62,14 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
             verticalAlignment = Alignment.CenterVertically,
         ) {
             ClickableText(
-                text = AnnotatedString("返回"),
-                style = TextStyle(
+                text = AnnotatedString("返回"), style = TextStyle(
                     color = Color.White,
                     fontSize = 20.sp,
                     textAlign = TextAlign.End,
                     textDecoration = TextDecoration.Underline,
-                ),
-                onClick = {
+                ), onClick = {
                     navController.navigate(Screen.MA3_1.route)
-                },
-                modifier = Modifier.padding(start = 20.dp)
+                }, modifier = Modifier.padding(start = 20.dp)
             )
             Text(
                 modifier = Modifier
@@ -91,33 +88,27 @@ fun CameraTest(navController: NavHostController = rememberNavController()){
     }
 }
 
+//相機功能
 @Composable
 fun Camera() {
-    //相機功能
     val context = LocalContext.current
     val file = context.createImageFile()
-    val filePath = file.absolutePath
     val uri = FileProvider.getUriForFile(
-        Objects.requireNonNull(context),
-        BuildConfig.APPLICATION_ID + ".provider", file
+        Objects.requireNonNull(context), BuildConfig.APPLICATION_ID + ".provider", file
     )
 
-    if (filePath.contains("storage")) {
-        Log.d("TAG_storage", "This is a storage")
-    }
-
-    var capturedImageUri by remember {
-        mutableStateOf<Uri>(Uri.EMPTY)
-    }
+    var capturedImageUri by remember { mutableStateOf(Uri.EMPTY) }
+    var cameraCapturedImageUri by remember { mutableStateOf(Uri.EMPTY) }
 
     val cameraLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
-            capturedImageUri = uri
+        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                cameraCapturedImageUri = uri
+            }
         }
 
     val galleryLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
-                uri ->
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             if (uri != null) {
                 capturedImageUri = uri
             }
@@ -134,99 +125,87 @@ fun Camera() {
         }
     }
 
-    val imagepersissionLauncher = rememberLauncherForActivityResult(
+    val imagePermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ){
-        if(it) {
+    ) {
+        if (it) {
             Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
             galleryLauncher.launch("image/*")
-        }else {
+        } else {
             Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
         }
     }
 
-
     Row(
     ) {
-        Button(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            onClick = {
-                val permissionCheckResult =
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                    cameraLauncher.launch(uri)
-                } else {
-                    // Request a permission
-                    permissionLauncher.launch(Manifest.permission.CAMERA)
-                }
-            }) {
+        Button(modifier = Modifier.padding(horizontal = 8.dp), onClick = {
+            val permissionCheckResult =
+                ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                cameraLauncher.launch(uri)
+            } else {
+                permissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        }) {
             Text(text = "拍照")
         }
-        //相簿功能
-        Button(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            onClick = {
-                val permissionCheckResult =
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES)
-                if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                    galleryLauncher.launch("image/*")
-                }else {
-                    imagepersissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-                }
-            }) {
+        Button(modifier = Modifier.padding(horizontal = 8.dp), onClick = {
+            val permissionCheckResult = ContextCompat.checkSelfPermission(
+                context, Manifest.permission.READ_MEDIA_IMAGES
+            )
+            if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
+                galleryLauncher.launch("image/*")
+            } else {
+                imagePermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        }) {
             Text(text = "相簿")
         }
     }
 
-    if (capturedImageUri.path?.isNotEmpty() == true) {
-        Image(
-            modifier = Modifier
-                .padding(16.dp, 8.dp)
-                .background(Color.Yellow),
-            painter = rememberImagePainter(capturedImageUri),
-            contentDescription = null
-        )
+    if(cameraCapturedImageUri != null){
+        capturedImageUri = cameraCapturedImageUri
+    }
+
+    if (capturedImageUri?.path != null) {
+        if (capturedImageUri.path?.isNotEmpty() == true) {
+            Image(
+                modifier = Modifier
+                    .padding(16.dp, 8.dp)
+                    .background(Color.Yellow),
+                painter = rememberImagePainter(capturedImageUri),
+                contentDescription = null
+            )
+
+            if (cameraCapturedImageUri != null) {
 
 
-        val inputStream = LocalContext.current.contentResolver.openInputStream(capturedImageUri)
-        val MinWenBitmap = BitmapFactory.decodeStream(inputStream)
+                val inputStream =
+                    LocalContext.current.contentResolver.openInputStream(cameraCapturedImageUri)
+                val MinWenBitmap = BitmapFactory.decodeStream(inputStream)
+                val bitmap: Bitmap = MinWenBitmap //BitmapFactory.decodeStream(inputStream)
+                val imageFileName =
+                    "JPEG_" + SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) + "_myImage.jpg"
+                val dir =
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                val file = File(dir, imageFileName)
+                val fos = FileOutputStream(file)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                fos.flush()
+                fos.close()
 
+                cameraCapturedImageUri = null
 
-        val bitmap: Bitmap = MinWenBitmap //BitmapFactory.decodeStream(inputStream)
-        val filename = "myImage.jpg"
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName = "JPEG_" + timeStamp + "_myImage.jpg"
+//        val byteArray = byteArrayOf(0x00, 0x01, 0x02, 0x03)
+//        val base64Strina = Base64.encodeToString(byteArray, Base64.DEFAULT)
+//        val base64String = bitmapToBase64(MinWenBitmap)
 
-        val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-        val file = File(dir, imageFileName)
-
-        val fos = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-        fos.flush()
-        fos.close()
-
-
-        val byteArray = byteArrayOf(0x00, 0x01, 0x02, 0x03)
-        val base64Strina = Base64.encodeToString(byteArray, Base64.DEFAULT)
-
-        val base64String = bitmapToBase64(MinWenBitmap)
-
-        Log.i("MyTag", "This is an informational message.")
-//        val filePathA = file.absolutePath
-//
-//        val sourceUri: Uri = capturedImageUri // The Uri of the image file to be moved
-//        val destinationFolder: String = "/storage/emulated/0/DCIM" // The destination folder where the image file will be moved to
-//
-//        val sourceFile = File(sourceUri.path)
-//        val destinationFile = File(destinationFolder, sourceFile.name)
-//
-//        sourceFile.copyTo(destinationFile)
-//        sourceFile.delete()
-
-
-
+                Log.i("MyTag", "This is an informational message.")
+            }
+        }
     }
 }
+
 
 @Composable
 fun bitmapToBase64(bitmap: Bitmap): String {
@@ -235,6 +214,7 @@ fun bitmapToBase64(bitmap: Bitmap): String {
     val byteArray = outputStream.toByteArray()
     return Base64.encodeToString(byteArray, Base64.DEFAULT)
 }
+
 fun Context.createImageFile(): File {
     // Create an image file name
     val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
