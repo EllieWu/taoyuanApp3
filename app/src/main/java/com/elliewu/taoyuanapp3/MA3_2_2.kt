@@ -8,6 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -60,27 +62,47 @@ fun MA3_2_2(state: MapState,
                 .background(Color(62, 83, 140)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                modifier = Modifier
-                    .padding(start = 5.dp)
-                    .size(30.dp),
-                imageVector = Icons.Default.KeyboardArrowLeft,
-                contentDescription = "BackIcon",
-                tint = Color.White
-            )
-            ClickableText(
-                text = AnnotatedString("返回"),
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.End,
+//            ClickableText(
+//                text = AnnotatedString("返回"),
+//                style = TextStyle(
+//                    color = Color.White,
+//                    fontSize = 20.sp,
+//                    textAlign = TextAlign.End,
+//                ),
+//                onClick = {
+//                    var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_RepairCode}&State=${MA3_2_1_State}"
+//                    Log.d("返回", "MA3_2_2: ")
+//                    navController.navigate(fullMA3_2_1_path)
+//                },
+//            )
+            Button(
+                elevation = null,
+                contentPadding = PaddingValues(0.dp),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Transparent
                 ),
                 onClick = {
                     var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_RepairCode}&State=${MA3_2_1_State}"
-                    Log.d("返回", "MA3_2_2: ")
                     navController.navigate(fullMA3_2_1_path)
-                },
-            )
+                }
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .padding(start = 5.dp)
+                        .size(30.dp),
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "BackIcon",
+                    tint = Color.White
+                )
+                Text(
+                    text = "返回",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.End,
+                    )
+                )
+            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
