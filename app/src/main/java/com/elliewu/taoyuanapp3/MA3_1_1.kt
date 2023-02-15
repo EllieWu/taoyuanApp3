@@ -196,9 +196,10 @@ fun MA3_1_1(
                 val cameraPositionState = rememberCameraPositionState {
                     position = CameraPosition.fromLatLngZoom(taiwan, 8f) //zoom 放大參數 數字越則越放大
                 }
+                var rwdHeight = (ScreenHeight * 0.83).dp
                 GoogleMap(
                     modifier = Modifier
-                        .height(670.dp)
+                        .height(rwdHeight)
                         .fillMaxHeight()
                         .zIndex(0f),
                     cameraPositionState = cameraPositionState,
