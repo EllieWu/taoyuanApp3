@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,12 +26,15 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
+var ScreenHeight by mutableStateOf(800)
+var ScreenWidth by mutableStateOf(392)
 //TODO:未來請將預設UserId設為空字串
 var Login_UserId by mutableStateOf("F123332212");
 @Preview(device= Devices.PIXEL_C)
 @Preview(device= Devices.PIXEL_3A)
 @Composable
 fun login(navController: NavHostController = rememberNavController(), onClick: () -> Unit = {}){
+    PostView();
     Log.d("Login","APP仔入中")
     val coroutineScope = rememberCoroutineScope()
     Box(modifier = Modifier
@@ -158,6 +162,20 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
         }
     }
 }
+
+@Composable
+fun PostView() {
+    val configuration = LocalConfiguration.current
+
+    val screenHeight = configuration.screenHeightDp
+    val screenWidth = configuration.screenWidthDp
+    ScreenHeight = screenHeight
+    ScreenWidth = screenWidth
+    Log.d("screenHeight",ScreenHeight.toString())
+    Log.d("screenWidth",ScreenWidth.toString())
+
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewLogin() {

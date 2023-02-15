@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
@@ -46,7 +47,7 @@ var buttonBtnData2 = listOf(
 
 @Composable
 fun BottomSpace2(navController : NavHostController = rememberNavController(),WorkTime:String?="",WorkCode:String?="",Longitude:String?="",Latitude:String?="") {
-    Box(modifier = Modifier.fillMaxSize(), Alignment.BottomCenter) {
+    Box(modifier = Modifier.fillMaxSize().zIndex(1f), Alignment.BottomCenter) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
