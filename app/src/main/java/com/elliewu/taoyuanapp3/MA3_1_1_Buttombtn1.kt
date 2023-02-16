@@ -70,6 +70,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+
+
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
@@ -292,14 +294,20 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                     },
 
                     title = {
-                        Text(text = "選擇拍照或從相簿選取")
+                        Text(
+                            text = "選擇拍照或從相簿選取")
                     },
                     buttons = {
                         Column(
                             modifier = Modifier.padding(10.dp),
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Button(modifier = Modifier.padding(horizontal = 8.dp), onClick = {
+                            Button(
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .fillMaxWidth(),
+                                onClick = {
                                 val permissionCheckResult =
                                     ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
                                 if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
@@ -308,9 +316,19 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                                     permissionLauncher.launch(Manifest.permission.CAMERA)
                                 }
                             }) {
-                                Text(text = "拍照")
+                                Text(
+                                    text = "拍照",
+                                    color = Color.White,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
-                            Button(modifier = Modifier.padding(horizontal = 8.dp), onClick = {
+                            Button(
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
+                                modifier = Modifier
+                                    .padding(horizontal = 8.dp)
+                                    .fillMaxWidth(),
+                                onClick = {
                                 val permissionCheckResult = ContextCompat.checkSelfPermission(
                                     context, Manifest.permission.READ_MEDIA_IMAGES
                                 )
@@ -320,11 +338,20 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                                     imagePermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
                                 }
                             }) {
-                                Text(text = "相簿")
+                                Text(
+                                    text = "相簿",
+                                    color = Color.White,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                         }
                     },
                 )
+            }
+
+            if(cameraCapturedImageUri != null){
+                capturedImageUri = cameraCapturedImageUri
             }
 
             if (capturedImageUri?.path != null) {
@@ -417,6 +444,7 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
 //                            contentDescription = "contentDescription"
 //                        )
 //                    }
+
                 }
 
             }
@@ -491,4 +519,5 @@ fun Context.createImageFile(): File {
     )
     return image
 }
+
 
