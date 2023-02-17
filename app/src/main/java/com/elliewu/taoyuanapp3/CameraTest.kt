@@ -166,9 +166,10 @@ fun Camera() {
         }
     }
 
-    if(cameraCapturedImageUri != null){
-        capturedImageUri = cameraCapturedImageUri
-    }
+//    if(cameraCapturedImageUri != null){
+//        //capturedImageUri = cameraCapturedImageUri
+//        cameraCapturedImageUri = capturedImageUri
+//    }
 
     if (capturedImageUri?.path != null) {
         if (capturedImageUri.path?.isNotEmpty() == true) {
@@ -229,6 +230,53 @@ fun Camera() {
 
                 cameraCapturedImageUri = null
                 Log.i("MyTag", "This is an informational message.")
+            }
+        }
+    }
+    if (cameraCapturedImageUri?.path != null) {
+        if (cameraCapturedImageUri.path?.isNotEmpty() == true) {
+            Image(
+                modifier = Modifier
+                    .padding(16.dp, 8.dp)
+                    .background(Color.Yellow),
+                painter = rememberImagePainter(cameraCapturedImageUri),
+                contentDescription = null
+            )
+
+            Row(
+            ) {
+                Button(modifier = Modifier.padding(horizontal = 8.dp), onClick = {
+
+                    val base64StringOK = imageBase64
+                    val pathOK = fileExistsImageUriPath
+                    if (pathOK != null) {
+                        val fileOK = File(pathOK)
+                        if (fileOK.exists()) {
+                            val base64String = fileToBase64(fileOK)
+                            CurrentPhoto = base64String
+                        }
+                    }
+
+                }) {
+                    Text(text = "Send")
+                }
+            }
+
+            imageBase64 = null
+            fileExistsImageUriPath = null
+            val contextOK: Context = LocalContext.current
+            val uriOK: Uri = capturedImageUri
+            val pathOK = getPathFromUri(contextOK, uriOK)
+            if (pathOK != null) {
+                fileExistsImageUriPath = pathOK
+                val fileOK = File(pathOK)
+                if (fileOK.exists()) {
+                    imageBase64 = fileToBase64(fileOK)
+                    if(imageBase64 == null)
+                        CurrentPhoto = ""
+                    else
+                        CurrentPhoto = imageBase64.toString()
+                }
             }
         }
     }
