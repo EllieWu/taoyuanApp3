@@ -23,7 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 
 @Composable
-fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocationProviderClient) {
+fun Navigation(onBackPressed:()->Unit = {},viewModel:MapViewModel,fusedLocationProviderClient: FusedLocationProviderClient) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.login.route) {
         composable(route = Screen.login.route) {
@@ -406,7 +406,7 @@ fun Navigation(viewModel:MapViewModel,fusedLocationProviderClient: FusedLocation
 
         //相機
         composable(route = Screen.CameraTest.route) { entry ->
-            CameraTest(navController = navController)
+            CameraTest(onBackPressed,navController = navController)
         }
 //        composable(
 //            route = Screen.MA3_2_1.route + "/{RepairCode}",

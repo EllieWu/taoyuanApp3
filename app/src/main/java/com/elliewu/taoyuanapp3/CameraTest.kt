@@ -46,7 +46,7 @@ import java.io.FileInputStream
 var CurrentPhoto by mutableStateOf("")
 @Preview
 @Composable
-fun CameraTest(navController: NavHostController = rememberNavController()) {
+fun CameraTest(onBackPressed:()->Unit = {},navController: NavHostController = rememberNavController()) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,13 +84,13 @@ fun CameraTest(navController: NavHostController = rememberNavController()) {
                 color = Color(255, 255, 255),
             )
         }
-        Camera()
+        Camera(onBackPressed)
     }
 }
 
 //相機功能
 @Composable
-fun Camera() {
+fun Camera(onBackPressed:()->Unit = {}) {
     val context = LocalContext.current
     val file = context.createImageFile()
     val uri = FileProvider.getUriForFile(
@@ -191,6 +191,7 @@ fun Camera() {
                         if (fileOK.exists()) {
                             val base64String = fileToBase64(fileOK)
                             CurrentPhoto = base64String
+                            onBackPressed();
                         }
                     }
 

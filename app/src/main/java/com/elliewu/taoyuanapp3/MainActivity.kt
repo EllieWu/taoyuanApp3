@@ -113,7 +113,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             TaoyuanApp3Theme {
                 //DefaultPreview();
-                Navigation(viewModel,fusedLocationProviderClient)  }
+                Navigation(
+                    onBackPressed = {
+                        onBackPressedDispatcher.onBackPressed()
+                    },viewModel,fusedLocationProviderClient)
+            }
         }
     }
 }
