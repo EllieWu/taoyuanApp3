@@ -43,10 +43,14 @@ import java.util.Base64.getEncoder
 import android.util.Base64
 import android.provider.MediaStore
 import java.io.FileInputStream
+
 var CurrentPhoto by mutableStateOf("")
+
 @Preview
 @Composable
-fun CameraTest(onBackPressed:()->Unit = {},navController: NavHostController = rememberNavController()) {
+fun CameraTest(
+    onBackPressed: () -> Unit = {}, navController: NavHostController = rememberNavController()
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -90,7 +94,7 @@ fun CameraTest(onBackPressed:()->Unit = {},navController: NavHostController = re
 
 //相機功能
 @Composable
-fun Camera(onBackPressed:()->Unit = {}) {
+fun Camera(onBackPressed: () -> Unit = {}) {
     val context = LocalContext.current
     val file = context.createImageFile()
     val uri = FileProvider.getUriForFile(
@@ -101,7 +105,7 @@ fun Camera(onBackPressed:()->Unit = {}) {
     var cameraCapturedImageUri by remember { mutableStateOf(Uri.EMPTY) }
 
     var imageBase64 by remember { mutableStateOf<String?>(null) }
-    var fileExistsImageUriPath  by remember { mutableStateOf<String?>(null) }
+    var fileExistsImageUriPath by remember { mutableStateOf<String?>(null) }
 
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
@@ -166,9 +170,7 @@ fun Camera(onBackPressed:()->Unit = {}) {
         }
     }
 
-    if(cameraCapturedImageUri != null){
-        capturedImageUri = cameraCapturedImageUri
-    }
+
 
     if (capturedImageUri?.path != null) {
         if (capturedImageUri.path?.isNotEmpty() == true) {
@@ -191,7 +193,7 @@ fun Camera(onBackPressed:()->Unit = {}) {
                         if (fileOK.exists()) {
                             val base64String = fileToBase64(fileOK)
                             CurrentPhoto = base64String
-                            onBackPressed();
+                            onBackPressed()
                         }
                     }
 
@@ -213,9 +215,9 @@ fun Camera(onBackPressed:()->Unit = {}) {
                 }
             }
 
-            if (cameraCapturedImageUri != null) {
+            if (capturedImageUri != null) {
                 val inputStream =
-                    LocalContext.current.contentResolver.openInputStream(cameraCapturedImageUri)
+                    LocalContext.current.contentResolver.openInputStream(capturedImageUri)
                 val MinWenBitmap = BitmapFactory.decodeStream(inputStream)
                 val bitmap: Bitmap = MinWenBitmap //BitmapFactory.decodeStream(inputStream)
                 val imageFileName =
@@ -231,6 +233,53 @@ fun Camera(onBackPressed:()->Unit = {}) {
                 cameraCapturedImageUri = null
                 Log.i("MyTag", "This is an informational message.")
             }
+        }
+    }
+    if (cameraCapturedImageUri?.path != null) {
+        if (cameraCapturedImageUri.path?.isNotEmpty() == true) {
+            Image(
+                modifier = Modifier
+                    .padding(16.dp, 8.dp)
+                    .background(Color.Yellow),
+                painter = rememberImagePainter(cameraCapturedImageUri),
+                contentDescription = null
+            )
+
+            Row(
+            ) {
+                Button(modifier = Modifier.padding(horizontal = 8.dp), onClick = {
+
+                    val base64StringOK = imageBase64
+                    val pathOK = fileExistsImageUriPath
+                    if (pathOK != null) {
+                        val fileOK = File(pathOK)
+                        if (fileOK.exists()) {
+                            val base64String = fileToBase64(fileOK)
+                            CurrentPhoto = base64String
+                            onBackPressed()
+                        }
+                    }
+
+                }) {
+                    Text(text = "Send")
+                }
+            }
+
+            imageBase64 = null
+            fileExistsImageUriPath = null
+            val contextOK: Context = LocalContext.current
+            val uriOK: Uri = cameraCapturedImageUri
+            val pathOK = getPathFromUri(contextOK, uriOK)
+            if (pathOK != null) {
+                fileExistsImageUriPath = pathOK
+                val fileOK = File(pathOK)
+                if (fileOK.exists()) {
+                    imageBase64 = fileToBase64(fileOK)
+                    val base64String = fileToBase64(fileOK)
+                    CurrentPhoto = base64String
+                }
+            }
+            capturedImageUri = null;
         }
     }
 }

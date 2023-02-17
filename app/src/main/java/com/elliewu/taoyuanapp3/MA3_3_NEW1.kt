@@ -48,7 +48,7 @@ data class ReportInfoList(
     val Latitude: String,
     var ReportTitle: String,
     var ReportContent: String,
-    val ReportPhoto: String,
+    var ReportPhoto: String,
     val Edit: String,
     )
 
@@ -373,7 +373,9 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(170,170,170)),
             shape = RoundedCornerShape(50),
             elevation = null,
-            onClick = {},
+            onClick = {
+                      navController.navigate(Screen.CameraTest.route)
+            },
         )
         {
             Row(verticalAlignment = Alignment.CenterVertically,
@@ -403,6 +405,12 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
             .fillMaxWidth()
             .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp))
     {
+        if(CurrentPhoto != "")
+        {
+            list.ReportPhoto = CurrentPhoto
+            CurrentPhoto = ""
+        }
+
         val imageBytes = Base64.decode(list.ReportPhoto, 0)
         val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         if(image != null)
