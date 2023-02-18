@@ -81,10 +81,10 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                        Latitude:String?="",
                        navController: NavHostController = rememberNavController()){
     var reportContentValue by remember { mutableStateOf("") }
-    Log.d("WorkTime",WorkTime.toString())
-    Log.d("WorkCode",WorkCode.toString())
-    Log.d("Longitude",Longitude.toString())
-    Log.d("Latitude",Latitude.toString())
+//    Log.d("WorkTime",WorkTime.toString())
+//    Log.d("WorkCode",WorkCode.toString())
+//    Log.d("Longitude",Longitude.toString())
+//    Log.d("Latitude",Latitude.toString())
 
     Column(
         modifier = Modifier
@@ -383,7 +383,7 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
 
                         cameraCapturedImageUri = null
 
-                        Log.i("MyTag", "This is an informational message.")
+//                        Log.i("MyTag", "This is an informational message.")
                     }
                 }
             }

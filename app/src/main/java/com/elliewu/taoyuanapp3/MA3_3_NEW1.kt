@@ -107,6 +107,7 @@ fun MA3_3_NEW1(navController: NavHostController = rememberNavController()) {
                     if(MA3_3_NEW1_lastWorkCode !="" && MA3_3_NEW1_lastWorkTime != ""){
                         val fullpath = Screen.MA3_1_1.route + "?WorkCode=${MA3_3_NEW1_lastWorkCode}&WorkTime=${MA3_3_NEW1_lastWorkTime}"
                         navController.navigate(fullpath)
+                        CurrentPhoto = ""
                     }
                     else
                         navController.navigate(Screen.MA3_3.route)
@@ -258,7 +259,7 @@ fun ReportInfo(list: ReportInfoList,navController:NavHostController = rememberNa
 
 @Composable
 fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememberNavController()) {
-    Log.d("ReportInfoList","$list")
+    //Log.d("ReportInfoList","$list")
     var titleValue by remember {
         mutableStateOf(list.ReportTitle)
     }
@@ -268,8 +269,8 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
     }
     titleValue = list.ReportTitle
     contentValue = list.ReportContent
-    Log.d("titleValue",titleValue);
-    Log.d("contentValue",contentValue);
+//    Log.d("titleValue",titleValue);
+//    Log.d("contentValue",contentValue);
 //    var titleValue = list.ReportTitle
 //    var contentValue = list.ReportContent
     Row(
@@ -405,13 +406,11 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
             .fillMaxWidth()
             .padding(top = 10.dp, bottom = 10.dp, start = 20.dp, end = 20.dp))
     {
+        var imageBytes = Base64.decode(list.ReportPhoto, 0)
         if(CurrentPhoto != "")
         {
-            list.ReportPhoto = CurrentPhoto
-            CurrentPhoto = ""
+            imageBytes = Base64.decode(CurrentPhoto, 0)
         }
-
-        val imageBytes = Base64.decode(list.ReportPhoto, 0)
         val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         if(image != null)
         {
@@ -442,7 +441,10 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
                     RequestJsonObject.put("ReportCode", MA3_3_NEW1_msggg.ReportCode)
                     RequestJsonObject.put("ReportTitle", MA3_3_NEW1_msggg.ReportTitle)
                     RequestJsonObject.put("ReportContent", MA3_3_NEW1_msggg.ReportContent)
-                    RequestJsonObject.put("ReportPhoto", MA3_3_NEW1_msggg.ReportPhoto)
+                    if(CurrentPhoto != "")
+                        RequestJsonObject.put("ReportPhoto", CurrentPhoto)
+                    else
+                        RequestJsonObject.put("ReportPhoto", MA3_3_NEW1_msggg.ReportPhoto)
                     RequestJsonObject.put("ReportType", "外巡報修")
                     val responseString = HttpRequestTest(RequestJsonObject)
                     Log.d("MA3_3_NEW1_Submit",responseString)
@@ -453,6 +455,7 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
                             if(MA3_3_NEW1_lastWorkCode !="" && MA3_3_NEW1_lastWorkTime != ""){
                                 val fullpath = Screen.MA3_1_1.route + "?WorkCode=${MA3_3_NEW1_lastWorkCode}&WorkTime=${MA3_3_NEW1_lastWorkTime}"
                                 navController.navigate(fullpath)
+                                CurrentPhoto = ""
                             }
                             else
                                 navController.navigate(Screen.MA3_3.route)
@@ -485,7 +488,7 @@ fun MA3_3_NEW1_MakeList( ReportCode:String){
         RequestJsonObject.put("ReportCode", ReportCode)
         RequestJsonObject.put("ReportType", "外巡報修")
         val responseString = HttpRequestTest(RequestJsonObject)
-        Log.d("MA3_3_NEW1",responseString)
+//        Log.d("MA3_3_NEW1",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:ReportContent_Response = gson.fromJson(responseString,ReportContent_Response::class.java)
@@ -502,9 +505,9 @@ fun MA3_3_NEW1_MakeList( ReportCode:String){
                         outsiderepair.ReportPhoto.toString(),
                         outsiderepair.Edit.toString()
                     )
-                    Log.d("ReportTitle",outsiderepair.ReportTitle.toString())
-                    Log.d("ReportContent",outsiderepair.ReportContent.toString())
-                    Log.d("ReportPhoto",outsiderepair.ReportPhoto.toString())
+//                    Log.d("ReportTitle",outsiderepair.ReportTitle.toString())
+//                    Log.d("ReportContent",outsiderepair.ReportContent.toString())
+//                    Log.d("ReportPhoto",outsiderepair.ReportPhoto.toString())
                 }
             }
             MA3_3_NEW1_msggg = workListDatas
