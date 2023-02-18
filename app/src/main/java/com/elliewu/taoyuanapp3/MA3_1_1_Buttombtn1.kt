@@ -381,48 +381,54 @@ fun Context.createImageFile(): File {
 
 @Composable
 fun CameraTest_Jeremy(context:Context){
-    val file = context.createImageFile()
-    val uri = FileProvider.getUriForFile(
-        Objects.requireNonNull(context), BuildConfig.APPLICATION_ID + ".provider", file
-    )
-
-
-    val cameraLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) {
-                cameraCapturedImageUri = uri
-            }
-        }
-
-    val galleryLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            if (uri != null) {
-                capturedImageUri = uri
-            }
-        }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) {
-        if (it) {
-            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
-            cameraLauncher.launch(uri)
-        } else {
-            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    val imagePermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) {
-        if (it) {
-            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
-            galleryLauncher.launch("image/*")
-        } else {
-            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
-        }
-    }
     if(AlertDialogState){
+        val file = context.createImageFile()
+        val uri = FileProvider.getUriForFile(
+            Objects.requireNonNull(context), BuildConfig.APPLICATION_ID + ".provider", file
+        )
+
+
+        val cameraLauncher =
+            rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                if (success) {
+                    Log.d("pathOK","拍照成功")
+                    Log.d("pathOK",uri?.path.toString())
+                    cameraCapturedImageUri = uri
+                    Log.d("pathOK",cameraCapturedImageUri?.path.toString())
+                    AlertDialogState= false
+                }
+            }
+
+        val galleryLauncher =
+            rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+                if (uri != null) {
+                    Log.d("pathOK","照片取得成功")
+                    capturedImageUri = uri
+                    AlertDialogState = false
+                }
+            }
+
+        val permissionLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
+            if (it) {
+                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+                cameraLauncher.launch(uri)
+            } else {
+                Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val imagePermissionLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
+            if (it) {
+                Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+                galleryLauncher.launch("image/*")
+            } else {
+                Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
         AlertDialog(
             onDismissRequest = {
                 AlertDialogState = false
@@ -450,7 +456,7 @@ fun CameraTest_Jeremy(context:Context){
                             } else {
                                 permissionLauncher.launch(Manifest.permission.CAMERA)
                             }
-                            AlertDialogState = false
+
                         }) {
                         Text(
                             text = "拍照",
@@ -473,7 +479,6 @@ fun CameraTest_Jeremy(context:Context){
                             } else {
                                 imagePermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
                             }
-                            AlertDialogState = false
                         }) {
                         Text(
                             text = "相簿",
@@ -486,7 +491,8 @@ fun CameraTest_Jeremy(context:Context){
             },
         )
     }
-    if (cameraCapturedImageUri?.path != null) {
+    //region TEST
+    if (cameraCapturedImageUri?.path != null && cameraCapturedImageUri?.path != "") {
         Log.d("cameraCapturedImageUri",cameraCapturedImageUri?.path.toString())
         if (cameraCapturedImageUri.path?.isNotEmpty() == true) {
             imageBase64 = null
@@ -507,22 +513,24 @@ fun CameraTest_Jeremy(context:Context){
                 }
                 val inputStream = context.contentResolver.openInputStream(cameraCapturedImageUri)
                 val MinWenBitmap = BitmapFactory.decodeStream(inputStream)
-                val bitmap: Bitmap = MinWenBitmap //BitmapFactory.decodeStream(inputStream)
-                val imageFileName =
-                    "JPEG_" + SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) + "_myImage.jpg"
-                val dir =
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera")
-                val file = File(dir, imageFileName)
-                val fos = FileOutputStream(file)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-                fos.flush()
-                fos.close()
-                capturedImageUri = null
+                if(MinWenBitmap !=null){
+                    val bitmap: Bitmap = MinWenBitmap //BitmapFactory.decodeStream(inputStream)
+                    val imageFileName =
+                        "JPEG_" + SimpleDateFormat("yyyyMMdd_HHmmss").format(Date()) + "_myImage.jpg"
+                    val dir =
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera")
+                    val file = File(dir, imageFileName)
+                    val fos = FileOutputStream(file)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                    fos.flush()
+                    fos.close()
+                    capturedImageUri = null
+                    cameraCapturedImageUri = null;
+                }
             }
         }
-        cameraCapturedImageUri = null;
     }
-    if (capturedImageUri?.path != null) {
+    if (capturedImageUri?.path != null && capturedImageUri?.path != "") {
         imageBase64 = null
         fileExistsImageUriPath = null
         val contextOK: Context = context
@@ -540,4 +548,5 @@ fun CameraTest_Jeremy(context:Context){
         }
         cameraCapturedImageUri = null;
     }
+    //endregion
 }
