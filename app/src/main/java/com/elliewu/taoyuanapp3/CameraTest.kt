@@ -1,12 +1,15 @@
 package com.elliewu.taoyuanapp3
 
 import android.Manifest
+import android.R
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,15 +37,12 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
-import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.Base64.getEncoder
-import android.util.Base64
-import android.provider.MediaStore
-import java.io.FileInputStream
+
 
 var CurrentPhoto by mutableStateOf("")
 

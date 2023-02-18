@@ -68,8 +68,13 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.Base64.getEncoder
 
+var capturedImageUri by mutableStateOf(Uri.EMPTY)
+var cameraCapturedImageUri by mutableStateOf(Uri.EMPTY)
 
+var imageBase64 by mutableStateOf<String?>(null)
+var fileExistsImageUriPath by mutableStateOf<String?>(null)
 
 var AlertDialogState by mutableStateOf(false);
 @Preview(device = Devices.PIXEL_C)
@@ -306,55 +311,59 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                 }
 
             }
+            Row(
+                //verticalAlignment = Alignment.Bottom,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 10.dp, bottom = 10.dp, start = 80.dp, end = 80.dp)
+            )
+            {
+                Button(
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
+                    elevation = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp),
+                    onClick = {
+                        GlobalScope.launch(Dispatchers.IO) {
+                            var RequestJsonObject = JSONObject();
+                            RequestJsonObject.put("Function", "LocateFormUpload")
+                            RequestJsonObject.put("UserID", Login_UserId)
+                            RequestJsonObject.put("WorkTime", WorkTime)
+                            RequestJsonObject.put("WorkCode", WorkCode)
+                            RequestJsonObject.put("Longitude", Longitude)
+                            RequestJsonObject.put("Latitude", Latitude)
+                            RequestJsonObject.put("InputContent", reportContentValue)
+                            RequestJsonObject.put("ImagePhoto", CurrentPhoto)
+                            val responseString = HttpRequestTest(RequestJsonObject)
+                            Log.d("MA3_1_1_Buttombtn1",responseString)
+                            if(responseString!="Error"){
+                                var gson = Gson();
+                                var Response:LocateFormUpload_Response = gson.fromJson(responseString,LocateFormUpload_Response::class.java)
+                                if(Response.Feedback == "TRUE"){
+                                    GlobalScope.launch(Dispatchers.Main) {
+                                        //TODO:跳轉回上頁
+                                        val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                                        navController.navigate(MA3_1_1_fullRoutePath)
+                                        CurrentPhoto=""
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ) {
+                    Text(
+                        text = "送出",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.White
+                    )
+                }
+            }
         }
 
     }
-    Row(
-        verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 10.dp, bottom = 10.dp, start = 80.dp, end = 80.dp)
-    )
-    {
-        Button(
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
-            elevation = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp),
-            onClick = {
-                GlobalScope.launch(Dispatchers.Main) {
-                    var RequestJsonObject = JSONObject();
-                    RequestJsonObject.put("Function", "LocateFormUpload")
-                    RequestJsonObject.put("UserID", Login_UserId)
-                    RequestJsonObject.put("WorkTime", WorkTime)
-                    RequestJsonObject.put("WorkCode", WorkCode)
-                    RequestJsonObject.put("Longitude", Longitude)
-                    RequestJsonObject.put("Latitude", Latitude)
-                    RequestJsonObject.put("InputContent", reportContentValue)
-                    RequestJsonObject.put("ImagePhoto", CurrentPhoto)
-                    val responseString = HttpRequestTest(RequestJsonObject)
-                    Log.d("MA3_1_1_Buttombtn1",responseString)
-                    if(responseString!="Error"){
-                        var gson = Gson();
-                        var Response:LocateFormUpload_Response = gson.fromJson(responseString,LocateFormUpload_Response::class.java)
-                        if(Response.Feedback == "TRUE"){
-                            //TODO:跳轉回上頁
-                            val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
-                            navController.navigate(MA3_1_1_fullRoutePath)
-                        }
-                    }
-                }
-            }
-        ) {
-            Text(
-                text = "送出",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = Color.White
-            )
-        }
-    }
+
 }
 
 
@@ -377,11 +386,7 @@ fun CameraTest_Jeremy(context:Context){
         Objects.requireNonNull(context), BuildConfig.APPLICATION_ID + ".provider", file
     )
 
-    var capturedImageUri by remember { mutableStateOf(Uri.EMPTY) }
-    var cameraCapturedImageUri by remember { mutableStateOf(Uri.EMPTY) }
 
-    var imageBase64 by remember { mutableStateOf<String?>(null) }
-    var fileExistsImageUriPath by remember { mutableStateOf<String?>(null) }
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
@@ -481,25 +486,26 @@ fun CameraTest_Jeremy(context:Context){
             },
         )
     }
-    if (capturedImageUri?.path != null) {
-        if (capturedImageUri.path?.isNotEmpty() == true) {
+    if (cameraCapturedImageUri?.path != null) {
+        Log.d("cameraCapturedImageUri",cameraCapturedImageUri?.path.toString())
+        if (cameraCapturedImageUri.path?.isNotEmpty() == true) {
             imageBase64 = null
             fileExistsImageUriPath = null
             val contextOK: Context = context
-            val uriOK: Uri = capturedImageUri
+            val uriOK: Uri = cameraCapturedImageUri
             val pathOK = getPathFromUri(contextOK, uriOK)
             if (pathOK != null) {
                 fileExistsImageUriPath = pathOK
-                val fileOK = File(pathOK)
-                if (fileOK.exists()) {
-                    imageBase64 = fileToBase64(fileOK)
-                    val base64String = fileToBase64(fileOK)
-                    CurrentPhoto = base64String
+                val bm = BitmapFactory.decodeFile(pathOK);
+                val stream = ByteArrayOutputStream()
+                if(bm != null)
+                {
+                    bm.compress(Bitmap.CompressFormat.JPEG, 50, stream)
+                    val byteFormat = stream.toByteArray()
+                    val imgString = Base64.encodeToString(byteFormat,0)
+                    CurrentPhoto = imgString
                 }
-            }
-            if (capturedImageUri != null) {
-                val inputStream =
-                    LocalContext.current.contentResolver.openInputStream(capturedImageUri)
+                val inputStream = context.contentResolver.openInputStream(cameraCapturedImageUri)
                 val MinWenBitmap = BitmapFactory.decodeStream(inputStream)
                 val bitmap: Bitmap = MinWenBitmap //BitmapFactory.decodeStream(inputStream)
                 val imageFileName =
@@ -511,26 +517,27 @@ fun CameraTest_Jeremy(context:Context){
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
                 fos.flush()
                 fos.close()
-                cameraCapturedImageUri = null
+                capturedImageUri = null
             }
         }
+        cameraCapturedImageUri = null;
     }
-    if (cameraCapturedImageUri?.path != null) {
+    if (capturedImageUri?.path != null) {
         imageBase64 = null
         fileExistsImageUriPath = null
         val contextOK: Context = context
-        val uriOK: Uri = cameraCapturedImageUri
+        val uriOK: Uri = capturedImageUri
         val pathOK = getPathFromUri(contextOK, uriOK)
         if (pathOK != null) {
             fileExistsImageUriPath = pathOK
-            val fileOK = File(pathOK)
-            if (fileOK.exists()) {
-                imageBase64 = fileToBase64(fileOK)
-                val base64String = fileToBase64(fileOK)
-                CurrentPhoto = base64String
-            }
+            val bm = BitmapFactory.decodeFile(pathOK);
+            val stream = ByteArrayOutputStream()
+            bm.compress(Bitmap.CompressFormat.JPEG, 50, stream)
+            val byteFormat = stream.toByteArray()
+            val imgString = Base64.encodeToString(byteFormat,0)
+            CurrentPhoto = imgString
+            capturedImageUri = null;
         }
-        capturedImageUri = null;
-
+        cameraCapturedImageUri = null;
     }
 }
