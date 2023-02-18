@@ -62,6 +62,7 @@ var MA3_3_1_ReportCode by mutableStateOf("")
 fun MA3_3(
     navController: NavHostController = rememberNavController()
 ) {
+    CurrentPhoto = ""
     Column(
         modifier = Modifier
             .fillMaxWidth()

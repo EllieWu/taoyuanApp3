@@ -66,6 +66,8 @@ import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Base64.getEncoder
@@ -522,10 +524,10 @@ fun CameraTest_Jeremy(context:Context){
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
                     fos.flush()
                     fos.close()
-                    capturedImageUri = null
-                    cameraCapturedImageUri = null;
                 }
             }
+            capturedImageUri = null
+            cameraCapturedImageUri = null;
         }
     }
     if (capturedImageUri?.path != null && capturedImageUri?.path != "") {

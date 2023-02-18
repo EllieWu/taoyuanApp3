@@ -94,6 +94,7 @@ fun MA3_1_1(
     viewModel: MapViewModel,
     WorkCode: String? = "", WorkTime: String?="", navController: NavHostController = rememberNavController()
 ){
+    CurrentPhoto = ""
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
     MA3_1_1_BluePoint_MakeListCom(MA3_1_date, Login_UserId);
     Column(

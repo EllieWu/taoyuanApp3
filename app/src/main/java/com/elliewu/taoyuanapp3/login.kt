@@ -152,12 +152,12 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         color = Color(255,255,255)
                     )
                 }
-                Button(onClick = {
-                    //TODO:for 照片測試
-                    navController.navigate(Screen.CameraTest.route)
-                }) {
-                    Text(text = "照片測試")
-                }
+//                Button(onClick = {
+//                    //TODO:for 照片測試
+//                    navController.navigate(Screen.CameraTest.route)
+//                }) {
+//                    Text(text = "照片測試")
+//                }
             }
         }
     }
