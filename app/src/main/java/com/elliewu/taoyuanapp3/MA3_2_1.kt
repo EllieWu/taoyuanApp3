@@ -72,6 +72,7 @@ var MA3_2_1_State by mutableStateOf("")
 @Preview(showBackground = true)
 @Composable
 fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostController = rememberNavController()){
+    CurrentPhoto = ""
     MA3_2_1_MakeListCom(RepairCode,State)
     Column(
         modifier = Modifier
@@ -425,8 +426,8 @@ fun RepairBottomBtn(RepairCode: String? = "",State: String?="" ,list: RepairInfo
             elevation = null,
             onClick =
             {
-
-                Log.d("ButtonClick","1111111");
+                MA3_2_1_RepairCode = RepairCode.toString()
+                MA3_2_1_State = State.toString();
                 navController.navigate(Screen.MA3_2_1_finishRepair.route)
             },
         )

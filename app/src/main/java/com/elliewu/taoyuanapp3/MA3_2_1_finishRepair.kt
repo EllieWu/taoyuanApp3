@@ -42,11 +42,26 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-
+data class Finish_RepairInfoList(
+    var State: String,
+    var RepairContent: String,
+    var RepairPhoto:String,
+    var Edit:String,
+    )
+var Finish_RepairListData =
+    Finish_RepairInfoList(
+        "尚未完成",
+        "載入中",
+        "",
+        "FALSE",
+    )
+var MA3_2_1_finishRepair_finishState by mutableStateOf("待執行")
+var MA3_2_1_finishRepair_msggg by mutableStateOf(Finish_RepairListData)
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
 fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavController()) {
+    MA3_2_1_finishRepair_MakeListCom(MA3_2_1_RepairCode)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -272,6 +287,14 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                                 color = Color.White,
                             )
                         }
+                        else if(MA3_2_1_finishRepair_msggg.RepairPhoto.isNullOrEmpty()){
+                            Text(
+                                text = "更換照片",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                            )
+                        }
                         else{
                             Text(
                                 text = "更換照片",
@@ -288,7 +311,13 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.Start)
             {
-                val imageBytes = Base64.decode(CurrentPhoto, 0)
+                var imageBytes = Base64.decode(CurrentPhoto, 0)
+                if(!MA3_2_1_finishRepair_msggg.RepairPhoto.isNullOrEmpty())
+                {
+                    imageBytes = Base64.decode(MA3_2_1_finishRepair_msggg.RepairPhoto, 0)
+                    if(CurrentPhoto != "")
+                        imageBytes = Base64.decode(CurrentPhoto, 0)
+                }
                 val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 if(image != null)
                 {
@@ -317,7 +346,32 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                 .fillMaxWidth()
                 .padding(vertical = 5.dp),
             onClick = {
-
+                GlobalScope.launch(Dispatchers.IO) {
+                    var RequestJsonObject = JSONObject();
+                    RequestJsonObject.put("Function", "FormUploadService")
+                    RequestJsonObject.put("UserID", Login_UserId)
+                    RequestJsonObject.put("RepairCode", MA3_2_1_RepairCode)
+                    RequestJsonObject.put("State", MA3_2_1_finishRepair_msggg.State)
+                    RequestJsonObject.put("RepairContent", MA3_2_1_finishRepair_msggg.RepairContent)
+                    if(CurrentPhoto != "")
+                        RequestJsonObject.put("RepairPhoto", CurrentPhoto)
+                    else
+                        RequestJsonObject.put("RepairPhoto", MA3_2_1_finishRepair_msggg.RepairPhoto)
+                    val responseString = HttpRequestTest(RequestJsonObject)
+                    Log.d("MA3_2_1_finishRepair_Upload",responseString)
+                    if(responseString!="Error"){
+                        var gson = Gson();
+                        var WorkInfoResponse:FormUploadService_Response = gson.fromJson(responseString,FormUploadService_Response::class.java)
+                        if(WorkInfoResponse.Feedback == "TRUE")
+                        {
+                            GlobalScope.launch(Dispatchers.Main){
+                                var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_RepairCode}&State=${MA3_2_1_State}"
+                                navController.navigate(fullMA3_2_1_path)
+                                CurrentPhoto = ""
+                            }
+                        }
+                    }
+                }
             }
         ) {
             Text(
@@ -376,6 +430,31 @@ fun DropdownDemo() {
             }
             FinishState = items[selectedIndex]
             Log.d("FinishState",FinishState)
+        }
+    }
+}
+//TODO:Jeremy增加
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun MA3_2_1_finishRepair_MakeListCom(RepairCode:String){
+    MA3_2_1_finishRepair_MakeList(RepairCode)
+}
+fun MA3_2_1_finishRepair_MakeList(RepairCode:String){
+    GlobalScope.launch(Dispatchers.IO) {
+        var RequestJsonObject = JSONObject();
+        RequestJsonObject.put("Function", "FormRequestService")
+        RequestJsonObject.put("RepairCode", RepairCode)
+        val responseString = HttpRequestTest(RequestJsonObject)
+        Log.d("MA3_2_1_finishRepair",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var WorkInfoResponse:FormRequestService_Response = gson.fromJson(responseString,FormRequestService_Response::class.java)
+            var workListDatas = Finish_RepairListData
+            workListDatas.State = WorkInfoResponse.State.toString()
+            workListDatas.RepairContent = WorkInfoResponse.RepairContent.toString()
+            workListDatas.RepairPhoto = WorkInfoResponse.RepairPhoto.toString()
+            workListDatas.Edit = WorkInfoResponse.Edit.toString()
+            Finish_RepairListData = workListDatas
         }
     }
 }

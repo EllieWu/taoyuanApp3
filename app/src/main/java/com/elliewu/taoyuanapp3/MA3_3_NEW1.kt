@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -364,6 +365,7 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
             autoCorrect = true, keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
         ),
     )
+    CameraTest_Jeremy(context = LocalContext.current)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -375,7 +377,7 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
             shape = RoundedCornerShape(50),
             elevation = null,
             onClick = {
-                      navController.navigate(Screen.CameraTest.route)
+                      AlertDialogState = true
             },
         )
         {
@@ -383,7 +385,8 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
             ){
                 Icon(
                     modifier = Modifier
-                        .size(25.dp).padding(end = 5.dp),
+                        .size(25.dp)
+                        .padding(end = 5.dp),
                     painter = painterResource(id = R.drawable.camera),
                     contentDescription = "BackIcon",
                     tint = Color.White
@@ -399,7 +402,6 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
         }
     }
     //照片位置
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
