@@ -1,6 +1,8 @@
 package com.elliewu.taoyuanapp3
 
 import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -16,6 +18,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -231,6 +236,7 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                     ),
                 )
             }
+            CameraTest_Jeremy(LocalContext.current)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -242,7 +248,9 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
                     shape = RoundedCornerShape(50),
                     elevation = null,
-                    onClick = {},
+                    onClick = {
+                        AlertDialogState = true
+                    },
                 )
                 {
                     Row(
@@ -256,16 +264,43 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                             contentDescription = "BackIcon",
                             tint = Color.White
                         )
-                        Text(
-                            text = "拍照",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                        )
+                        if(CurrentPhoto == ""){
+                            Text(
+                                text = "拍照",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                            )
+                        }
+                        else{
+                            Text(
+                                text = "更換照片",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                            )
+                        }
                     }
                 }
             }
+            //照片顯示位置
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.Start)
+            {
+                val imageBytes = Base64.decode(CurrentPhoto, 0)
+                val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                if(image != null)
+                {
+                    Image(
+                        modifier = Modifier.size(350.dp),
+                        contentScale = ContentScale.FillWidth,
+                        bitmap = image.asImageBitmap(),
+                        contentDescription = "contentDescription"
+                    )
+                }
 
+            }
         }
     }
     Row(
@@ -281,7 +316,9 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 5.dp),
-            onClick = {}
+            onClick = {
+
+            }
         ) {
             Text(
                 text = "送出",
