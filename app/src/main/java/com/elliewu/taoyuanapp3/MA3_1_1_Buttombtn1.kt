@@ -392,9 +392,7 @@ fun CameraTest_Jeremy(context:Context){
             rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
                 if (success) {
                     Log.d("pathOK","拍照成功")
-                    Log.d("pathOK",uri?.path.toString())
                     cameraCapturedImageUri = uri
-                    Log.d("pathOK",cameraCapturedImageUri?.path.toString())
                     AlertDialogState= false
                 }
             }
