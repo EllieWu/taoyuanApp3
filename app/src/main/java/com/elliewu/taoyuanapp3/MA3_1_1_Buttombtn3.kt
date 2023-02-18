@@ -2,18 +2,17 @@ package com.elliewu.taoyuanapp3
 
 import android.Manifest
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -24,6 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -411,6 +413,7 @@ fun MA3_1_1_Bottombtn3(
                     autoCorrect = true, keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
                 ),
             )
+            CameraTest_Jeremy(context = LocalContext.current)
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -434,7 +437,8 @@ fun MA3_1_1_Bottombtn3(
                     ) {
                         Icon(
                             modifier = Modifier
-                                .size(25.dp).padding(end = 5.dp),
+                                .size(25.dp)
+                                .padding(end = 5.dp),
                             painter = painterResource(id = R.drawable.camera),
                             contentDescription = "BackIcon",
                             tint = Color.White
@@ -464,6 +468,18 @@ fun MA3_1_1_Bottombtn3(
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.Start)
             {
+                val imageBytes = Base64.decode(CurrentPhoto, 0)
+                val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                if(image != null)
+                {
+                    Image(
+                        modifier = Modifier.size(350.dp),
+                        contentScale = ContentScale.FillWidth,
+                        bitmap = image.asImageBitmap(),
+                        contentDescription = "contentDescription"
+                    )
+                }
+
             }
             Row(
                 verticalAlignment = Alignment.Bottom,

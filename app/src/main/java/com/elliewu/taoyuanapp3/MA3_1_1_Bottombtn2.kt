@@ -1,6 +1,9 @@
 package com.elliewu.taoyuanapp3
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,6 +19,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -282,7 +287,7 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                     shape = RoundedCornerShape(50),
                     elevation = null,
                     onClick = {
-                              AlertDialogState = true
+                        AlertDialogState = true
                     },
                 )
                 {
@@ -322,17 +327,18 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.Start)
             {
-//                    val imageBytes = Base64.decode(list.RepairPhoto, 0)
-//                    val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-//                    if(image != null)
-//                    {
-//                        Image(
-//                            modifier = Modifier.size(350.dp),
-//                            contentScale = ContentScale.FillWidth,
-//                            bitmap = image.asImageBitmap(),
-//                            contentDescription = "contentDescription"
-//                        )
-//                    }
+                val imageBytes = Base64.decode(CurrentPhoto, 0)
+                val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                if(image != null)
+                {
+                    Image(
+                        modifier = Modifier.size(350.dp),
+                        contentScale = ContentScale.FillWidth,
+                        bitmap = image.asImageBitmap(),
+                        contentDescription = "contentDescription"
+                    )
+                }
+
             }
             Row(
                 verticalAlignment = Alignment.Bottom,
