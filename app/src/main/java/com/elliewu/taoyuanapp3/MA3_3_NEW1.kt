@@ -437,7 +437,7 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
                 .fillMaxWidth()
                 .padding(vertical = 5.dp),
             onClick = {
-                GlobalScope.launch(Dispatchers.Main) {
+                GlobalScope.launch(Dispatchers.IO) {
                     var RequestJsonObject = JSONObject();
                     RequestJsonObject.put("Function", "ReportUploadAgain")
                     RequestJsonObject.put("UserID", Login_UserId)
@@ -449,19 +449,24 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
                     else
                         RequestJsonObject.put("ReportPhoto", MA3_3_NEW1_msggg.ReportPhoto)
                     RequestJsonObject.put("ReportType", "外巡報修")
+                    showDialog = true
                     val responseString = HttpRequestTest(RequestJsonObject)
                     //Log.d("MA3_3_NEW1_Submit",responseString)
                     if(responseString!="Error"){
                         var gson = Gson();
                         var WorkInfoResponse:ReportUploadAgain_Response = gson.fromJson(responseString,ReportUploadAgain_Response::class.java)
                         if(WorkInfoResponse.Feedback == "TRUE"){
-                            if(MA3_3_NEW1_lastWorkCode !="" && MA3_3_NEW1_lastWorkTime != ""){
-                                val fullpath = Screen.MA3_1_1.route + "?WorkCode=${MA3_3_NEW1_lastWorkCode}&WorkTime=${MA3_3_NEW1_lastWorkTime}"
-                                navController.navigate(fullpath)
-                                CurrentPhoto = ""
+                            GlobalScope.launch(Dispatchers.Main) {
+                                if(MA3_3_NEW1_lastWorkCode !="" && MA3_3_NEW1_lastWorkTime != ""){
+                                    val fullpath = Screen.MA3_1_1.route + "?WorkCode=${MA3_3_NEW1_lastWorkCode}&WorkTime=${MA3_3_NEW1_lastWorkTime}"
+                                    navController.navigate(fullpath)
+                                    CurrentPhoto = ""
+                                }
+                                else
+                                    navController.navigate(Screen.MA3_3.route)
+
+                                showDialog = false
                             }
-                            else
-                                navController.navigate(Screen.MA3_3.route)
                         }
                     }
                 }
