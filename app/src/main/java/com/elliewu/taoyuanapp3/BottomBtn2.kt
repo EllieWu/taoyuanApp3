@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import java.text.SimpleDateFormat
+import java.util.*
 
 data class buttonBtn2(val icon: Int, val text: String,val screen: String)
 
@@ -57,29 +59,53 @@ fun BottomSpace2(navController : NavHostController = rememberNavController(),Wor
                 .background(Color(232, 232, 232)),
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
-//            var selected by remember { mutableStateOf(false) }
-//            val clickColor =
-//                if(selected){
-//                    (Color(255, 248, 220))
-//                }else {
-//                    (Color(157, 157, 157))
-//                }
-//             點擊背景顏色      Color(229,221,198)
-//             點擊圖案、文字顏色 Color(247,240,213)
-//            val selectedBG = if (title == "外巡巡檢工單")
-//            {
-//                Color(255,248,220)
-//            }else{
-//                Color(254,166,0)
-//            }
-//
-//            val selectColor = if (title == "外巡巡檢工單")
-//            {
-//                Color(235,166,59)
-//            }else{
-//                Color(157,157,157)
-//            }
-            BottomBtn2(buttonBtnData2,navController,WorkTime,WorkCode,Longitude,Latitude);
+            if(MA3_1_date == SimpleDateFormat("yyyy-MM-dd").format(Date()))
+                BottomBtn2(buttonBtnData2,navController,WorkTime,WorkCode,Longitude,Latitude);
+            else
+            {
+                val btnList = buttonBtn2(
+                    R.drawable.btn2, "完工填報",Screen.MA3_1_1_Bottombtn2.route
+                )
+                Button(
+                    border = BorderStroke(0.dp, Color.Transparent),
+                    elevation = null,
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(235, 166, 59)
+                    ),
+                    modifier = Modifier.size(width = 180.dp, 50.dp),
+                    onClick = {
+                        var fullpath = ""
+                        if (btnList.text=="完工填報")
+                        {
+                            fullpath = Screen.MA3_1_1_Bottombtn2.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                        }
+                        navController.navigate(fullpath)
+                    }
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+
+                        Image(
+                            painterResource(id = btnList.icon),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(35.dp)
+                                .padding(bottom = 5.dp),
+                            colorFilter = ColorFilter.tint(Color(255,255,255))
+                        )
+                        Text(
+                            text = "完工填報資訊",
+                            color = Color(255,255,255),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                        )
+                    }
+
+                }
+            }
+
         }
     }
 }

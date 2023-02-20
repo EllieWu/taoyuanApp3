@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.Location
 import android.location.LocationManager
 import android.util.Log
@@ -42,6 +43,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
 import androidx.compose.ui.node.modifierElementOf
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.zIndex
@@ -94,6 +96,7 @@ fun MA3_1_1(
     viewModel: MapViewModel,
     WorkCode: String? = "", WorkTime: String?="", navController: NavHostController = rememberNavController()
 ){
+    PostView();
     CurrentPhoto = ""
     loadingDialog();
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
@@ -171,8 +174,7 @@ fun MA3_1_1(
 
         }
         Column(modifier = Modifier.fillMaxSize()) {
-            Box(
-            ) {
+            Box {
                 Row(verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.zIndex(3f)) {
@@ -220,118 +222,242 @@ fun MA3_1_1(
                 val cameraPositionState = rememberCameraPositionState {
                     position = CameraPosition.fromLatLngZoom(taiwan, 8f) //zoom 放大參數 數字越則越放大
                 }
-                var rwdHeight = (ScreenHeight * 0.83).dp
-                GoogleMap(
-                    modifier = Modifier
-                        .height(rwdHeight)
-                        .fillMaxHeight()
-                        .zIndex(0f),
-                    cameraPositionState = cameraPositionState,
-                    properties = mapProperties,
-                ) {
-                    val context = LocalContext.current
-                    redDotList.forEachIndexed { Index, item ->
-                        MarkerInfoWindow(
-                            icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
-                            state = MarkerState(position = item.LatLng),
-                            visible = redDotIsVis,
-                            title = "打卡",
-                            snippet = "打卡點-${(Index+1)}",
-                            onInfoWindowClick = {
-                                //Log.d("reddot",item.LocateNumber)
+                Log.d("ScreenHeight",ScreenHeight.toString())
+                Log.d("(ScreenHeight * 0.83).dp",(ScreenHeight * 0.83).dp.toString())
+
+//                googleMapWidth = (ScreenWidth * 0.8.toInt())
+                val configuration = LocalConfiguration.current
+                if (configuration.orientation ==  Configuration.ORIENTATION_LANDSCAPE) {
+                    GoogleMap(
+                        modifier = Modifier
+                            .height((ScreenHeight * 0.75).dp)
+//                        .fillMaxHeight()
+                            .zIndex(0f),
+                        cameraPositionState = cameraPositionState,
+                        properties = mapProperties,
+                    ) {
+                        val context = LocalContext.current
+                        redDotList.forEachIndexed { Index, item ->
+                            MarkerInfoWindow(
+                                icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
+                                state = MarkerState(position = item.LatLng),
+                                visible = redDotIsVis,
+                                title = "打卡",
+                                snippet = "打卡點-${(Index+1)}",
+                                onInfoWindowClick = {
+                                    //Log.d("reddot",item.LocateNumber)
 //                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
 //                                navController.navigate(fullpath)
 //                                Log.d("reddot",item.LocateNumber)
-                                GlobalScope.launch(Dispatchers.Main) {
-                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}&LocateNumber=${item.LocateNumber}"
-                                navController.navigate(fullpath)
-                                }
+                                    GlobalScope.launch(Dispatchers.Main) {
+                                        val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}&LocateNumber=${item.LocateNumber}"
+                                        navController.navigate(fullpath)
+                                    }
 
-                            }
-                        ) { marker ->
-                            // Implement the custom info window here
-                            Row(
-                                modifier = Modifier
-                                    .padding(10.dp)
-                                    .background(Color.White)
-                                    .width(200.dp)
-                                , verticalAlignment = Alignment.CenterVertically) {
-                                Column(modifier = Modifier
-                                    .padding(10.dp)
-                                    .weight(0.55f)
-                                ) {
-                                    Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
-                                    Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
                                 }
-                                Button(
-                                    colors = ButtonDefaults.buttonColors(
-                                        backgroundColor = Color.Transparent
-                                    ),
-                                    onClick = {
-                                          //Log.d("reddot",item.LocateNumber)
-                                    },
-                                    modifier = Modifier.weight(0.45f)
-                                )
-                                {
-                                    Image(
-                                        painterResource(id = R.drawable.map_clockin2),
-                                        contentDescription = "null",
-                                        modifier = Modifier.weight(1f)
+                            ) { marker ->
+                                // Implement the custom info window here
+                                Row(
+                                    modifier = Modifier
+                                        .padding(10.dp)
+                                        .background(Color.White)
+                                        .width(200.dp)
+                                    , verticalAlignment = Alignment.CenterVertically) {
+                                    Column(modifier = Modifier
+                                        .padding(10.dp)
+                                        .weight(0.55f)
+                                    ) {
+                                        Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
+                                        Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
+                                    }
+                                    Button(
+                                        colors = ButtonDefaults.buttonColors(
+                                            backgroundColor = Color.Transparent
+                                        ),
+                                        onClick = {
+                                            //Log.d("reddot",item.LocateNumber)
+                                        },
+                                        modifier = Modifier.weight(0.45f)
                                     )
+                                    {
+                                        Image(
+                                            painterResource(id = R.drawable.map_clockin2),
+                                            contentDescription = "null",
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
+
+                            }
+                        }
+
+                        blueDotList.forEachIndexed { Index,item ->
+                            MarkerInfoWindow(
+                                icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
+                                state = MarkerState(position = item.LatLng),
+                                visible = blueDotIsVis,
+                                title = "報修",
+                                snippet = "報修點-${(Index+1)}",
+                                onInfoWindowClick = {
+                                    GlobalScope.launch(Dispatchers.Main) {
+//                                    val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                                    navController.navigate(fullpath)
+                                        MA3_3_1_ReportCode = item.ReportCode
+                                        MA3_3_NEW1_lastWorkCode = WorkCode.toString()
+                                        MA3_3_NEW1_lastWorkTime = WorkTime.toString()
+                                        navController.navigate(Screen.MA3_3_NEW1.route)
+                                    }
+                                    Log.d("bluedot",item.ReportCode)
+                                }
+                            ) { marker ->
+                                // Implement the custom info window here
+                                Row(
+                                    modifier = Modifier
+                                        .padding(10.dp)
+                                        .background(Color.White)
+                                        .width(200.dp)
+                                    , verticalAlignment = Alignment.CenterVertically) {
+                                    Column(modifier = Modifier
+                                        .padding(10.dp)
+                                        .weight(0.55f)
+                                    ) {
+                                        Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
+                                        Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
+                                    }
+                                    Button(
+                                        colors = ButtonDefaults.buttonColors(
+                                            backgroundColor = Color.Transparent
+                                        ),
+                                        onClick = {
+                                            Log.d("bluedot",item.ReportCode)
+                                        },
+                                        modifier = Modifier.weight(0.45f)
+                                    )
+                                    {
+                                        Image(
+                                            painterResource(id = R.drawable.map_repair2),
+                                            contentDescription = "null",
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
                                 }
                             }
-
                         }
                     }
 
-                    blueDotList.forEachIndexed { Index,item ->
-                        MarkerInfoWindow(
-                            icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
-                            state = MarkerState(position = item.LatLng),
-                            visible = blueDotIsVis,
-                            title = "報修",
-                            snippet = "報修點-${(Index+1)}",
-                            onInfoWindowClick = {
-                                GlobalScope.launch(Dispatchers.Main) {
+                }else{
+                    GoogleMap(
+                        modifier = Modifier
+                            .height((ScreenHeight * 0.83).dp)
+//                        .fillMaxHeight()
+                            .zIndex(0f),
+                        cameraPositionState = cameraPositionState,
+                        properties = mapProperties,
+                    ) {
+                        val context = LocalContext.current
+                        redDotList.forEachIndexed { Index, item ->
+                            MarkerInfoWindow(
+                                icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
+                                state = MarkerState(position = item.LatLng),
+                                visible = redDotIsVis,
+                                title = "打卡",
+                                snippet = "打卡點-${(Index+1)}",
+                                onInfoWindowClick = {
+                                    //Log.d("reddot",item.LocateNumber)
+//                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                                navController.navigate(fullpath)
+//                                Log.d("reddot",item.LocateNumber)
+                                    GlobalScope.launch(Dispatchers.Main) {
+                                        val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}&LocateNumber=${item.LocateNumber}"
+                                        navController.navigate(fullpath)
+                                    }
+
+                                }
+                            ) { marker ->
+                                // Implement the custom info window here
+                                Row(
+                                    modifier = Modifier
+                                        .padding(10.dp)
+                                        .background(Color.White)
+                                        .width(200.dp)
+                                    , verticalAlignment = Alignment.CenterVertically) {
+                                    Column(modifier = Modifier
+                                        .padding(10.dp)
+                                        .weight(0.55f)
+                                    ) {
+                                        Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
+                                        Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
+                                    }
+                                    Button(
+                                        colors = ButtonDefaults.buttonColors(
+                                            backgroundColor = Color.Transparent
+                                        ),
+                                        onClick = {
+                                            //Log.d("reddot",item.LocateNumber)
+                                        },
+                                        modifier = Modifier.weight(0.45f)
+                                    )
+                                    {
+                                        Image(
+                                            painterResource(id = R.drawable.map_clockin2),
+                                            contentDescription = "null",
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
+
+                            }
+                        }
+
+                        blueDotList.forEachIndexed { Index,item ->
+                            MarkerInfoWindow(
+                                icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
+                                state = MarkerState(position = item.LatLng),
+                                visible = blueDotIsVis,
+                                title = "報修",
+                                snippet = "報修點-${(Index+1)}",
+                                onInfoWindowClick = {
+                                    GlobalScope.launch(Dispatchers.Main) {
 //                                    val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
 //                                    navController.navigate(fullpath)
-                                    MA3_3_1_ReportCode = item.ReportCode
-                                    MA3_3_NEW1_lastWorkCode = WorkCode.toString()
-                                    MA3_3_NEW1_lastWorkTime = WorkTime.toString()
-                                    navController.navigate(Screen.MA3_3_NEW1.route)
+                                        MA3_3_1_ReportCode = item.ReportCode
+                                        MA3_3_NEW1_lastWorkCode = WorkCode.toString()
+                                        MA3_3_NEW1_lastWorkTime = WorkTime.toString()
+                                        navController.navigate(Screen.MA3_3_NEW1.route)
+                                    }
+                                    Log.d("bluedot",item.ReportCode)
                                 }
-                                Log.d("bluedot",item.ReportCode)
-                            }
-                        ) { marker ->
-                            // Implement the custom info window here
-                            Row(
-                                modifier = Modifier
-                                    .padding(10.dp)
-                                    .background(Color.White)
-                                    .width(200.dp)
-                                , verticalAlignment = Alignment.CenterVertically) {
-                                Column(modifier = Modifier
-                                    .padding(10.dp)
-                                    .weight(0.55f)
+                            ) { marker ->
+                                // Implement the custom info window here
+                                Row(
+                                    modifier = Modifier
+                                        .padding(10.dp)
+                                        .background(Color.White)
+                                        .width(200.dp)
+                                    , verticalAlignment = Alignment.CenterVertically) {
+                                    Column(modifier = Modifier
+                                        .padding(10.dp)
+                                        .weight(0.55f)
                                     ) {
-                                    Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
-                                    Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
-                                }
-                                Button(
-                                    colors = ButtonDefaults.buttonColors(
-                                        backgroundColor = Color.Transparent
-                                    ),
-                                    onClick = {
-                                        Log.d("bluedot",item.ReportCode)
-                                    },
-                                    modifier = Modifier.weight(0.45f)
-                                )
-                                {
-                                    Image(
-                                        painterResource(id = R.drawable.map_repair2),
-                                        contentDescription = "null",
-                                        modifier = Modifier.weight(1f)
+                                        Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
+                                        Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
+                                    }
+                                    Button(
+                                        colors = ButtonDefaults.buttonColors(
+                                            backgroundColor = Color.Transparent
+                                        ),
+                                        onClick = {
+                                            Log.d("bluedot",item.ReportCode)
+                                        },
+                                        modifier = Modifier.weight(0.45f)
                                     )
+                                    {
+                                        Image(
+                                            painterResource(id = R.drawable.map_repair2),
+                                            contentDescription = "null",
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
                                 }
                             }
                         }
