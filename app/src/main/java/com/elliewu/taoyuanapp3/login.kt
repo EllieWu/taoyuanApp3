@@ -5,8 +5,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -16,6 +22,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,8 +92,46 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         .padding(bottom = 8.dp))
 
                 var account by remember { mutableStateOf("") }
-                val maxLength = 110
-                TextField( modifier = Modifier
+                var password by remember { mutableStateOf("") }
+                var passwordVisible by rememberSaveable { mutableStateOf(false) }
+                val maxLength = 15
+                TextField(keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Ascii),keyboardActions = KeyboardActions(onDone  = {showDialog = true;
+                    //TODO:之後須在外層補入請輸入帳號/請輸入密碼
+                    Log.d("Login","嘗試登入");
+                    coroutineScope.launch {
+                        var loginJsonObject = JSONObject();
+                        loginJsonObject.put("Function", "Login")
+                        //TODO : 正式上線請把預設值改掉換下面那個
+                        loginJsonObject.put("UserID", account)
+                        loginJsonObject.put("UserPW", password)
+                        //Login_UserId = account
+//                        loginJsonObject.put("UserID", "F123332212")
+//                        loginJsonObject.put("UserPW", "Abc1234")
+                        val responseString = HttpRequestTest(loginJsonObject)
+                        //Log.d("Login Response",responseString)
+                        if(responseString == "Error")
+                        {
+                            //TODO :網路連線異常的通知
+                        }
+                        else{
+                            val jResponse = JSONObject(responseString);
+                            val succeed:String? = jResponse.getString("Feedback").toString();
+                            if(succeed == "TRUE")
+                            {
+                                //Login_UserId = account;
+                                Login_UserId = "F123332212";
+                                navController.navigate(Screen.MA3_1.route)
+                            }
+                            else
+                            {
+                                //TODO:登入失敗跳的東西
+                            }
+                        }
+                        showDialog = false;
+                    }
+                })
+                    ,singleLine = true
+                    ,maxLines = 1, modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 20.dp),
                     value = account,
@@ -91,7 +139,8 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         cursorColor = Color.Black,
                         backgroundColor = Color(255,255,255),
                         focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent), onValueChange = {if (it.length <= maxLength) account = it})
+                        unfocusedIndicatorColor = Color.Transparent),
+                    onValueChange = {if (it.length <= maxLength) account = it})
 
                 Text("密碼",fontSize = 24.sp,textAlign = TextAlign.Start,fontWeight = FontWeight.Bold,
                     color = Color(255,255,255),
@@ -99,11 +148,61 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         .fillMaxWidth()
                         .padding(bottom = 8.dp))
 
-                var password by remember { mutableStateOf("") }
-                TextField( modifier = Modifier
+                TextField(keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done
+                    , keyboardType = KeyboardType.Password)
+                    ,keyboardActions = KeyboardActions(onDone  = {showDialog = true;
+                    //TODO:之後須在外層補入請輸入帳號/請輸入密碼
+                    Log.d("Login","嘗試登入");
+                    coroutineScope.launch {
+                        var loginJsonObject = JSONObject();
+                        loginJsonObject.put("Function", "Login")
+                        //TODO : 正式上線請把預設值改掉換下面那個
+                        loginJsonObject.put("UserID", account)
+                        loginJsonObject.put("UserPW", password)
+                        //Login_UserId = account
+//                        loginJsonObject.put("UserID", "F123332212")
+//                        loginJsonObject.put("UserPW", "Abc1234")
+                        val responseString = HttpRequestTest(loginJsonObject)
+                        //Log.d("Login Response",responseString)
+                        if(responseString == "Error")
+                        {
+                            //TODO :網路連線異常的通知
+                        }
+                        else{
+                            val jResponse = JSONObject(responseString);
+                            val succeed:String? = jResponse.getString("Feedback").toString();
+                            if(succeed == "TRUE")
+                            {
+                                //Login_UserId = account;
+                                Login_UserId = "F123332212";
+                                navController.navigate(Screen.MA3_1.route)
+                            }
+                            else
+                            {
+                                //TODO:登入失敗跳的東西
+                            }
+                        }
+                        showDialog = false;
+                    }
+                    })
+                    ,visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+                    ,singleLine = true
+                    ,maxLines = 1,modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 40.dp),
                     value = password,
+                    trailingIcon = {
+                        val image = if (passwordVisible)
+                            Icons.Filled.Visibility
+                        else Icons.Filled.VisibilityOff
+
+                        // Please provide localized description for accessibility services
+                        val description = if (passwordVisible) "Hide password" else "Show password"
+
+                        IconButton(onClick = {passwordVisible = !passwordVisible}){
+                            Icon(imageVector  = image, description)
+                        }
+                    },
                     colors = TextFieldDefaults.textFieldColors(
                         cursorColor = Color.Black,
                         backgroundColor = Color(255,255,255),
@@ -133,11 +232,11 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             var loginJsonObject = JSONObject();
                             loginJsonObject.put("Function", "Login")
                             //TODO : 正式上線請把預設值改掉換下面那個
-                            //loginJsonObject.put("UserID", account)
-                            //loginJsonObject.put("UserPW", password)
+                            loginJsonObject.put("UserID", account)
+                            loginJsonObject.put("UserPW", password)
                             //Login_UserId = account
-                            loginJsonObject.put("UserID", "F123332212")
-                            loginJsonObject.put("UserPW", "Abc1234")
+//                            loginJsonObject.put("UserID", "F123332212")
+//                            loginJsonObject.put("UserPW", "Abc1234")
                             val responseString = HttpRequestTest(loginJsonObject)
                             //Log.d("Login Response",responseString)
                             if(responseString == "Error")
