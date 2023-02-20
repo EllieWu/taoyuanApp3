@@ -35,6 +35,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -50,6 +52,7 @@ import java.util.*
 
 var msggg by mutableStateOf(FakeData.workListData)
 var MA3_1_date by mutableStateOf(SimpleDateFormat("yyyy-MM-dd").format(Date()));
+
 data class Lists(val state: String, val workID: String, val time: String)
 object FakeData {
     var workListData = listOf(
@@ -70,6 +73,7 @@ object FakeData {
 fun MA3_1(
     navController: NavHostController = rememberNavController()
 ) {
+    loadingDialog();
     //TODO:Jeremy增加根據request塞入變數 下方的Date跟UserID會根據外部變化
     Column(
         modifier = Modifier
@@ -249,6 +253,7 @@ fun MA3_1_MakeList(Date:String,UserID:String){
         MA3_RequestJsonObject.put("Function", "SelectWorkList")
         MA3_RequestJsonObject.put("Date", Date)
         MA3_RequestJsonObject.put("UserID", UserID)
+        showDialog = true;
         val responseString = HttpRequestTest(MA3_RequestJsonObject)
         Log.d("MA3_1",responseString)
         if(responseString!="Error"){
@@ -268,6 +273,8 @@ fun MA3_1_MakeList(Date:String,UserID:String){
             }
             msggg = workListDatas
         }
+        showDialog = false;
+
     }
 }
 @Composable
@@ -275,17 +282,20 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
     Button(
         modifier = Modifier
             //.padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
-            .fillMaxSize().padding(vertical = 10.dp),
+            .fillMaxSize()
+            .padding(vertical = 10.dp),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
         contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
+            showDialog = true;
             Log.d("ButtonEvent", Screen.MA3_1_1.route)
             //val screen = Screen.MA3_1_1.route
                 //navController.navigate(Screen.MA3_1_1.withArgs(list.workID))
             val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${list.workID}&WorkTime=${list.time}"
             navController.navigate(MA3_1_1_fullRoutePath)
+            showDialog = false;
         })
     {
         Card(modifier = Modifier.fillMaxSize()) {

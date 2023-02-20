@@ -64,7 +64,8 @@ fun MA3_1_1_WorkPoint(WorkTime:String?="",
                       Latitude:String?="",
                       LocateNumber:String?="",
                       navController: NavHostController = rememberNavController()){
-    var workContentValue by remember { mutableStateOf(MA3_1_1_WorkPointList.InputContent) }
+    var workContentValue by remember { mutableStateOf("") }
+    workContentValue = MA3_1_1_WorkPointList.InputContent
     Log.d("WorkTime",WorkTime.toString())
     Log.d("WorkCode",WorkCode.toString())
     Log.d("LocateNumber",LocateNumber.toString())

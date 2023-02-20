@@ -369,6 +369,7 @@ fun MA3_1_1_Info_MakeListCom(WorkCode:String){
 }
 fun MA3_1_1_Info_MakeList( WorkCode:String){
     GlobalScope.launch(Dispatchers.IO) {
+        showDialog = true;
         var RequestJsonObject = JSONObject();
         RequestJsonObject.put("Function", "WorkInfo")
         RequestJsonObject.put("WorkCode", WorkCode)
@@ -390,5 +391,6 @@ fun MA3_1_1_Info_MakeList( WorkCode:String){
             }
             MA3_1_1_info_msggg = workListDatas
         }
+        showDialog = false;
     }
 }

@@ -123,7 +123,9 @@ fun MA3_2_1(RepairCode: String? = "",State: String?="" ,navController : NavHostC
                 color = Color(255, 255, 255),
             )
         }
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())) {
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(255, 255, 255))) {
@@ -415,10 +417,12 @@ fun RepairInfoTable(RepairCode: String? = "",State: String?="" ,list: RepairInfo
 
 @Composable
 fun RepairBottomBtn(RepairCode: String? = "",State: String?="" ,list: RepairInfoList,navController : NavHostController = rememberNavController()){
+    loadingDialog();
     Row(
-        modifier = Modifier.fillMaxSize()
-                           .padding(start = 20.dp,end = 20.dp,bottom = 20.dp)
-                           .background(Color.Transparent),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+            .background(Color.Transparent),
         horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.Bottom
     ){
         Button(
@@ -516,6 +520,7 @@ fun MA3_2_1_MakeList(RepairCode:String?,State: String?){
         RequestJsonObject.put("Function", "RepairContent")
         RequestJsonObject.put("RepairCode", RepairCode.toString())
         RequestJsonObject.put("ReportType", "外巡報修")
+        showDialog = true;
         val responseString = HttpRequestTest(RequestJsonObject)
         Log.d("MA3_2_1",responseString)
         if(responseString!="Error"){
@@ -544,6 +549,6 @@ fun MA3_2_1_MakeList(RepairCode:String?,State: String?){
         }
 //        val responsejsonobject = CustomMizeHttpRequestTest(RequestJsonObject)
 //        val a:String? = responsejsonobject.get("DevRepair").toString()
-
+        showDialog = false;
     }
 }

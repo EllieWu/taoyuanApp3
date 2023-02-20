@@ -95,6 +95,7 @@ fun MA3_1_1(
     WorkCode: String? = "", WorkTime: String?="", navController: NavHostController = rememberNavController()
 ){
     CurrentPhoto = ""
+    loadingDialog();
     MA3_1_1_RedPoint_MakeListCom(WorkCode.toString(),WorkTime.toString())
     MA3_1_1_BluePoint_MakeListCom(MA3_1_date, Login_UserId);
     Column(
@@ -386,6 +387,7 @@ fun MA3_1_1_BluePoint_MakeListCom(Date:String,UserID:String){
 }
 fun MA3_1_1_BluePoint_MakeList(Date:String,UserID:String){
     GlobalScope.launch(Dispatchers.IO) {
+        showDialog = true
         var RequestJsonObject = JSONObject();
         RequestJsonObject.put("Function", "RequestRepairLocate")
         RequestJsonObject.put("Date", Date)
@@ -409,6 +411,7 @@ fun MA3_1_1_BluePoint_MakeList(Date:String,UserID:String){
             }
             blueDotList = workListDatas
         }
+        showDialog = false
     }
 }
 

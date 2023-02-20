@@ -330,58 +330,61 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                 }
 
             }
-        }
-    }
-    Row(
-        verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 10.dp, bottom = 10.dp, start = 80.dp, end = 80.dp)
-    )
-    {
-        Button(
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
-            elevation = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp),
-            onClick = {
-                GlobalScope.launch(Dispatchers.IO) {
-                    var RequestJsonObject = JSONObject();
-                    RequestJsonObject.put("Function", "FormUploadService")
-                    RequestJsonObject.put("UserID", Login_UserId)
-                    RequestJsonObject.put("RepairCode", MA3_2_1_RepairCode)
-                    RequestJsonObject.put("State", MA3_2_1_finishRepair_msggg.State)
-                    RequestJsonObject.put("RepairContent", MA3_2_1_finishRepair_msggg.RepairContent)
-                    if(CurrentPhoto != "")
-                        RequestJsonObject.put("RepairPhoto", CurrentPhoto)
-                    else
-                        RequestJsonObject.put("RepairPhoto", MA3_2_1_finishRepair_msggg.RepairPhoto)
-                    val responseString = HttpRequestTest(RequestJsonObject)
-                    Log.d("MA3_2_1_finishRepair_Upload",responseString)
-                    if(responseString!="Error"){
-                        var gson = Gson();
-                        var WorkInfoResponse:FormUploadService_Response = gson.fromJson(responseString,FormUploadService_Response::class.java)
-                        if(WorkInfoResponse.Feedback == "TRUE")
-                        {
-                            GlobalScope.launch(Dispatchers.Main){
-                                var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_RepairCode}&State=${MA3_2_1_State}"
-                                navController.navigate(fullMA3_2_1_path)
-                                CurrentPhoto = ""
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 10.dp, bottom = 10.dp, start = 80.dp, end = 80.dp)
+            )
+            {
+                Button(
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(86, 107, 183)),
+                    elevation = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp),
+                    onClick = {
+                        GlobalScope.launch(Dispatchers.IO) {
+                            showDialog = true;
+                            var RequestJsonObject = JSONObject();
+                            RequestJsonObject.put("Function", "FormUploadService")
+                            RequestJsonObject.put("UserID", Login_UserId)
+                            RequestJsonObject.put("RepairCode", MA3_2_1_RepairCode)
+                            RequestJsonObject.put("State", MA3_2_1_finishRepair_msggg.State)
+                            RequestJsonObject.put("RepairContent", MA3_2_1_finishRepair_msggg.RepairContent)
+                            if(CurrentPhoto != "")
+                                RequestJsonObject.put("RepairPhoto", CurrentPhoto)
+                            else
+                                RequestJsonObject.put("RepairPhoto", MA3_2_1_finishRepair_msggg.RepairPhoto)
+                            val responseString = HttpRequestTest(RequestJsonObject)
+                            Log.d("MA3_2_1_finishRepair_Upload",responseString)
+                            if(responseString!="Error"){
+                                var gson = Gson();
+                                var WorkInfoResponse:FormUploadService_Response = gson.fromJson(responseString,FormUploadService_Response::class.java)
+                                if(WorkInfoResponse.Feedback == "TRUE")
+                                {
+                                    GlobalScope.launch(Dispatchers.Main){
+                                        var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_RepairCode}&State=${MA3_2_1_State}"
+                                        navController.navigate(fullMA3_2_1_path)
+                                        CurrentPhoto = ""
+                                    }
+                                }
                             }
+                            showDialog = false;
                         }
                     }
+                ) {
+                    Text(
+                        text = "送出",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.White
+                    )
                 }
             }
-        ) {
-            Text(
-                text = "送出",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = Color.White
-            )
         }
     }
+
 }
 
 
@@ -441,6 +444,7 @@ fun MA3_2_1_finishRepair_MakeListCom(RepairCode:String){
 }
 fun MA3_2_1_finishRepair_MakeList(RepairCode:String){
     GlobalScope.launch(Dispatchers.IO) {
+        showDialog = true;
         var RequestJsonObject = JSONObject();
         RequestJsonObject.put("Function", "FormRequestService")
         RequestJsonObject.put("RepairCode", RepairCode)
@@ -456,5 +460,6 @@ fun MA3_2_1_finishRepair_MakeList(RepairCode:String){
             workListDatas.Edit = WorkInfoResponse.Edit.toString()
             Finish_RepairListData = workListDatas
         }
+        showDialog = false;
     }
 }

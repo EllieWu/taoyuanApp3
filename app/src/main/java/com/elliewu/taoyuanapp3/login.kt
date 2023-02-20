@@ -2,12 +2,16 @@ package com.elliewu.taoyuanapp3
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -17,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
@@ -28,6 +34,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 var ScreenHeight by mutableStateOf(800)
 var ScreenWidth by mutableStateOf(392)
+var showDialog by  (mutableStateOf(false))
 //TODO:未來請將預設UserId設為空字串
 var Login_UserId by mutableStateOf("F123332212");
 @Preview(device= Devices.PIXEL_C)
@@ -36,6 +43,7 @@ var Login_UserId by mutableStateOf("F123332212");
 fun login(navController: NavHostController = rememberNavController(), onClick: () -> Unit = {}){
     PostView();
     Log.d("Login","APP仔入中")
+
     val coroutineScope = rememberCoroutineScope()
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -102,6 +110,9 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent), onValueChange = {if (it.length <= maxLength) password = it})
 
+                loadingDialog()
+
+
                 Button(
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = Color(
@@ -114,6 +125,8 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         .fillMaxWidth()
                         .size(width = 50.dp, height = 60.dp),
                     onClick = {
+
+                        showDialog = true;
                         //TODO:之後須在外層補入請輸入帳號/請輸入密碼
                         Log.d("Login","嘗試登入");
                         coroutineScope.launch {
@@ -145,6 +158,7 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                                     //TODO:登入失敗跳的東西
                                 }
                             }
+                            showDialog = false;
                         }
                     },
                 ) {
@@ -162,6 +176,31 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
         }
     }
 }
+
+
+@Composable
+fun loadingDialog(){
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = { showDialog = false },
+            DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+        ) {
+            Box(
+                contentAlignment= Center,
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(White, shape = RoundedCornerShape(12.dp))
+            ) {
+                Column {
+                    CircularProgressIndicator(modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp))
+                    Text(text = "Loading", Modifier.padding(0.dp, 8.dp, 0.dp, 0.dp))
+                }
+            }
+        }
+    }
+}
+
+
 
 @Composable
 fun PostView() {

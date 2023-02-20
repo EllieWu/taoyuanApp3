@@ -73,6 +73,7 @@ var MA3_3_NEW1_lastWorkTime by mutableStateOf("")
 fun MA3_3_NEW1(navController: NavHostController = rememberNavController()) {
     var ReportCode: String? = ""
     ReportCode = MA3_3_1_ReportCode;
+    loadingDialog()
     MA3_3_NEW1_MakeListCom(ReportCode.toString());
     Column(
         modifier = Modifier
@@ -485,6 +486,7 @@ fun MA3_3_NEW1_MakeListCom(ReportCode:String){
 }
 fun MA3_3_NEW1_MakeList( ReportCode:String){
     GlobalScope.launch(Dispatchers.IO) {
+        showDialog = true;
         var RequestJsonObject = JSONObject();
         RequestJsonObject.put("Function", "ReportContent")
         RequestJsonObject.put("ReportCode", ReportCode)
@@ -514,5 +516,6 @@ fun MA3_3_NEW1_MakeList( ReportCode:String){
             }
             MA3_3_NEW1_msggg = workListDatas
         }
+        showDialog = false;
     }
 }

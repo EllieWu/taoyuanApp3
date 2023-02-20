@@ -65,6 +65,7 @@ object RepairFakeData {
 fun MA3_2(
     navController: NavHostController = rememberNavController()
 ) {
+    loadingDialog();
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -214,15 +215,18 @@ fun MA3_2(
 
 @Composable
 fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavController()) {
+
     Button(
         modifier = Modifier
             //.padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
-            .fillMaxSize().padding(vertical = 10.dp),
+            .fillMaxSize()
+            .padding(vertical = 10.dp),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
         contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
+            Log.d("showDialog", showDialog.toString())
             Log.d("ButtonEvent", Screen.MA3_2_1.route)
                 var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${list.RepairCode}&State=${list.State}"
                 navController.navigate(fullMA3_2_1_path)
@@ -232,7 +236,7 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
             Row(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
-                    .size(100.dp,100.dp)
+                    .size(100.dp, 100.dp)
                     .fillMaxWidth()
                     //.size(width = 0.dp, height = 100.dp)
                     .background(Color(255, 255, 255))
@@ -262,7 +266,7 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth()
-                    .padding(top = 20.dp, bottom = 20.dp,start = 20.dp)
+                    .padding(top = 20.dp, bottom = 20.dp, start = 20.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically){
                     Text(
@@ -307,6 +311,7 @@ fun MA3_2_MakeList(Date:String, UserID:String){
         MA3_RequestJsonObject.put("Function", "RepairList")
         MA3_RequestJsonObject.put("Date", Date)
         MA3_RequestJsonObject.put("UserID", UserID)
+        showDialog = true;
         val responseString = HttpRequestTest(MA3_RequestJsonObject)
         Log.d("MA3_2",responseString)
         if(responseString!="Error"){
@@ -326,6 +331,7 @@ fun MA3_2_MakeList(Date:String, UserID:String){
             }
             MA3_2_msggg = RepairListDatas
         }
+        showDialog = false;
     }
 }
 

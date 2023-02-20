@@ -62,12 +62,13 @@ var MA3_3_1_ReportCode by mutableStateOf("")
 fun MA3_3(
     navController: NavHostController = rememberNavController()
 ) {
+    loadingDialog()
     CurrentPhoto = ""
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(Color(226,230,239)),
+            .background(Color(226, 230, 239)),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -75,7 +76,7 @@ fun MA3_3(
             modifier = Modifier
                 .fillMaxWidth()
                 .size(width = 250.dp, 50.dp)
-                .background(Color(65,96,176)),
+                .background(Color(65, 96, 176)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -199,14 +200,16 @@ fun MA3_3(
             }
 
         }
-        Box(modifier = Modifier.fillMaxSize().background(Color(231,238,248))){
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color(231, 238, 248))){
             if (MA3_3_msggg.size == 0) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-                        .background(Color(231,238,248))
+                        .background(Color(231, 238, 248))
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 180.dp),
@@ -221,7 +224,7 @@ fun MA3_3(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-                        .background(Color(231,238,248))
+                        .background(Color(231, 238, 248))
                 ) {
                     ReportList(MA3_3_msggg,navController);
                 }
@@ -236,7 +239,8 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
     Button(
         modifier = Modifier
             //.padding(start = 5.dp, end = 5.dp, bottom = 5.dp)
-            .fillMaxSize().padding(vertical = 10.dp),
+            .fillMaxSize()
+            .padding(vertical = 10.dp),
         border = BorderStroke(0.dp, Color.Transparent),
         elevation = null,
         contentPadding = PaddingValues(0.dp),
@@ -252,7 +256,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
             Row(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
-                    .size(100.dp,100.dp)
+                    .size(100.dp, 100.dp)
                     .fillMaxWidth()
                     //.size(width = 0.dp, height = 100.dp)
                     .background(Color(255, 255, 255))
@@ -282,7 +286,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
                 modifier = Modifier
                     .fillMaxHeight()
                     .fillMaxWidth()
-                    .padding(top = 20.dp, bottom = 20.dp,start = 20.dp)
+                    .padding(top = 20.dp, bottom = 20.dp, start = 20.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically){
                     Text(
@@ -315,7 +319,9 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
 
 @Composable
 fun ReportList(messages: List<ReportLists>,navController :NavHostController = rememberNavController()) {
-    LazyColumn(modifier = Modifier.padding(start = 20.dp,end = 20.dp,bottom = 80.dp).fillMaxSize(), state = LazyListState()) {
+    LazyColumn(modifier = Modifier
+        .padding(start = 20.dp, end = 20.dp, bottom = 80.dp)
+        .fillMaxSize(), state = LazyListState()) {
         items(messages) { message ->
             ReportCard(message,navController)
         }
@@ -329,6 +335,7 @@ fun MA3_3_MakeListCom(Date:String,UserID:String){
 }
 fun MA3_3_MakeList(Date:String, UserID:String){
     GlobalScope.launch(Dispatchers.IO) {
+        showDialog = true;
         var MA3_RequestJsonObject = JSONObject();
         MA3_RequestJsonObject.put("Function", "ReportList")
         MA3_RequestJsonObject.put("Date", Date)
@@ -352,5 +359,6 @@ fun MA3_3_MakeList(Date:String, UserID:String){
             }
             MA3_3_msggg = ReportListDatas
         }
+        showDialog = false;
     }
 }
