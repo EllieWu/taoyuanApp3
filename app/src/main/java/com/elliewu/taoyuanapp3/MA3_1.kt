@@ -74,6 +74,7 @@ fun MA3_1(
     navController: NavHostController = rememberNavController()
 ) {
     loadingDialog();
+    CurrentPhoto = ""
     //TODO:Jeremy增加根據request塞入變數 下方的Date跟UserID會根據外部變化
     Column(
         modifier = Modifier
@@ -255,7 +256,7 @@ fun MA3_1_MakeList(Date:String,UserID:String){
         MA3_RequestJsonObject.put("UserID", UserID)
         showDialog = true;
         val responseString = HttpRequestTest(MA3_RequestJsonObject)
-        Log.d("MA3_1",responseString)
+        //Log.d("MA3_1",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var TestWorkList:SelectWorkList_Response = gson.fromJson(responseString,SelectWorkList_Response::class.java)
@@ -290,7 +291,7 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
             showDialog = true;
-            Log.d("ButtonEvent", Screen.MA3_1_1.route)
+            //Log.d("ButtonEvent", Screen.MA3_1_1.route)
             //val screen = Screen.MA3_1_1.route
                 //navController.navigate(Screen.MA3_1_1.withArgs(list.workID))
             val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${list.workID}&WorkTime=${list.time}"

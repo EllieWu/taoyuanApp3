@@ -100,7 +100,7 @@ fun BottomBtnCard(btnList: buttonBtn,clicked:Color,navController :NavHostControl
             modifier = Modifier.size(width = 100.dp, 80.dp),
             onClick = {
                 nowclickedpage = btnList.number;
-                Log.d("ButtonEvent", btnList.screen.route.toString())
+                //Log.d("ButtonEvent", btnList.screen.route.toString())
                 navController.navigate(btnList.screen.route)
 
             }
@@ -137,7 +137,7 @@ fun BottomBtnCard(btnList: buttonBtn,clicked:Color,navController :NavHostControl
             modifier = Modifier.size(width = 100.dp, 80.dp),
             onClick = {
                 nowclickedpage = btnList.number;
-                Log.d("ButtonEvent", btnList.screen.route.toString())
+                //Log.d("ButtonEvent", btnList.screen.route.toString())
                 navController.navigate(btnList.screen.route)
 
             }

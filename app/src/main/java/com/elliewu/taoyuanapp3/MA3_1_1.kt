@@ -238,7 +238,7 @@ fun MA3_1_1(
                             title = "打卡",
                             snippet = "打卡點-${(Index+1)}",
                             onInfoWindowClick = {
-                                Log.d("reddot",item.LocateNumber)
+                                //Log.d("reddot",item.LocateNumber)
 //                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
 //                                navController.navigate(fullpath)
 //                                Log.d("reddot",item.LocateNumber)
@@ -268,7 +268,7 @@ fun MA3_1_1(
                                         backgroundColor = Color.Transparent
                                     ),
                                     onClick = {
-                                          Log.d("reddot",item.LocateNumber)
+                                          //Log.d("reddot",item.LocateNumber)
                                     },
                                     modifier = Modifier.weight(0.45f)
                                 )
@@ -364,7 +364,7 @@ fun MA3_1_1_RedPoint_MakeList(WorkCode:String,WorkTime:String){
         RequestJsonObject.put("WorkCode", WorkCode)
         RequestJsonObject.put("WorkTime", WorkTime)
         val responseString = HttpRequestTest(RequestJsonObject)
-        Log.d("MA3_1_1_CheckPoint",responseString)
+        //Log.d("MA3_1_1_CheckPoint",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:RequestLocate_Response = gson.fromJson(responseString,RequestLocate_Response::class.java)
@@ -394,7 +394,7 @@ fun MA3_1_1_BluePoint_MakeList(Date:String,UserID:String){
         RequestJsonObject.put("UserID", UserID)
         RequestJsonObject.put("ReportType", "外巡報修")
         val responseString = HttpRequestTest(RequestJsonObject)
-        Log.d("MA3_1_1_Bluepoint",responseString)
+        //Log.d("MA3_1_1_Bluepoint",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:RequestRepairLocate_Response = gson.fromJson(responseString,RequestRepairLocate_Response::class.java)
@@ -402,12 +402,17 @@ fun MA3_1_1_BluePoint_MakeList(Date:String,UserID:String){
 //                LatLng(25.046296,121.506857))
             var workListDatas = repairDotFakedatas;
             workListDatas = workListDatas - workListDatas[workListDatas.size - 1]
-
-            if(WorkInfoResponse.RepairLocate != null && WorkInfoResponse.RepairLocate!!.isNotEmpty()){
-                WorkInfoResponse.RepairLocate!!.forEach {
+            try {
+                if(WorkInfoResponse.RepairLocate != null && WorkInfoResponse.RepairLocate!!.isNotEmpty()){
+                    WorkInfoResponse.RepairLocate!!.forEach {
 //                    workListDatas = workListDatas + LatLng(it.Latitude.toDouble(),it.Longitude.toDouble())
-                    workListDatas = workListDatas + repairDot(it.ReportCode,LatLng(it.Latitude.toDouble(),it.Longitude.toDouble()))
+                        if(it.Latitude != null && it.Longitude != null)
+                            workListDatas = workListDatas + repairDot(it.ReportCode,LatLng(it.Latitude.toDouble(),it.Longitude.toDouble()))
+                    }
                 }
+            }
+            catch (e:java.lang.Exception){
+
             }
             blueDotList = workListDatas
         }

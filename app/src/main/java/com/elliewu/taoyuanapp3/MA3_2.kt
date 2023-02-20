@@ -65,6 +65,7 @@ object RepairFakeData {
 fun MA3_2(
     navController: NavHostController = rememberNavController()
 ) {
+    CurrentPhoto=""
     loadingDialog();
     Column(
         modifier = Modifier
@@ -226,8 +227,8 @@ fun RepairCard(list: RepairLists,navController :NavHostController = rememberNavC
         contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
-            Log.d("showDialog", showDialog.toString())
-            Log.d("ButtonEvent", Screen.MA3_2_1.route)
+            //Log.d("showDialog", showDialog.toString())
+            //Log.d("ButtonEvent", Screen.MA3_2_1.route)
                 var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${list.RepairCode}&State=${list.State}"
                 navController.navigate(fullMA3_2_1_path)
         })
@@ -313,7 +314,7 @@ fun MA3_2_MakeList(Date:String, UserID:String){
         MA3_RequestJsonObject.put("UserID", UserID)
         showDialog = true;
         val responseString = HttpRequestTest(MA3_RequestJsonObject)
-        Log.d("MA3_2",responseString)
+        //Log.d("MA3_2",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var TestWorkList:RepairList_Response = gson.fromJson(responseString,RepairList_Response::class.java)

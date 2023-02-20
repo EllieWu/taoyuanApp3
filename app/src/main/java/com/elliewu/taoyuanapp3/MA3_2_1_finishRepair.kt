@@ -55,13 +55,18 @@ var Finish_RepairListData =
         "",
         "FALSE",
     )
-var MA3_2_1_finishRepair_finishState by mutableStateOf("待執行")
-var MA3_2_1_finishRepair_msggg by mutableStateOf(Finish_RepairListData)
+var MA3_2_1_finishRepair_msggg by mutableStateOf(Finish_RepairInfoList(
+    "尚未完成",
+    "載入中",
+    "",
+    "FALSE",
+))
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
 fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavController()) {
     MA3_2_1_finishRepair_MakeListCom(MA3_2_1_RepairCode)
+    var repairRemark by remember { mutableStateOf(MA3_2_1_finishRepair_msggg.RepairContent) }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -213,7 +218,12 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                         .padding(start = 30.dp), horizontalArrangement = Arrangement.Start
                 )
                 {
-                    DropdownDemo()
+                    when (MA3_2_1_finishRepair_msggg.State) {
+                        "待執行" -> DropdownDemo(0)
+                        "執行中" -> DropdownDemo(1)
+                        "已完工" -> DropdownDemo(2)
+                        else -> DropdownDemo(0)
+                    }
                 }
             }
             Row(
@@ -223,7 +233,7 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                     .padding(vertical = 8.dp)
             )
             {
-                var repairRemark by remember { mutableStateOf("維修備註") }
+                repairRemark = MA3_2_1_finishRepair_msggg.RepairContent
                 TextField(
                     modifier = Modifier
                         .size(2000.dp, 180.dp)
@@ -242,6 +252,7 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                     ),
                     onValueChange = {
                         repairRemark = it
+                        MA3_2_1_finishRepair_msggg.RepairContent = it
                     },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -279,7 +290,7 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                             contentDescription = "BackIcon",
                             tint = Color.White
                         )
-                        if(CurrentPhoto == ""){
+                        if(CurrentPhoto == "" && MA3_2_1_finishRepair_msggg.RepairPhoto.isNullOrEmpty()){
                             Text(
                                 text = "拍照",
                                 fontSize = 16.sp,
@@ -287,7 +298,7 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                                 color = Color.White,
                             )
                         }
-                        else if(MA3_2_1_finishRepair_msggg.RepairPhoto.isNullOrEmpty()){
+                        else if(!MA3_2_1_finishRepair_msggg.RepairPhoto.isNullOrEmpty()){
                             Text(
                                 text = "更換照片",
                                 fontSize = 16.sp,
@@ -350,24 +361,27 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
                             RequestJsonObject.put("Function", "FormUploadService")
                             RequestJsonObject.put("UserID", Login_UserId)
                             RequestJsonObject.put("RepairCode", MA3_2_1_RepairCode)
-                            RequestJsonObject.put("State", MA3_2_1_finishRepair_msggg.State)
+                            RequestJsonObject.put("State", FinishState)
                             RequestJsonObject.put("RepairContent", MA3_2_1_finishRepair_msggg.RepairContent)
                             if(CurrentPhoto != "")
                                 RequestJsonObject.put("RepairPhoto", CurrentPhoto)
                             else
                                 RequestJsonObject.put("RepairPhoto", MA3_2_1_finishRepair_msggg.RepairPhoto)
                             val responseString = HttpRequestTest(RequestJsonObject)
-                            Log.d("MA3_2_1_finishRepair_Upload",responseString)
+                            //Log.d("MA3_2_1_finishRepair_Upload",responseString)
                             if(responseString!="Error"){
                                 var gson = Gson();
                                 var WorkInfoResponse:FormUploadService_Response = gson.fromJson(responseString,FormUploadService_Response::class.java)
                                 if(WorkInfoResponse.Feedback == "TRUE")
                                 {
                                     GlobalScope.launch(Dispatchers.Main){
-                                        var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_RepairCode}&State=${MA3_2_1_State}"
-                                        navController.navigate(fullMA3_2_1_path)
+//                                        var fullMA3_2_1_path = Screen.MA3_2_1.route + "?RepairCode=${MA3_2_1_RepairCode}&State=${MA3_2_1_State}"
+//                                        navController.navigate(fullMA3_2_1_path)
+                                        navController.navigate(Screen.MA3_2.route)
                                         CurrentPhoto = ""
                                     }
+                                    MA3_2_1_finishRepair_msggg.State = FinishState
+                                    MA3_2_1_finishRepair_MakeList(MA3_2_1_RepairCode);
                                 }
                             }
                             showDialog = false;
@@ -389,10 +403,10 @@ fun MA3_2_1_finishRepair(navController: NavHostController = rememberNavControlle
 
 
 @Composable
-fun DropdownDemo() {
+fun DropdownDemo(State: Int) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("待執行","執行中", "已完工")
-    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by remember { mutableStateOf(State) }
     Box(modifier = Modifier
         .fillMaxSize()
         .wrapContentSize(Alignment.Center)) {
@@ -432,7 +446,6 @@ fun DropdownDemo() {
                 }
             }
             FinishState = items[selectedIndex]
-            Log.d("FinishState",FinishState)
         }
     }
 }
@@ -449,7 +462,7 @@ fun MA3_2_1_finishRepair_MakeList(RepairCode:String){
         RequestJsonObject.put("Function", "FormRequestService")
         RequestJsonObject.put("RepairCode", RepairCode)
         val responseString = HttpRequestTest(RequestJsonObject)
-        Log.d("MA3_2_1_finishRepair",responseString)
+        //Log.d("MA3_2_1_finishRepair",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:FormRequestService_Response = gson.fromJson(responseString,FormRequestService_Response::class.java)
@@ -458,7 +471,7 @@ fun MA3_2_1_finishRepair_MakeList(RepairCode:String){
             workListDatas.RepairContent = WorkInfoResponse.RepairContent.toString()
             workListDatas.RepairPhoto = WorkInfoResponse.RepairPhoto.toString()
             workListDatas.Edit = WorkInfoResponse.Edit.toString()
-            Finish_RepairListData = workListDatas
+            MA3_2_1_finishRepair_msggg = workListDatas
         }
         showDialog = false;
     }

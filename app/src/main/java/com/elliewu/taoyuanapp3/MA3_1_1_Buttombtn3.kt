@@ -308,8 +308,8 @@ fun MA3_1_1_Bottombtn3(
                             viewModel.getDeviceLocation(fusedLocationProviderClient)
                             btn3_longitude = state.lastKnownLocation?.longitude.toString();
                             btn3_latitude = state.lastKnownLocation?.latitude.toString();
-                            Log.d("longitude",state.lastKnownLocation?.longitude.toString())
-                            Log.d("latitude",state.lastKnownLocation?.latitude.toString())
+                            //Log.d("longitude",state.lastKnownLocation?.longitude.toString())
+                            //Log.d("latitude",state.lastKnownLocation?.latitude.toString())
 //                            val fullpath = Screen.MA3_1_1_Bottombtn3.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
 //                            navController.navigate(fullpath)
                         }
@@ -507,7 +507,7 @@ fun MA3_1_1_Bottombtn3(
                             RequestJsonObject.put("ReportType", "外巡報修")
 
                             val responseString = HttpRequestTest(RequestJsonObject)
-                            Log.d("MA3_1_1_Buttombtn3",responseString)
+                            //Log.d("MA3_1_1_Buttombtn3",responseString)
                             if(responseString!="Error"){
                                 var gson = Gson();
                                 var Response:LocateFormUpload_Response = gson.fromJson(responseString,LocateFormUpload_Response::class.java)

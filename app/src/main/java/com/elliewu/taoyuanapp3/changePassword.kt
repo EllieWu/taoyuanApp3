@@ -116,7 +116,7 @@ fun changePassword(
                         loginJsonObject.put("UserID", "F123332212")
                         loginJsonObject.put("UserPW", "Abc1234")
                         val responseString = HttpRequestTest(loginJsonObject)
-                        Log.d("Login Response",responseString)
+                        //Log.d("Login Response",responseString)
                         if(responseString == "Error") {
                             //TODO :網路連線異常的通知
                         }

@@ -66,9 +66,9 @@ fun MA3_1_1_WorkPoint(WorkTime:String?="",
                       navController: NavHostController = rememberNavController()){
     var workContentValue by remember { mutableStateOf("") }
     workContentValue = MA3_1_1_WorkPointList.InputContent
-    Log.d("WorkTime",WorkTime.toString())
-    Log.d("WorkCode",WorkCode.toString())
-    Log.d("LocateNumber",LocateNumber.toString())
+    //Log.d("WorkTime",WorkTime.toString())
+    //Log.d("WorkCode",WorkCode.toString())
+    //Log.d("LocateNumber",LocateNumber.toString())
     MA3_1_1_WorkPoint_MakeListCom(WorkCode.toString(),WorkTime.toString(),LocateNumber.toString())
     Column(
         modifier = Modifier
@@ -339,7 +339,7 @@ fun MA3_1_1_WorkPoint(WorkTime:String?="",
                                 RequestJsonObject.put("ImagePhoto", MA3_1_1_WorkPointList.ImagePhoto)
 
                             val responseString = HttpRequestTest(RequestJsonObject)
-                            Log.d("MA3_1_1_WorkPoint",responseString)
+                            //Log.d("MA3_1_1_WorkPoint",responseString)
                             if(responseString!="Error"){
                                 var gson = Gson();
                                 var WorkInfoResponse:LocateFormUploadAgain_Response = gson.fromJson(responseString,LocateFormUploadAgain_Response::class.java)
@@ -382,7 +382,7 @@ fun MA3_1_1_WorkPoint_MakeList(WorkCode:String,WorkTime: String,LocateNumber:Str
         RequestJsonObject.put("WorkTime", WorkTime)
         RequestJsonObject.put("LocateNumber", LocateNumber)
         val responseString = HttpRequestTest(RequestJsonObject)
-        Log.d("MA3_1_1_WorkPoint",responseString)
+        //Log.d("MA3_1_1_WorkPoint",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:RequestLocateInfo_Response = gson.fromJson(responseString,RequestLocateInfo_Response::class.java)

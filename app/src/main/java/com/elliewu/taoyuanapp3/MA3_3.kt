@@ -246,7 +246,7 @@ fun ReportCard(list: ReportLists,navController :NavHostController = rememberNavC
         contentPadding = PaddingValues(0.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         onClick = {
-            Log.d("ButtonEvent", Screen.MA3_3_1.route)
+            //Log.d("ButtonEvent", Screen.MA3_3_1.route)
             //val screen = Screen.MA3_1_1.route
             MA3_3_1_ReportCode = list.ReportCode
             navController.navigate(Screen.MA3_3_NEW1.route)
@@ -341,7 +341,7 @@ fun MA3_3_MakeList(Date:String, UserID:String){
         MA3_RequestJsonObject.put("Date", Date)
         MA3_RequestJsonObject.put("UserID", UserID)
         val responseString = HttpRequestTest(MA3_RequestJsonObject)
-        Log.d("MA3_3",responseString)
+        //Log.d("MA3_3",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var TestWorkList:ReportList_Response = gson.fromJson(responseString,ReportList_Response::class.java)

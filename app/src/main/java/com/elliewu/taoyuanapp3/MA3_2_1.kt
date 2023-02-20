@@ -463,7 +463,7 @@ fun RepairBottomBtn(RepairCode: String? = "",State: String?="" ,list: RepairInfo
                 MA3_2_1_RepairCode = RepairCode.toString()
                 MA3_2_1_State = State.toString();
                 val MA3_2_2_fullRoutePath = Screen.MA3_2_2.route + "?latitude=${list.Latitude}&longitude=${list.Longitude}&repairTitle=${list.RepairTitle}"
-                Log.d("ButtonClick","地圖");
+                //Log.d("ButtonClick","地圖");
                 navController.navigate(MA3_2_2_fullRoutePath);
             }
 
@@ -514,19 +514,19 @@ fun MA3_2_1_MakeListCom(RepairCode:String?,State: String?){
 }
 fun MA3_2_1_MakeList(RepairCode:String?,State: String?){
     GlobalScope.launch(Dispatchers.IO) {
-        Log.d("RepairCode",RepairCode.toString())
-        Log.d("State",State.toString())
+        //Log.d("RepairCode",RepairCode.toString())
+        //Log.d("State",State.toString())
         var RequestJsonObject = JSONObject();
         RequestJsonObject.put("Function", "RepairContent")
         RequestJsonObject.put("RepairCode", RepairCode.toString())
         RequestJsonObject.put("ReportType", "外巡報修")
         showDialog = true;
         val responseString = HttpRequestTest(RequestJsonObject)
-        Log.d("MA3_2_1",responseString)
+        //Log.d("MA3_2_1",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:RepairContent_Response = gson.fromJson(responseString,RepairContent_Response::class.java)
-            var workListDatas = MA3_2_1_msggg
+            var workListDatas = RepairListData
             if(WorkInfoResponse.OutsideRepair != null){
                 var outsiderepair = WorkInfoResponse.OutsideRepair;
                 workListDatas = RepairInfoList(
@@ -543,7 +543,7 @@ fun MA3_2_1_MakeList(RepairCode:String?,State: String?){
                 {
                     workListDatas.RepairPhoto = "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAARABkDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KKKACiiigAooooAKKKKAP/2Q=="
                 }
-                Log.d("RepairPhoto",outsiderepair.RepairPhoto.toString())
+                //Log.d("RepairPhoto",outsiderepair.RepairPhoto.toString())
             }
             MA3_2_1_msggg = workListDatas;
         }

@@ -450,7 +450,7 @@ fun MA3_3_NEW1_UI(list: ReportInfoList,navController: NavHostController = rememb
                         RequestJsonObject.put("ReportPhoto", MA3_3_NEW1_msggg.ReportPhoto)
                     RequestJsonObject.put("ReportType", "外巡報修")
                     val responseString = HttpRequestTest(RequestJsonObject)
-                    Log.d("MA3_3_NEW1_Submit",responseString)
+                    //Log.d("MA3_3_NEW1_Submit",responseString)
                     if(responseString!="Error"){
                         var gson = Gson();
                         var WorkInfoResponse:ReportUploadAgain_Response = gson.fromJson(responseString,ReportUploadAgain_Response::class.java)

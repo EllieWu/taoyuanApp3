@@ -338,7 +338,7 @@ fun MA3_1_1_Buttonbtn1(WorkTime:String?="",
                             RequestJsonObject.put("InputContent", reportContentValue)
                             RequestJsonObject.put("ImagePhoto", CurrentPhoto)
                             val responseString = HttpRequestTest(RequestJsonObject)
-                            Log.d("MA3_1_1_Buttombtn1",responseString)
+                            //Log.d("MA3_1_1_Buttombtn1",responseString)
                             if(responseString!="Error"){
                                 var gson = Gson();
                                 var Response:LocateFormUpload_Response = gson.fromJson(responseString,LocateFormUpload_Response::class.java)
@@ -493,7 +493,7 @@ fun CameraTest_Jeremy(context:Context){
     }
     //region TEST
     if (cameraCapturedImageUri?.path != null && cameraCapturedImageUri?.path != "") {
-        Log.d("cameraCapturedImageUri",cameraCapturedImageUri?.path.toString())
+        //Log.d("cameraCapturedImageUri",cameraCapturedImageUri?.path.toString())
         if (cameraCapturedImageUri.path?.isNotEmpty() == true) {
             imageBase64 = null
             fileExistsImageUriPath = null

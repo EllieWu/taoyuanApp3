@@ -73,7 +73,7 @@ fun MA3_1_1_info(
    WorkCode: String? = "",
    WorkTime: String?=""
 ) {
-    Log.d("Workcode","$WorkCode")
+    //Log.d("Workcode","$WorkCode")
     MA3_1_1_Info_MakeListCom(WorkCode.toString());
 //    val coroutineScope = rememberCoroutineScope()
     Column(
@@ -374,7 +374,7 @@ fun MA3_1_1_Info_MakeList( WorkCode:String){
         RequestJsonObject.put("Function", "WorkInfo")
         RequestJsonObject.put("WorkCode", WorkCode)
         val responseString = HttpRequestTest(RequestJsonObject)
-        Log.d("MA3_1_1_Info",responseString)
+        //Log.d("MA3_1_1_Info",responseString)
         if(responseString!="Error"){
             var gson = Gson();
             var WorkInfoResponse:WorkInfo_Response = gson.fromJson(responseString,WorkInfo_Response::class.java)

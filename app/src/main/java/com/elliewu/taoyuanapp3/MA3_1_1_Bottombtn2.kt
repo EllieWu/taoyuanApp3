@@ -1,5 +1,6 @@
 package com.elliewu.taoyuanapp3
 
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
@@ -34,20 +35,30 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 var FinishState by mutableStateOf("待執行")
+data class MA3_1_1_btn2_Info(var State: String, var FinishContent: String,var FinishPhoto : String)
+var MA3_1_1_btn2_Info_msggg by mutableStateOf(MA3_1_1_btn2_Info("","",""))
+
 @Preview(device = Devices.PIXEL_C)
 @Preview(device = Devices.PIXEL_3A)
 @Composable
 fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: NavHostController = rememberNavController()) {
-    var repairRemark by remember { mutableStateOf("完工備註") }
+    val coroutineScope = rememberCoroutineScope()
+    loadingDialog()
+    var repairRemark by remember { mutableStateOf(MA3_1_1_btn2_Info_msggg.FinishContent) }
+    repairRemark = MA3_1_1_btn2_Info_msggg.FinishContent
     MA3_1_1_Info_MakeListCom(WorkCode.toString());
+    MA3_1_1_btn2_MakeListCom(WorkCode.toString());
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,7 +67,6 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-
             modifier = Modifier
                 .fillMaxWidth()
                 .size(width = 250.dp, 50.dp)
@@ -237,7 +247,13 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                         .padding(start = 30.dp), horizontalArrangement = Arrangement.Start
                 )
                 {
-                    DropdownDemo()
+                    when (MA3_1_1_btn2_Info_msggg.State) {
+                        "待執行" -> DropdownDemo(0)
+                        "執行中" -> DropdownDemo(1)
+                        "已完工" -> DropdownDemo(2)
+                        else -> DropdownDemo(0)
+                    }
+
                 }
             }
             Row(
@@ -265,6 +281,7 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                     ),
                     onValueChange = {
                         repairRemark = it
+                        MA3_1_1_btn2_Info_msggg.FinishContent = it
                     },
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.None,
@@ -297,7 +314,8 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                     ) {
                         Icon(
                             modifier = Modifier
-                                .size(25.dp).padding(end = 5.dp),
+                                .size(25.dp)
+                                .padding(end = 5.dp),
                             painter = painterResource(id = R.drawable.camera),
                             contentDescription = "BackIcon",
                             tint = Color.White
@@ -321,13 +339,21 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                     }
                 }
             }
-
             //照片顯示位置
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp), horizontalArrangement = Arrangement.Start)
             {
-                val imageBytes = Base64.decode(CurrentPhoto, 0)
+
+                var imageBytes = Base64.decode("", 0)
+                if(CurrentPhoto != ""){
+                    imageBytes = Base64.decode(CurrentPhoto, 0)
+                }
+                else
+                {
+                    imageBytes = Base64.decode(MA3_1_1_btn2_Info_msggg.FinishPhoto, 0)
+                }
+
                 val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 if(image != null)
                 {
@@ -338,7 +364,6 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                         contentDescription = "contentDescription"
                     )
                 }
-
             }
             Row(
                 verticalAlignment = Alignment.Bottom,
@@ -354,7 +379,8 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                         .fillMaxWidth()
                         .padding(vertical = 5.dp),
                     onClick = {
-                        Log.d("MA3_1_1_btn2_submit","Onclick")
+                        //Log.d("MA3_1_1_btn2_submit","Onclick")
+                        showDialog = true
                         GlobalScope.launch(Dispatchers.IO) {
                             var RequestJsonObject = JSONObject();
                             RequestJsonObject.put("Function", "FormUploadWork")
@@ -362,9 +388,12 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                             RequestJsonObject.put("WorkCode", WorkCode)
                             RequestJsonObject.put("State", FinishState)
                             RequestJsonObject.put("FinishContent", repairRemark)
-                            RequestJsonObject.put("FinishPhoto", CurrentPhoto)
+                            if(CurrentPhoto != "")
+                                RequestJsonObject.put("FinishPhoto", CurrentPhoto)
+                            else
+                                RequestJsonObject.put("FinishPhoto", MA3_1_1_btn2_Info_msggg.FinishPhoto)
                             val responseString = HttpRequestTest(RequestJsonObject)
-                            Log.d("MA3_1_1_Buttombtn2",responseString)
+                            //Log.d("MA3_1_1_Buttombtn2",responseString)
                             if(responseString!="Error"){
                                 var gson = Gson();
                                 var Response:LocateFormUpload_Response = gson.fromJson(responseString,LocateFormUpload_Response::class.java)
@@ -372,10 +401,10 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
                                     //TODO:跳轉回首頁
                                     GlobalScope.launch(Dispatchers.Main) {
                                         navController.navigate(Screen.MA3_1.route)
-                                        CurrentPhoto = ""
                                     }
                                 }
                             }
+                            showDialog = false
                         }
                     }
                 ) {
@@ -389,5 +418,55 @@ fun MA3_1_1_Bottombtn2(WorkCode:String?="",WorkTime:String?="",navController: Na
             }
         }
     }
+}
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun MA3_1_1_btn2_MakeListCom(WorkCode:String){
+    MA3_1_1_btn2_MakeList(WorkCode)
+}
+fun MA3_1_1_btn2_MakeList(WorkCode:String){
+    GlobalScope.launch(Dispatchers.IO) {
+        showDialog = true
+        var RequestJsonObject = JSONObject();
+        RequestJsonObject.put("Function", "FormRequestWork")
+        RequestJsonObject.put("WorkCode", WorkCode)
+        val responseString = HttpRequestTest(RequestJsonObject)
+        //Log.d("MA3_1_1_btn2_MakeList",responseString)
+        if(responseString!="Error"){
+            var gson = Gson();
+            var WorkInfoResponse:FormRequestWork_Response = gson.fromJson(responseString,FormRequestWork_Response::class.java)
+            var workListDatas = MA3_1_1_btn2_Info("","","");
+            try {
+                workListDatas.State = WorkInfoResponse.State.toString();
+                workListDatas.FinishContent = WorkInfoResponse.FinishContent.toString();
+                workListDatas.FinishPhoto = WorkInfoResponse.FinishPhoto.toString();
+            }
+            catch (e:java.lang.Exception){
 
+            }
+            MA3_1_1_btn2_Info_msggg = workListDatas
+        }
+        showDialog = false
+    }
+}
+@Composable
+fun JeremyloadingDialog(AAA:Boolean){
+    if (AAA) {
+        Dialog(
+            onDismissRequest = { showDialog = false },
+            DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+        ) {
+            Box(
+                contentAlignment= Alignment.Center,
+                modifier = Modifier
+                    .size(100.dp)
+                    .background(Color.White, shape = RoundedCornerShape(12.dp))
+            ) {
+                Column {
+                    CircularProgressIndicator(modifier = Modifier.padding(8.dp, 0.dp, 0.dp, 0.dp))
+                    Text(text = "Loading", Modifier.padding(0.dp, 8.dp, 0.dp, 0.dp))
+                }
+            }
+        }
+    }
 }

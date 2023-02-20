@@ -139,7 +139,7 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             loginJsonObject.put("UserID", "F123332212")
                             loginJsonObject.put("UserPW", "Abc1234")
                             val responseString = HttpRequestTest(loginJsonObject)
-                            Log.d("Login Response",responseString)
+                            //Log.d("Login Response",responseString)
                             if(responseString == "Error")
                             {
                                 //TODO :網路連線異常的通知
@@ -210,8 +210,8 @@ fun PostView() {
     val screenWidth = configuration.screenWidthDp
     ScreenHeight = screenHeight
     ScreenWidth = screenWidth
-    Log.d("screenHeight",ScreenHeight.toString())
-    Log.d("screenWidth",ScreenWidth.toString())
+    //Log.d("screenHeight",ScreenHeight.toString())
+    //Log.d("screenWidth",ScreenWidth.toString())
 
 }
 
