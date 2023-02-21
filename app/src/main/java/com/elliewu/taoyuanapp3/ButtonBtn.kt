@@ -41,7 +41,7 @@ var buttonBtnData = listOf(
         R.drawable.p3, "報修", Screen.MA3_3,3
     ),
     buttonBtn(
-        R.drawable.p4, "密碼變更", Screen.changePassword,4
+        R.drawable.p4, "密碼變更", Screen.changePassword_newPassword,4
     ),
 )
 

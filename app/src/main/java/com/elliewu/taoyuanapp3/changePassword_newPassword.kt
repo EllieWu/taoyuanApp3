@@ -31,6 +31,8 @@ fun changePassword_newPassword(
     navController: NavHostController = rememberNavController()
 ) {
     val coroutineScope = rememberCoroutineScope()
+    PwderrorDialog();
+    loadingDialog()
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -78,68 +80,81 @@ fun changePassword_newPassword(
                     .fillMaxWidth()
                     .padding(bottom = 8.dp))
 
-            var account by remember { mutableStateOf("") }
-            val maxLength = 110
+            var New_password by remember { mutableStateOf("") }
+            val maxLength = 15
             TextField( modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
-                value = account,
+                value = New_password,
+                singleLine = true,
+                maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(
                     cursorColor = Color.Black,
                     backgroundColor = Color(255,255,255),
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent), onValueChange = {if (it.length <= maxLength) account = it})
+                    unfocusedIndicatorColor = Color.Transparent), onValueChange = {if (it.length <= maxLength) New_password = it})
 
             Text("再次確認新密碼",fontSize = 24.sp,textAlign = TextAlign.Start,fontWeight = FontWeight.Bold,
                 color = Color(62, 83, 140),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp))
-            var password by remember { mutableStateOf("") }
+            var New_password_Checked by remember { mutableStateOf("") }
             TextField( modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 40.dp),
-                value = password,
+                value = New_password_Checked,
+                singleLine = true,
+                maxLines = 1,
                 colors = TextFieldDefaults.textFieldColors(
                     cursorColor = Color.Black,
                     backgroundColor = Color(255,255,255),
                     focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent), onValueChange = {if (it.length <= maxLength) password = it})
+                    unfocusedIndicatorColor = Color.Transparent), onValueChange = {if (it.length <= maxLength) New_password_Checked = it})
 
             Button(colors = ButtonDefaults.buttonColors(backgroundColor = Color(red = 87, green = 104, blue = 182)),
                 modifier = Modifier
                     .fillMaxWidth()
                     .size(width = 50.dp, height = 60.dp),
                 onClick = {
-                    //TODO :修改成功後跳回首頁
-                    coroutineScope.launch {
-                        var loginJsonObject = JSONObject();
-                        loginJsonObject.put("Function", "ChangePassword")
-                        //TODO : 正式上線請把預設值改掉換下面那個
-                        //loginJsonObject.put("UserID", account)
-                        //loginJsonObject.put("UserNewPW", password)
-                        loginJsonObject.put("UserID", "F123332212")
-                        loginJsonObject.put("UserNewPW", "Abc1234")
-                        val responseString = HttpRequestTest(loginJsonObject)
-                        //Log.d("ChangePassword",responseString)
-                        if(responseString == "Error")
-                        {
-                            //TODO :網路連線異常的通知
-                        }
-                        else{
-                            val jResponse = JSONObject(responseString);
-                            val succeed:String? = jResponse.getString("Feedback").toString();
-                            if(succeed == "TRUE")
+                    if(New_password == New_password_Checked)
+                    {
+                        //TODO :修改成功後跳回首頁
+                        coroutineScope.launch {
+                            var loginJsonObject = JSONObject();
+                            loginJsonObject.put("Function", "ChangePassword")
+                            //TODO : 正式上線請把預設值改掉換下面那個
+                            loginJsonObject.put("UserID", Login_UserId)
+                            loginJsonObject.put("UserNewPW", New_password)
+                            //loginJsonObject.put("UserID", "F123332212")
+                            //loginJsonObject.put("UserNewPW", "Abc1234")
+                            showDialog = true
+                            val responseString = HttpRequestTest(loginJsonObject)
+                            Log.d("ChangePassword",responseString)
+                            if(responseString == "Error")
                             {
-                                navController.navigate(Screen.login.route)
-                                //TODO:成功後跳轉得頁面，下一頁才會正式修改密碼
+                                showDialog = false
+                                //TODO :網路連線異常的通知
+                                ifError = "0"
+                                openDialog = true
                             }
-                            else
-                            {
-                                //TODO:登入失敗跳的東西
+                            else{
+                                val jResponse = JSONObject(responseString);
+                                val succeed:String? = jResponse.getString("Feedback").toString();
+                                if(succeed == "TRUE")
+                                {
+                                    navController.navigate(Screen.login.route)
+                                    ifError = ""
+                                }
+                                showDialog = false
                             }
                         }
                     }
+                    else{
+                        ifError = "1"
+                        openDialog = true
+                    }
+
                 },) {
                 Text(text = "儲存更改", fontSize = 24.sp, fontWeight = FontWeight.Bold,
                     color = Color(255,255,255),
@@ -149,4 +164,56 @@ fun changePassword_newPassword(
 
     }
     BottomSpace(navController);
+}
+@Composable
+fun PwderrorDialog(){
+    Column {
+
+        Button(onClick = {
+            openDialog = true
+        }) {
+            Text("Click me")
+        }
+
+        if (openDialog) {
+
+            AlertDialog(
+                onDismissRequest = {
+                    // Dismiss the dialog when the user clicks outside the dialog or on the back
+                    // button. If you want to disable that functionality, simply use an empty
+                    // onCloseRequest.
+                    openDialog = false
+                },
+                title = {
+                    Text(text = "提示訊息!")
+                },
+                text = {
+                    if(ifError == "0"){
+                        Text("更改失敗，請檢查網路設置")
+                    }else if(ifError == "1"){
+                        Text("請驗證新密碼與確認新密碼是否相同")
+                    }
+
+                },
+                confirmButton = {
+                    Button(
+
+                        onClick = {
+                            openDialog = false
+                        }) {
+                        Text("確認")
+                    }
+                },
+//                dismissButton = {
+//                    Button(
+//
+//                        onClick = {
+//                            openDialog = false
+//                        }) {
+//                        Text("返回")
+//                    }
+//                }
+            )
+        }
+    }
 }
