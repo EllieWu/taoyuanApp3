@@ -68,9 +68,9 @@ fun MA3_1_1_Bottombtn3(
     WorkCode: String? = "", WorkTime: String?="", navController: NavHostController = rememberNavController()
 ){
 
-    var titleValue by remember { mutableStateOf("報修主旨") }
+    var titleValue by remember { mutableStateOf("") }
     var reportContentValue by remember {
-        mutableStateOf("報修內容")
+        mutableStateOf("")
     }
     var btn3_longitude by remember{ mutableStateOf("")}
     var btn3_latitude by remember{ mutableStateOf("")}
