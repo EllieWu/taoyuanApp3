@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,13 +34,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.location.*
-import androidx.compose.material.Button
 import androidx.compose.foundation.Image
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.node.modifierElementOf
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -83,6 +81,7 @@ var blueDotList by mutableStateOf(repairDotFakedatas)
 
 var redDotIsVis by mutableStateOf(true)
 var blueDotIsVis by mutableStateOf(true)
+var OTDialog by  (mutableStateOf(false))
 
 //@Preview(device = Devices.PIXEL_C)
 //@Preview(device = Devices.PIXEL_3A)
@@ -173,7 +172,306 @@ fun MA3_1_1(
 
 
         }
+        val mapProperties = MapProperties(
+            // Only enable if user has accepted location permissions.
+            isMyLocationEnabled = state.lastKnownLocation != null,
+        )
+        val taiwan = LatLng(25.17403, 121.40338) //Param(緯度,經度) 南北緯 & 東西經 以正負號表示
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(taiwan, 8f) //zoom 放大參數 數字越則越放大
+        }
         Column(modifier = Modifier.fillMaxSize()) {
+            overtimeDialog(navController, WorkCode.toString(),WorkTime.toString());
+            if(MA3_1_date > SimpleDateFormat("yyyy-MM-dd").format(Date())){
+                Box {
+                    Row(verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.zIndex(3f)) {
+                        infoLayout(navController, WorkCode.toString(),WorkTime.toString())
+                    }
+
+                    //Maps_start
+                    val locationPermissionRequest = rememberLauncherForActivityResult(
+                        ActivityResultContracts.RequestMultiplePermissions()
+                    ) { permissions ->
+                        when {
+                            permissions.getOrDefault(
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                false
+                            ) -> {
+                                viewModel.getDeviceLocation(fusedLocationProviderClient)
+                                // Precise location access granted.
+                            }
+                            permissions.getOrDefault(
+                                Manifest.permission.ACCESS_COARSE_LOCATION,
+                                false
+                            ) -> {
+                                // Only approximate location access granted.
+                                viewModel.getDeviceLocation(fusedLocationProviderClient)
+                            }
+                            else -> {
+                                // No location access granted.
+                            }
+                        }
+                    }
+                    SideEffect {
+                        locationPermissionRequest.launch(
+                            arrayOf(
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            )
+                        )
+                    }
+                    // Set properties using MapProperties which you can use to recompose the map\
+
+                    Log.d("ScreenHeight",ScreenHeight.toString())
+                    Log.d("(ScreenHeight * 0.83).dp",(ScreenHeight * 0.83).dp.toString())
+
+//                googleMapWidth = (ScreenWidth * 0.8.toInt())
+                    val configuration = LocalConfiguration.current
+                    if (configuration.orientation ==  Configuration.ORIENTATION_LANDSCAPE) {
+                        GoogleMap(
+                            modifier = Modifier
+                                .height((ScreenHeight * 0.75).dp)
+//                        .fillMaxHeight()
+                                .zIndex(0f),
+                            cameraPositionState = cameraPositionState,
+                            properties = mapProperties,
+                        ) {
+                            val context = LocalContext.current
+                            redDotList.forEachIndexed { Index, item ->
+                                MarkerInfoWindow(
+                                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
+                                    state = MarkerState(position = item.LatLng),
+                                    visible = redDotIsVis,
+                                    title = "打卡",
+                                    snippet = "打卡點-${(Index+1)}",
+                                    onInfoWindowClick = {
+                                        //Log.d("reddot",item.LocateNumber)
+//                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                                navController.navigate(fullpath)
+//                                Log.d("reddot",item.LocateNumber)
+                                        GlobalScope.launch(Dispatchers.Main) {
+                                            val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}&LocateNumber=${item.LocateNumber}"
+                                            navController.navigate(fullpath)
+                                        }
+
+                                    }
+                                ) { marker ->
+                                    // Implement the custom info window here
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(10.dp)
+                                            .background(Color.White)
+                                            .width(200.dp)
+                                        , verticalAlignment = Alignment.CenterVertically) {
+                                        Column(modifier = Modifier
+                                            .padding(10.dp)
+                                            .weight(0.55f)
+                                        ) {
+                                            Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
+                                            Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
+                                        }
+                                        Button(
+                                            colors = ButtonDefaults.buttonColors(
+                                                backgroundColor = Color.Transparent
+                                            ),
+                                            onClick = {
+                                                //Log.d("reddot",item.LocateNumber)
+                                            },
+                                            modifier = Modifier.weight(0.45f)
+                                        )
+                                        {
+                                            Image(
+                                                painterResource(id = R.drawable.map_clockin2),
+                                                contentDescription = "null",
+                                                modifier = Modifier.weight(1f)
+                                            )
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            blueDotList.forEachIndexed { Index,item ->
+                                MarkerInfoWindow(
+                                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
+                                    state = MarkerState(position = item.LatLng),
+                                    visible = blueDotIsVis,
+                                    title = "報修",
+                                    snippet = "報修點-${(Index+1)}",
+                                    onInfoWindowClick = {
+                                        GlobalScope.launch(Dispatchers.Main) {
+//                                    val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                                    navController.navigate(fullpath)
+                                            MA3_3_1_ReportCode = item.ReportCode
+                                            MA3_3_NEW1_lastWorkCode = WorkCode.toString()
+                                            MA3_3_NEW1_lastWorkTime = WorkTime.toString()
+                                            navController.navigate(Screen.MA3_3_NEW1.route)
+                                        }
+                                        Log.d("bluedot",item.ReportCode)
+                                    }
+                                ) { marker ->
+                                    // Implement the custom info window here
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(10.dp)
+                                            .background(Color.White)
+                                            .width(200.dp)
+                                        , verticalAlignment = Alignment.CenterVertically) {
+                                        Column(modifier = Modifier
+                                            .padding(10.dp)
+                                            .weight(0.55f)
+                                        ) {
+                                            Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
+                                            Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
+                                        }
+                                        Button(
+                                            colors = ButtonDefaults.buttonColors(
+                                                backgroundColor = Color.Transparent
+                                            ),
+                                            onClick = {
+                                                Log.d("bluedot",item.ReportCode)
+                                            },
+                                            modifier = Modifier.weight(0.45f)
+                                        )
+                                        {
+                                            Image(
+                                                painterResource(id = R.drawable.map_repair2),
+                                                contentDescription = "null",
+                                                modifier = Modifier.weight(1f)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }else{
+                        GoogleMap(
+                            modifier = Modifier
+                                .height((ScreenHeight * 0.83).dp)
+//                        .fillMaxHeight()
+                                .zIndex(0f),
+                            cameraPositionState = cameraPositionState,
+                            properties = mapProperties,
+                        ) {
+                            val context = LocalContext.current
+                            redDotList.forEachIndexed { Index, item ->
+                                MarkerInfoWindow(
+                                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED),
+                                    state = MarkerState(position = item.LatLng),
+                                    visible = redDotIsVis,
+                                    title = "打卡",
+                                    snippet = "打卡點-${(Index+1)}",
+                                    onInfoWindowClick = {
+                                        //Log.d("reddot",item.LocateNumber)
+//                                val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                                navController.navigate(fullpath)
+//                                Log.d("reddot",item.LocateNumber)
+                                        GlobalScope.launch(Dispatchers.Main) {
+                                            val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}&LocateNumber=${item.LocateNumber}"
+                                            navController.navigate(fullpath)
+                                        }
+
+                                    }
+                                ) { marker ->
+                                    // Implement the custom info window here
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(10.dp)
+                                            .background(Color.White)
+                                            .width(200.dp)
+                                        , verticalAlignment = Alignment.CenterVertically) {
+                                        Column(modifier = Modifier
+                                            .padding(10.dp)
+                                            .weight(0.55f)
+                                        ) {
+                                            Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
+                                            Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
+                                        }
+                                        Button(
+                                            colors = ButtonDefaults.buttonColors(
+                                                backgroundColor = Color.Transparent
+                                            ),
+                                            onClick = {
+                                                //Log.d("reddot",item.LocateNumber)
+                                            },
+                                            modifier = Modifier.weight(0.45f)
+                                        )
+                                        {
+                                            Image(
+                                                painterResource(id = R.drawable.map_clockin2),
+                                                contentDescription = "null",
+                                                modifier = Modifier.weight(1f)
+                                            )
+                                        }
+                                    }
+
+                                }
+                            }
+
+                            blueDotList.forEachIndexed { Index,item ->
+                                MarkerInfoWindow(
+                                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE),
+                                    state = MarkerState(position = item.LatLng),
+                                    visible = blueDotIsVis,
+                                    title = "報修",
+                                    snippet = "報修點-${(Index+1)}",
+                                    onInfoWindowClick = {
+                                        GlobalScope.launch(Dispatchers.Main) {
+//                                    val fullpath = Screen.MA3_1_1_WorkPoint.route + "?Longitude=${item.LatLng.longitude}&Latitude=${item.LatLng.latitude}&WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+//                                    navController.navigate(fullpath)
+                                            MA3_3_1_ReportCode = item.ReportCode
+                                            MA3_3_NEW1_lastWorkCode = WorkCode.toString()
+                                            MA3_3_NEW1_lastWorkTime = WorkTime.toString()
+                                            navController.navigate(Screen.MA3_3_NEW1.route)
+                                        }
+                                        Log.d("bluedot",item.ReportCode)
+                                    }
+                                ) { marker ->
+                                    // Implement the custom info window here
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(10.dp)
+                                            .background(Color.White)
+                                            .width(200.dp)
+                                        , verticalAlignment = Alignment.CenterVertically) {
+                                        Column(modifier = Modifier
+                                            .padding(10.dp)
+                                            .weight(0.55f)
+                                        ) {
+                                            Text(marker.title ?: "Default Marker Title", color = Color.Black, fontSize = 24.sp)
+                                            Text(marker.snippet ?: "Default Marker Snippet", color = Color.Black)
+                                        }
+                                        Button(
+                                            colors = ButtonDefaults.buttonColors(
+                                                backgroundColor = Color.Transparent
+                                            ),
+                                            onClick = {
+                                                Log.d("bluedot",item.ReportCode)
+                                            },
+                                            modifier = Modifier.weight(0.45f)
+                                        )
+                                        {
+                                            Image(
+                                                painterResource(id = R.drawable.map_repair2),
+                                                contentDescription = "null",
+                                                modifier = Modifier.weight(1f)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Box(modifier = Modifier.background(Color(224,224,224,80))){
+                    OTDialog = true
+                }
+                }else{
+
+
             Box {
                 Row(verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -214,14 +512,7 @@ fun MA3_1_1(
                     )
                 }
                 // Set properties using MapProperties which you can use to recompose the map\
-                val mapProperties = MapProperties(
-                    // Only enable if user has accepted location permissions.
-                    isMyLocationEnabled = state.lastKnownLocation != null,
-                )
-                val taiwan = LatLng(25.17403, 121.40338) //Param(緯度,經度) 南北緯 & 東西經 以正負號表示
-                val cameraPositionState = rememberCameraPositionState {
-                    position = CameraPosition.fromLatLngZoom(taiwan, 8f) //zoom 放大參數 數字越則越放大
-                }
+
                 Log.d("ScreenHeight",ScreenHeight.toString())
                 Log.d("(ScreenHeight * 0.83).dp",(ScreenHeight * 0.83).dp.toString())
 
@@ -464,6 +755,7 @@ fun MA3_1_1(
                     }
                 }
             }
+            }
 //            Button(onClick = {
 //                viewModel.getDeviceLocation(fusedLocationProviderClient)
 //                Log.d("緯度", state.lastKnownLocation?.latitude.toString())
@@ -475,6 +767,89 @@ fun MA3_1_1(
         }
     }
 }
+
+@Composable
+fun overtimeDialog(navController: NavHostController = rememberNavController(),WorkCode:String = "",WorkTime:String=""){
+    Column {
+
+        if (OTDialog) {
+
+            AlertDialog(
+
+
+                onDismissRequest = {
+                    // Dismiss the dialog when the user clicks outside the dialog or on the back
+                    // button. If you want to disable that functionality, simply use an empty
+                    // onCloseRequest.
+                    OTDialog = false
+                },
+                text = {
+                    Text(
+                        color = Color(163,76,60),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
+                        text = "打卡功能暫無開放",
+                        textAlign = TextAlign.Center,
+                        fontSize = 20.sp,
+                    )
+
+
+                },
+                confirmButton = {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()){
+                        Button(
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color(85,85,85)
+                            ),
+                            onClick = {
+
+                                showDialog = true
+                                val MA3_1_1_info_fullRoutePath = Screen.MA3_1_1_info.route + "?WorkCode=${WorkCode}&WorkTime=${WorkTime}"
+                                navController.navigate(MA3_1_1_info_fullRoutePath)
+                            }) {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                Image(
+                                    painterResource(id = R.drawable.p1),
+                                    contentDescription = "",
+                                    modifier = Modifier
+                                        .size(35.dp)
+                                        .padding(bottom = 5.dp),
+                                    colorFilter = ColorFilter.tint(Color(255,255,255))
+                                )
+                                Text(
+                                    text = "查看巡檢資訊",
+                                    color = Color(255,255,255),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                )
+                            }
+                        }
+                    }
+
+
+
+                },
+//                dismissButton = {
+//                    Button(
+//
+//                        onClick = {
+//                            openDialog = false
+//                        }) {
+//                        Text("返回")
+//                    }
+//                }
+            )
+        }
+    }
+}
+
+
 
 
 //TODO:Jeremy增加
@@ -557,3 +932,9 @@ private suspend fun CameraPositionState.centerOnLocation(
         15f
     ),
 )
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewLogin2() {
+    overtimeDialog();
+}

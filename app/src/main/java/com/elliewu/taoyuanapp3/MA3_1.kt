@@ -296,6 +296,8 @@ fun listCard(list: Lists,navController :NavHostController = rememberNavControlle
                 //navController.navigate(Screen.MA3_1_1.withArgs(list.workID))
             val MA3_1_1_fullRoutePath = Screen.MA3_1_1.route + "?WorkCode=${list.workID}&WorkTime=${list.time}"
             navController.navigate(MA3_1_1_fullRoutePath)
+            Log.d("MA3_1_date",MA3_1_date)
+            Log.d("MA3_1_date2",SimpleDateFormat("yyyy-MM-dd").format(Date()))
             showDialog = false;
         })
     {
