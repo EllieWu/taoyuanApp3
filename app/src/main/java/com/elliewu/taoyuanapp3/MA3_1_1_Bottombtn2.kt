@@ -438,7 +438,10 @@ fun MA3_1_1_btn2_MakeList(WorkCode:String){
             var workListDatas = MA3_1_1_btn2_Info("","","");
             try {
                 workListDatas.State = WorkInfoResponse.State.toString();
-                workListDatas.FinishContent = WorkInfoResponse.FinishContent.toString();
+//                workListDatas.FinishContent = (WorkInfoResponse.FinishContent != null).toString()\
+                if(WorkInfoResponse.FinishContent != null)
+                    workListDatas.FinishContent = WorkInfoResponse.FinishContent.toString()
+                workListDatas.FinishContent
                 workListDatas.FinishPhoto = WorkInfoResponse.FinishPhoto.toString();
             }
             catch (e:java.lang.Exception){
