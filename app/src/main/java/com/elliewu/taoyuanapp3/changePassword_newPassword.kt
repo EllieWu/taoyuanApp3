@@ -48,24 +48,23 @@ fun changePassword_newPassword(
                 .background(Color(62, 83, 140)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            ClickableText(
-                text = AnnotatedString("返回"),
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.End,
-                    textDecoration = TextDecoration.Underline,
-                ),
-                onClick = {
-                    navController.navigate(Screen.changePassword.route)
-                },
-                modifier = Modifier.padding(start = 20.dp)
-            )
+//            ClickableText(
+//                text = AnnotatedString("返回"),
+//                style = TextStyle(
+//                    color = Color.White,
+//                    fontSize = 20.sp,
+//                    textAlign = TextAlign.End,
+//                    textDecoration = TextDecoration.Underline,
+//                ),
+//                onClick = {
+//                    navController.navigate(Screen.changePassword.route)
+//                },
+//                modifier = Modifier.padding(start = 20.dp)
+//            )
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .padding(end = 60.dp),
+                    .weight(1f),
                 //size(width = 250.dp, height = 30.dp),
                 text = "密碼變更",
                 fontSize = 20.sp,
