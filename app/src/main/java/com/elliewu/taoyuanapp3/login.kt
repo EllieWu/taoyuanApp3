@@ -1,8 +1,10 @@
 package com.elliewu.taoyuanapp3
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -16,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
@@ -47,11 +50,82 @@ var ScreenWidth by mutableStateOf(392)
 var showDialog by  (mutableStateOf(false))
 //TODO:未來請將預設UserId設為空字串
 var Login_UserId by mutableStateOf("F123332212");
+var openDialog by  (mutableStateOf(false))
+var ifError by mutableStateOf("");
 @Preview(device= Devices.PIXEL_C)
 @Preview(device= Devices.PIXEL_3A)
+
+
+
+//@Composable
+//fun test(){
+//    Column(modifier = Modifier
+//        .size(250.dp)
+//        .padding(10.dp)) {
+//        Text(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(5.dp)
+//                .background(Color.LightGray)
+//                .border(BorderStroke(1.dp, Color.DarkGray))
+//                .padding(5.dp),
+//            text = "A")
+//        Text(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(5.dp)
+//                .background(Color.LightGray)
+//                .border(BorderStroke(1.dp, Color.DarkGray))
+//                .padding(5.dp),
+//            text = "A"
+//        )
+//        Row(modifier = Modifier.fillMaxWidth()){
+//            Text(
+//                modifier = Modifier
+//                    .size(58.dp, 40.dp)
+//                    .padding(5.dp)
+//                    .background(Color.LightGray)
+//                    .border(BorderStroke(1.dp, Color.DarkGray))
+//                    .padding(5.dp),
+//                text = "B")
+//            Text(
+//                modifier = Modifier
+//                    .size(58.dp, 40.dp)
+//                    .padding(5.dp)
+//                    .background(Color.LightGray)
+//                    .border(BorderStroke(1.dp, Color.DarkGray))
+//                    .padding(5.dp),
+//                text = "C")
+//            Text(
+//                modifier = Modifier
+//                    .size(58.dp, 40.dp)
+//                    .padding(5.dp)
+//                    .background(Color.LightGray)
+//                    .border(BorderStroke(1.dp, Color.DarkGray))
+//                    .padding(5.dp),
+//                text = "D")
+//            Text(
+//                modifier = Modifier
+//                    .size(58.dp, 40.dp)
+//                    .padding(5.dp)
+//                    .background(Color.LightGray)
+//                    .border(BorderStroke(1.dp, Color.DarkGray))
+//                    .padding(5.dp),
+//                text = "E")
+//        }
+//        Button(modifier = Modifier.padding(0.dp),
+//            onClick = { /*TODO*/ }) {
+//            Text(text = "123")
+//        }
+//    }
+//}
+
+
+
 @Composable
 fun login(navController: NavHostController = rememberNavController(), onClick: () -> Unit = {}){
     PostView();
+    errorDialog();
     Log.d("Login","APP仔入中")
 
     val coroutineScope = rememberCoroutineScope()
@@ -132,8 +206,8 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                 })
                     ,singleLine = true
                     ,maxLines = 1, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp),
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp),
                     value = account,
                     colors = TextFieldDefaults.textFieldColors(
                         cursorColor = Color.Black,
@@ -188,8 +262,8 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                     ,visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
                     ,singleLine = true
                     ,maxLines = 1,modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 40.dp),
+                        .fillMaxWidth()
+                        .padding(bottom = 40.dp),
                     value = password,
                     trailingIcon = {
                         val image = if (passwordVisible)
@@ -232,16 +306,18 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                             var loginJsonObject = JSONObject();
                             loginJsonObject.put("Function", "Login")
                             //TODO : 正式上線請把預設值改掉換下面那個
-//                            loginJsonObject.put("UserID", account)
-//                            loginJsonObject.put("UserPW", password)
+                            loginJsonObject.put("UserID", account)
+                            loginJsonObject.put("UserPW", password)
                             //Login_UserId = account
-                            loginJsonObject.put("UserID", "F123332212")
-                            loginJsonObject.put("UserPW", "Abc1234")
-                            val responseString = HttpRequestTest(loginJsonObject)
+//                            loginJsonObject.put("UserID", "F123332212")
+//                            loginJsonObject.put("UserPW", "Abc1234")
+                            var responseString = HttpRequestTest(loginJsonObject)
                             //Log.d("Login Response",responseString)
                             if(responseString == "Error")
                             {
                                 //TODO :網路連線異常的通知
+                                ifError = "0";
+                                openDialog = true
                             }
                             else{
                                 val jResponse = JSONObject(responseString);
@@ -255,6 +331,8 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                                 else
                                 {
                                     //TODO:登入失敗跳的東西
+                                    ifError = "1";
+                                    openDialog = true
                                 }
                             }
                             showDialog = false;
@@ -266,10 +344,10 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                     )
                 }
 //                Button(onClick = {
-//                    //TODO:for 照片測試
-//                    navController.navigate(Screen.CameraTest.route)
+//                    //TODO:for 登入錯誤測試
+//                    openDialog = true
 //                }) {
-//                    Text(text = "照片測試")
+//                    Text(text = "登入錯誤測試")
 //                }
             }
         }
@@ -299,6 +377,59 @@ fun loadingDialog(){
     }
 }
 
+@Composable
+fun errorDialog(){
+    Column {
+
+        Button(onClick = {
+            openDialog = true
+        }) {
+            Text("Click me")
+        }
+
+        if (openDialog) {
+
+            AlertDialog(
+                onDismissRequest = {
+                    // Dismiss the dialog when the user clicks outside the dialog or on the back
+                    // button. If you want to disable that functionality, simply use an empty
+                    // onCloseRequest.
+                    openDialog = false
+                },
+                title = {
+                    Text(text = "提示訊息!")
+                },
+                text = {
+                    if(ifError == "0"){
+                        Text("登入失敗，請檢查網路設置")
+                    }else{
+                        Text("登入失敗，請檢查帳號密碼是否正確")
+                    }
+
+                },
+                confirmButton = {
+                    Button(
+
+                        onClick = {
+                            openDialog = false
+                        }) {
+                        Text("確認")
+                    }
+                },
+//                dismissButton = {
+//                    Button(
+//
+//                        onClick = {
+//                            openDialog = false
+//                        }) {
+//                        Text("返回")
+//                    }
+//                }
+            )
+        }
+    }
+}
+
 
 
 @Composable
@@ -319,3 +450,5 @@ fun PostView() {
 fun PreviewLogin() {
     login();
 }
+
+
