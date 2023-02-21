@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -30,7 +32,6 @@ import org.json.JSONObject
 fun changePassword_newPassword(
     navController: NavHostController = rememberNavController()
 ) {
-    val coroutineScope = rememberCoroutineScope()
     PwderrorDialog();
     loadingDialog()
     Column(
@@ -119,7 +120,7 @@ fun changePassword_newPassword(
                     if(New_password == New_password_Checked)
                     {
                         //TODO :修改成功後跳回首頁
-                        coroutineScope.launch {
+                        GlobalScope.launch(Dispatchers.IO) {
                             var loginJsonObject = JSONObject();
                             loginJsonObject.put("Function", "ChangePassword")
                             //TODO : 正式上線請把預設值改掉換下面那個
@@ -127,6 +128,8 @@ fun changePassword_newPassword(
                             loginJsonObject.put("UserNewPW", New_password)
                             //loginJsonObject.put("UserID", "F123332212")
                             //loginJsonObject.put("UserNewPW", "Abc1234")
+                            Log.d("UserID",Login_UserId)
+                            Log.d("UserNewPW",New_password)
                             showDialog = true
                             val responseString = HttpRequestTest(loginJsonObject)
                             Log.d("ChangePassword",responseString)
@@ -142,8 +145,10 @@ fun changePassword_newPassword(
                                 val succeed:String? = jResponse.getString("Feedback").toString();
                                 if(succeed == "TRUE")
                                 {
-                                    navController.navigate(Screen.login.route)
-                                    ifError = ""
+                                    GlobalScope.launch(Dispatchers.Main){
+                                        navController.navigate(Screen.login.route)
+                                        ifError = ""
+                                    }
                                 }
                                 showDialog = false
                             }

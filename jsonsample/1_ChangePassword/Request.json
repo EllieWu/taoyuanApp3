@@ -1,5 +1,5 @@
 {
-    "Function":"Login",
-    "UserID":"admin",
-    "UserPW":"Abc1234"
+    "Function":"ChangePassword",
+    "UserID":"F123332212",
+    "UserNewPW":"Abc1234"
 }
