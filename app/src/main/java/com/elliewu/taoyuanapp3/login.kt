@@ -55,73 +55,6 @@ var ifError by mutableStateOf("");
 @Preview(device= Devices.PIXEL_C)
 @Preview(device= Devices.PIXEL_3A)
 
-
-
-//@Composable
-//fun test(){
-//    Column(modifier = Modifier
-//        .size(250.dp)
-//        .padding(10.dp)) {
-//        Text(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(5.dp)
-//                .background(Color.LightGray)
-//                .border(BorderStroke(1.dp, Color.DarkGray))
-//                .padding(5.dp),
-//            text = "A")
-//        Text(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(5.dp)
-//                .background(Color.LightGray)
-//                .border(BorderStroke(1.dp, Color.DarkGray))
-//                .padding(5.dp),
-//            text = "A"
-//        )
-//        Row(modifier = Modifier.fillMaxWidth()){
-//            Text(
-//                modifier = Modifier
-//                    .size(58.dp, 40.dp)
-//                    .padding(5.dp)
-//                    .background(Color.LightGray)
-//                    .border(BorderStroke(1.dp, Color.DarkGray))
-//                    .padding(5.dp),
-//                text = "B")
-//            Text(
-//                modifier = Modifier
-//                    .size(58.dp, 40.dp)
-//                    .padding(5.dp)
-//                    .background(Color.LightGray)
-//                    .border(BorderStroke(1.dp, Color.DarkGray))
-//                    .padding(5.dp),
-//                text = "C")
-//            Text(
-//                modifier = Modifier
-//                    .size(58.dp, 40.dp)
-//                    .padding(5.dp)
-//                    .background(Color.LightGray)
-//                    .border(BorderStroke(1.dp, Color.DarkGray))
-//                    .padding(5.dp),
-//                text = "D")
-//            Text(
-//                modifier = Modifier
-//                    .size(58.dp, 40.dp)
-//                    .padding(5.dp)
-//                    .background(Color.LightGray)
-//                    .border(BorderStroke(1.dp, Color.DarkGray))
-//                    .padding(5.dp),
-//                text = "E")
-//        }
-//        Button(modifier = Modifier.padding(0.dp),
-//            onClick = { /*TODO*/ }) {
-//            Text(text = "123")
-//        }
-//    }
-//}
-
-
-
 @Composable
 fun login(navController: NavHostController = rememberNavController(), onClick: () -> Unit = {}){
     PostView();
@@ -186,19 +119,23 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         if(responseString == "Error")
                         {
                             //TODO :網路連線異常的通知
+                            ifError = "0"
+                            openDialog = true
                         }
                         else{
                             val jResponse = JSONObject(responseString);
                             val succeed:String? = jResponse.getString("Feedback").toString();
                             if(succeed == "TRUE")
                             {
-                                //Login_UserId = account;
-                                Login_UserId = "F123332212";
+                                Login_UserId = account;
                                 navController.navigate(Screen.MA3_1.route)
+                                ifError = ""
                             }
                             else
                             {
                                 //TODO:登入失敗跳的東西
+                                ifError = "1"
+                                openDialog = true
                             }
                         }
                         showDialog = false;
@@ -241,19 +178,24 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         if(responseString == "Error")
                         {
                             //TODO :網路連線異常的通知
+                            ifError = "0"
+                            openDialog = true
                         }
                         else{
                             val jResponse = JSONObject(responseString);
                             val succeed:String? = jResponse.getString("Feedback").toString();
                             if(succeed == "TRUE")
                             {
-                                //Login_UserId = account;
-                                Login_UserId = "F123332212";
+                                Login_UserId = account;
+                                //Login_UserId = "F123332212";
                                 navController.navigate(Screen.MA3_1.route)
+                                ifError = ""
                             }
                             else
                             {
                                 //TODO:登入失敗跳的東西
+                                ifError = "1"
+                                openDialog = true
                             }
                         }
                         showDialog = false;
@@ -324,9 +266,11 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                                 val succeed:String? = jResponse.getString("Feedback").toString();
                                 if(succeed == "TRUE")
                                 {
-                                    //Login_UserId = account;
-                                    Login_UserId = "F123332212";
+                                    Login_UserId = account;
+                                    //Login_UserId = "F123332212";
+
                                     navController.navigate(Screen.MA3_1.route)
+                                    ifError = "";
                                 }
                                 else
                                 {
@@ -402,7 +346,7 @@ fun errorDialog(){
                 text = {
                     if(ifError == "0"){
                         Text("登入失敗，請檢查網路設置")
-                    }else{
+                    }else if(ifError == "1"){
                         Text("登入失敗，請檢查帳號密碼是否正確")
                     }
 
