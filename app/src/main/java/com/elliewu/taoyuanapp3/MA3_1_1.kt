@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.location.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -466,7 +467,7 @@ fun MA3_1_1(
                         }
                     }
                 }
-                Box(modifier = Modifier.background(Color(224,224,224,80))){
+                Box(){
                     OTDialog = true
                 }
                 }else{
@@ -781,9 +782,31 @@ fun overtimeDialog(navController: NavHostController = rememberNavController(),Wo
                     // Dismiss the dialog when the user clicks outside the dialog or on the back
                     // button. If you want to disable that functionality, simply use an empty
                     // onCloseRequest.
-                    OTDialog = false
+                    OTDialog = true
                 },
                 text = {
+                    Button(
+                        modifier = Modifier.padding(top = 8.dp),
+                        elevation = null,
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Transparent
+                        ),
+                        onClick = {
+                            navController.navigate(Screen.MA3_1.route)
+                            MA3_3_NEW1_lastWorkCode=""
+                            MA3_3_NEW1_lastWorkTime=""
+                        }
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .padding(start = 5.dp)
+                                .size(30.dp),
+                            imageVector = Icons.Default.KeyboardArrowLeft,
+                            contentDescription = "BackIcon",
+                            tint = Color.DarkGray
+                        )
+                    }
                     Text(
                         color = Color(163,76,60),
                         fontWeight = FontWeight.Bold,
