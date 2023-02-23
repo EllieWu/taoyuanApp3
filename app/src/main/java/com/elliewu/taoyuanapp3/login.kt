@@ -55,6 +55,8 @@ var ifError by mutableStateOf("");
 @Preview(device= Devices.PIXEL_C)
 @Preview(device= Devices.PIXEL_3A)
 
+
+
 @Composable
 fun login(navController: NavHostController = rememberNavController(), onClick: () -> Unit = {}){
     PostView();
@@ -98,11 +100,15 @@ fun login(navController: NavHostController = rememberNavController(), onClick: (
                         .fillMaxWidth()
                         .padding(bottom = 8.dp))
 
-                var account by remember { mutableStateOf("") }
-                var password by remember { mutableStateOf("") }
+                var account by rememberSaveable { mutableStateOf("") }
+                var password by rememberSaveable { mutableStateOf("") }
                 var passwordVisible by rememberSaveable { mutableStateOf(false) }
+                //var passwordVisible by remember { mutableStateOf(false) }
                 val maxLength = 15
-                TextField(keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Ascii),keyboardActions = KeyboardActions(onDone  = {showDialog = true;
+                TextField(
+                    keyboardOptions = KeyboardOptions
+                        (imeAction = ImeAction.Done, keyboardType = KeyboardType.Ascii),
+                    keyboardActions = KeyboardActions(onDone  = {showDialog = true;
                     //TODO:之後須在外層補入請輸入帳號/請輸入密碼
                     Log.d("Login","嘗試登入");
                     coroutineScope.launch {
@@ -325,19 +331,9 @@ fun loadingDialog(){
 fun errorDialog(){
     Column {
 
-        Button(onClick = {
-            openDialog = true
-        }) {
-            Text("Click me")
-        }
-
         if (openDialog) {
-
             AlertDialog(
                 onDismissRequest = {
-                    // Dismiss the dialog when the user clicks outside the dialog or on the back
-                    // button. If you want to disable that functionality, simply use an empty
-                    // onCloseRequest.
                     openDialog = false
                 },
                 title = {
@@ -353,7 +349,6 @@ fun errorDialog(){
                 },
                 confirmButton = {
                     Button(
-
                         onClick = {
                             openDialog = false
                         }) {
