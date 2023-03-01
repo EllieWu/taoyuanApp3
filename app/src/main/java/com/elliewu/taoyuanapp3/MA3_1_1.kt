@@ -896,7 +896,13 @@ fun MA3_1_1_RedPoint_MakeList(WorkCode:String,WorkTime:String){
             workListDatas = workListDatas - workListDatas[workListDatas.size - 1]
             if(WorkInfoResponse.Locate != null && WorkInfoResponse.Locate!!.isNotEmpty()){
                 WorkInfoResponse.Locate!!.forEach {
-                    workListDatas = workListDatas + redDot(it.LocateNumber.toString(),LatLng(it.Latitude.toDouble(),it.Longitude.toDouble()))
+                    try {
+                        workListDatas = workListDatas + redDot(it.LocateNumber.toString(),LatLng(it.Latitude.toDouble(),it.Longitude.toDouble()))
+                    }
+                    catch (e:java.lang.Exception){
+
+                    }
+
                 }
             }
             redDotList = workListDatas
